@@ -1,6 +1,8 @@
 ---
+import 'flag-icons/css/flag-icons.min.css';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
+import { profile } from '../data/cv';
 
 interface Props {
   title?: string;
@@ -44,8 +46,9 @@ const {
         <a href="#inicio" class="header-logo"><Logo variant="cream" /></a>
         <nav class="header-nav" aria-label="Navegación principal">
           <a href="#sobre-mi">Sobre mí</a>
-          <a href="#experiencia">Experiencia</a>
-          <a href="#proyectos">Futuros proyectos</a>
+          <a href="#trayectoria">Trayectoria</a>
+          <a href="#experiencia">Viajes</a>
+          <a href="#rutas">Rutas</a>
           <a href="#contacto" class="header-cta">Contacto</a>
         </nav>
       </div>
@@ -65,14 +68,16 @@ const {
           <div>
             <h4>Navega</h4>
             <a href="#sobre-mi">Sobre mí</a>
-            <a href="#experiencia">Experiencia viajera</a>
-            <a href="#proyectos">Futuros proyectos</a>
+            <a href="#trayectoria">Trayectoria</a>
+            <a href="#experiencia">Viajes</a>
+            <a href="#rutas">Rutas</a>
           </div>
           <div>
             <h4>Contacto</h4>
-            <a href="mailto:hola@nilmariages.com">hola@nilmariages.com</a>
-            <a href="https://wa.me/" target="_blank" rel="noopener">WhatsApp</a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <a href={profile.phoneHref}>{profile.phone}</a>
+            <a href={profile.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+            <a href="#trayectoria">{profile.location}</a>
           </div>
         </div>
       </div>
@@ -83,6 +88,8 @@ const {
     </footer>
 
     <script>
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       // Header con fondo al hacer scroll
       const header = document.getElementById('site-header');
       const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
@@ -102,6 +109,33 @@ const {
         { threshold: 0.12 },
       );
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      // Efecto parallax suave en elementos con [data-parallax]
+      const parallaxEls = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-parallax]'),
+      );
+      if (parallaxEls.length && !reduceMotion) {
+        let ticking = false;
+        const apply = () => {
+          const vh = window.innerHeight;
+          for (const el of parallaxEls) {
+            const speed = parseFloat(el.dataset.parallax || '0');
+            const rect = el.getBoundingClientRect();
+            const offset = rect.top + rect.height / 2 - vh / 2;
+            el.style.transform = `translate3d(0, ${(-offset * speed).toFixed(1)}px, 0)`;
+          }
+          ticking = false;
+        };
+        const onParallax = () => {
+          if (!ticking) {
+            window.requestAnimationFrame(apply);
+            ticking = true;
+          }
+        };
+        window.addEventListener('scroll', onParallax, { passive: true });
+        window.addEventListener('resize', onParallax, { passive: true });
+        apply();
+      }
     </script>
 
     <style>
@@ -127,23 +161,42 @@ const {
         align-items: center;
         gap: 28px;
       }
-      .header-nav a {
+      .header-nav a:not(.header-cta) {
+        position: relative;
         color: rgba(245, 250, 249, 0.82);
         font-weight: 600;
         font-size: 0.95rem;
         transition: color 0.18s ease;
       }
-      .header-nav a:hover {
+      .header-nav a:not(.header-cta)::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        height: 2px;
+        background: var(--teal-bright);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+      .header-nav a:not(.header-cta):hover {
         color: var(--teal-bright);
+      }
+      .header-nav a:not(.header-cta):hover::after {
+        transform: scaleX(1);
       }
       .header-cta {
         padding: 9px 20px;
         border-radius: 999px;
         background: var(--teal);
         color: var(--navy) !important;
+        transition: background 0.18s ease, transform 0.18s ease;
       }
       .header-cta:hover {
         background: var(--teal-bright);
+        transform: translateY(-1px);
       }
 
       .site-footer {

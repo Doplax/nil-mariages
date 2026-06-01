@@ -1,0 +1,35 @@
+---
+// Bloque de estadística reutilizable (valor grande + etiqueta).
+interface Props {
+  value: string;
+  label: string;
+}
+const { value, label } = Astro.props;
+---
+
+<div class="stat">
+  <strong>{value}</strong>
+  <span>{label}</span>
+</div>
+
+<style>
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat strong {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--teal-bright);
+    line-height: 1.1;
+  }
+  .stat span {
+    font-size: 0.9rem;
+    color: rgba(245, 250, 249, 0.7);
+  }
+  @media (max-width: 640px) {
+    .stat strong {
+      font-size: 1.7rem;
+    }
+  }
+</style>

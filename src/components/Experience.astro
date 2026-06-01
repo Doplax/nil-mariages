@@ -1,6 +1,10 @@
 ---
-import { regions, flagUrl } from '../data/countries';
+import { regions } from '../data/countries';
 import CountryCard from './CountryCard.astro';
+import Flag from './Flag.astro';
+import SectionHeader from './ui/SectionHeader.astro';
+import Reveal from './ui/Reveal.astro';
+import Chip from './ui/Chip.astro';
 
 const featured = regions.filter((r) => r.featured);
 const europe = regions.find((r) => !r.featured);
@@ -8,35 +12,34 @@ const europe = regions.find((r) => !r.featured);
 
 <section class="experience section" id="experiencia">
   <div class="container">
-    <div class="exp-head reveal">
-      <span class="eyebrow">● Experiencia viajera</span>
-      <h2 class="section-title">Más de 40 países, cuatro continentes</h2>
-      <p class="section-lead">
-        Lo internacional es lo que más me apasiona. Cada destino me ha dejado mapas, contactos y un
-        conocimiento práctico que vuelco en cada viaje que diseño. Estos son algunos de los lugares que
-        he recorrido.
-      </p>
-    </div>
+    <SectionHeader
+      class="exp-head"
+      eyebrow="Experiencia viajera"
+      title="Más de 40 países, cuatro continentes"
+      lead="Lo internacional es lo que más me apasiona. Cada destino me ha dejado mapas, contactos y un conocimiento práctico que vuelco en cada viaje que diseño. Estos son algunos de los lugares que he recorrido."
+    />
 
     {
       featured.map((region) => (
-        <div class="region reveal">
-          <div class="region-head">
+        <div class="region">
+          <Reveal class="region-head">
             <h3>
               <span class="region-icon">{region.icon}</span>
               {region.title}
             </h3>
-            {region.subtitle && <span class="region-subtitle">{region.subtitle}</span>}
+            {region.subtitle && <Chip variant="soft">{region.subtitle}</Chip>}
             <span class="region-flags" aria-hidden="true">
               {region.countries.slice(0, 8).map((c) => (
-                <img src={flagUrl(c.iso, 40)} alt="" width="22" height="15" loading="lazy" />
+                <Flag iso={c.iso} h={15} label={c.name} />
               ))}
             </span>
             <span class="region-count">{region.countries.length} países</span>
-          </div>
+          </Reveal>
           <div class="region-grid">
-            {region.countries.map((c) => (
-              <CountryCard name={c.name} iso={c.iso} description={c.description} />
+            {region.countries.map((c, i) => (
+              <Reveal delay={(i % 4) * 60}>
+                <CountryCard name={c.name} iso={c.iso} description={c.description} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -45,18 +48,20 @@ const europe = regions.find((r) => !r.featured);
 
     {
       europe && (
-        <div class="region region-europe reveal">
-          <div class="region-head">
+        <div class="region region-europe">
+          <Reveal class="region-head">
             <h3>
               <span class="region-icon">{europe.icon}</span>
               {europe.title}
             </h3>
-            {europe.subtitle && <span class="region-subtitle">{europe.subtitle}</span>}
+            {europe.subtitle && <Chip variant="soft">{europe.subtitle}</Chip>}
             <span class="region-count">{europe.countries.length} países</span>
-          </div>
+          </Reveal>
           <div class="region-grid compact-grid">
-            {europe.countries.map((c) => (
-              <CountryCard name={c.name} iso={c.iso} description={c.description} compact />
+            {europe.countries.map((c, i) => (
+              <Reveal delay={(i % 5) * 45}>
+                <CountryCard name={c.name} iso={c.iso} description={c.description} compact />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -94,26 +99,11 @@ const europe = regions.find((r) => !r.featured);
   .region-icon {
     font-size: 1.55rem;
   }
-  .region-subtitle {
-    padding: 5px 14px;
-    background: rgba(95, 201, 188, 0.16);
-    color: var(--teal-deep);
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
   .region-flags {
     display: none;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     margin-left: 6px;
-  }
-  .region-flags img {
-    width: 22px;
-    height: 15px;
-    border-radius: 3px;
-    object-fit: cover;
-    box-shadow: 0 1px 3px rgba(14, 35, 54, 0.2);
   }
   .region-count {
     margin-left: auto;

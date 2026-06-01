@@ -1,0 +1,23 @@
+---
+// Botón / enlace reutilizable con las variantes de la marca.
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ghost';
+  download?: boolean;
+  external?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', download = false, external = false, class: cls = '' } = Astro.props;
+const rel = external ? 'noopener noreferrer' : undefined;
+const target = external ? '_blank' : undefined;
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn-${variant}`, cls]}
+  download={download || undefined}
+  target={target}
+  rel={rel}
+>
+  <slot />
+</a>

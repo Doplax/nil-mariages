@@ -1,0 +1,17 @@
+---
+// Envoltorio para animar la aparición de contenido al hacer scroll.
+// La clase `.reveal` la observa un IntersectionObserver en el Layout.
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  /** Retardo en ms para crear efectos escalonados (stagger) */
+  delay?: number;
+  class?: string;
+}
+const { as = 'div', delay = 0, class: cls = '' } = Astro.props;
+const Tag = as as any;
+const style = delay ? `--reveal-delay:${delay}ms` : undefined;
+---
+
+<Tag class:list={['reveal', cls]} style={style}>
+  <slot />
+</Tag>

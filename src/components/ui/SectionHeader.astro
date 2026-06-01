@@ -1,0 +1,31 @@
+---
+import Reveal from './Reveal.astro';
+// Cabecera de sección reutilizable: antetítulo + título + entradilla.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  /** Variante clara para secciones con fondo oscuro */
+  light?: boolean;
+  class?: string;
+}
+const { eyebrow, title, lead, light = false, class: cls = '' } = Astro.props;
+---
+
+<Reveal class:list={['section-header', light && 'is-light', cls]}>
+  <span class="eyebrow">● {eyebrow}</span>
+  <h2 class="section-title">{title}</h2>
+  {lead && <p class="section-lead">{lead}</p>}
+</Reveal>
+
+<style>
+  .section-header {
+    max-width: 780px;
+  }
+  .is-light :global(.eyebrow) {
+    color: var(--teal-bright);
+  }
+  .is-light .section-lead {
+    color: rgba(245, 250, 249, 0.72);
+  }
+</style>
