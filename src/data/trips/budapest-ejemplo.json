@@ -1,0 +1,54 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruta a pie por Budapest", "type": "route" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [19.0456, 47.5072],
+          [19.0509, 47.5036],
+          [19.0537, 47.5008],
+          [19.0479, 47.4994],
+          [19.0436, 47.4986],
+          [19.0399, 47.4961],
+          [19.0361, 47.4998],
+          [19.0347, 47.5025],
+          [19.0512, 47.5081],
+          [19.0779, 47.5148]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Parlamento de Hungría", "description": "Punto de inicio, a orillas del Danubio." },
+      "geometry": { "type": "Point", "coordinates": [19.0456, 47.5072] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Basílica de San Esteban", "description": "La iglesia más emblemática de Pest." },
+      "geometry": { "type": "Point", "coordinates": [19.0537, 47.5008] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Puente de las Cadenas", "description": "Cruce icónico entre Buda y Pest." },
+      "geometry": { "type": "Point", "coordinates": [19.0436, 47.4986] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Castillo de Buda", "description": "Colina histórica con vistas al río." },
+      "geometry": { "type": "Point", "coordinates": [19.0399, 47.4961] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bastión de los Pescadores", "description": "Terrazas neorrománicas y panorámicas." },
+      "geometry": { "type": "Point", "coordinates": [19.0347, 47.5025] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Plaza de los Héroes", "description": "Gran plaza monumental, fin del recorrido." },
+      "geometry": { "type": "Point", "coordinates": [19.0779, 47.5148] }
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+---
+import 'leaflet/dist/leaflet.css';
+import { trips } from '../data/trips';
+import Flag from './Flag.astro';
+import SectionHeader from './ui/SectionHeader.astro';
+
+const hasTrips = trips.length > 0;
+---
+
+<section class="trips section" id="rutas">
+  <div class="container">
+    <SectionHeader
+      class="trips-head"
+      eyebrow="Rutas y mapas"
+      title="Mis rutas, sobre el mapa"
+      lead="Cada viaje que diseño deja un mapa detrás. Aquí podrás explorar de forma interactiva algunos de mis itinerarios, con sus paradas y recorridos reales."
+    />
+
+    {
+      hasTrips && (
+        <div class="trips-layout reveal">
+          <div class="trip-tabs" role="tablist" aria-label="Selecciona una ruta">
+            {trips.map((trip, i) => (
+              <button class={`trip-tab${i === 0 ? ' active' : ''}`} data-index={i} type="button" role="tab" aria-selected={i === 0}>
+                <Flag iso={trip.iso} h={14} label={trip.location} />
+                <span class="trip-tab-title">{trip.title}</span>
+                {trip.sample && <span class="trip-tab-badge">Ejemplo</span>}
+              </button>
+            ))}
+          </div>
+
+          <div class="trip-stage">
+            <div id="trip-map" class="trip-map" role="application" aria-label="Mapa interactivo de la ruta"></div>
+            <div class="trip-info" id="trip-info">
+              <h3 id="trip-info-title" />
+              <p id="trip-info-location" class="trip-info-location" />
+              <p id="trip-info-desc" />
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  import L from 'leaflet';
+  import { trips } from '../data/trips';
+
+  const mapEl = document.getElementById('trip-map');
+  if (mapEl && trips.length) {
+    const map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true }).setView([47.5, 19.04], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 20,
+      subdomains: 'abcd',
+    }).addTo(map);
+
+    let layer: L.GeoJSON | null = null;
+
+    const titleEl = document.getElementById('trip-info-title');
+    const locEl = document.getElementById('trip-info-location');
+    const descEl = document.getElementById('trip-info-desc');
+
+    function renderTrip(index: number) {
+      const trip = trips[index];
+      if (!trip) return;
+
+      if (layer) layer.remove();
+
+      layer = L.geoJSON(trip.data as any, {
+        style: () => ({ color: '#3da093', weight: 4, opacity: 0.9 }),
+        pointToLayer: (_feature, latlng) =>
+          L.circleMarker(latlng, {
+            radius: 7,
+            fillColor: '#5fc9bc',
+            color: '#0e2336',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 1,
+          }),
+        onEachFeature: (feature, lyr) => {
+          const props = feature.properties || {};
+          if (props.name && feature.geometry?.type === 'Point') {
+            lyr.bindPopup(
+              `<strong>${props.name}</strong>${props.description ? `<br>${props.description}` : ''}`,
+            );
+          }
+        },
+      }).addTo(map);
+
+      const bounds = layer.getBounds();
+      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40] });
+
+      if (titleEl) titleEl.textContent = trip.title;
+      if (locEl) locEl.textContent = trip.location + (trip.year ? ` · ${trip.year}` : '');
+      if (descEl) descEl.textContent = trip.description;
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('.trip-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.trip-tab').forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        renderTrip(Number(btn.dataset.index));
+      });
+    });
+
+    renderTrip(0);
+    // Recalcula el tamaño tras el primer render (evita el mapa gris)
+    setTimeout(() => map.invalidateSize(), 200);
+  }
+</script>
+
+<style>
+  .trips {
+    background: var(--cream);
+  }
+  .trips-head {
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+  .trips-layout {
+    display: grid;
+    gap: 18px;
+  }
+  .trip-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .trip-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .trip-tab:hover {
+    border-color: var(--teal);
+  }
+  .trip-tab.active {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+  }
+  .trip-tab-badge {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(95, 201, 188, 0.2);
+    color: var(--teal-deep);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .trip-tab.active .trip-tab-badge {
+    color: var(--teal-bright);
+    background: rgba(95, 201, 188, 0.18);
+  }
+
+  .trip-stage {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .trip-map {
+    height: 480px;
+    width: 100%;
+    background: #e8eef0;
+    z-index: 1;
+  }
+  .trip-info {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(160deg, var(--navy), var(--navy-deep));
+    color: var(--cream);
+  }
+  .trip-info h3 {
+    font-size: 1.5rem;
+  }
+  .trip-info-location {
+    margin-top: 6px;
+    color: var(--teal-bright);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .trip-info p:last-child {
+    margin-top: 14px;
+    color: rgba(245, 250, 249, 0.82);
+    font-size: 0.96rem;
+  }
+
+  /* La atribución y los controles de Leaflet con la tipografía del sitio */
+  :global(.leaflet-container) {
+    font-family: var(--font);
+  }
+
+  @media (max-width: 820px) {
+    .trip-stage {
+      grid-template-columns: 1fr;
+    }
+    .trip-map {
+      height: 380px;
+    }
+  }
+</style>
