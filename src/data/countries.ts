@@ -33,11 +33,6 @@ export function countryImage(name: string): string {
   return countryImages[name] ?? `https://loremflickr.com/600/450/${encodeURIComponent(name)}`;
 }
 
-/** URL de la bandera del país */
-export function flagUrl(iso: string, width = 80): string {
-  return `https://flagcdn.com/w${width}/${iso}.png`;
-}
-
 export const regions: Region[] = [
   {
     id: 'asia',

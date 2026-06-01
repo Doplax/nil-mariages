@@ -1,0 +1,38 @@
+---
+// Bandera vectorial (SVG) mediante flag-icons. Nítida a cualquier tamaño.
+// El CSS de flag-icons se importa una sola vez en el Layout.
+interface Props {
+  iso: string;
+  /** Altura de la bandera en píxeles (el ancho se calcula con ratio 4:3) */
+  h?: number;
+  label?: string;
+  class?: string;
+}
+const { iso, h = 15, label, class: cls = '' } = Astro.props;
+const w = Math.round((h * 4) / 3);
+---
+
+<span
+  class:list={['flag', 'fi', `fi-${iso}`, cls]}
+  role="img"
+  aria-label={label ?? `Bandera de ${iso.toUpperCase()}`}
+  style={`width:${w}px;height:${h}px`}
+>
+</span>
+
+<style>
+  .flag {
+    display: inline-block;
+    flex-shrink: 0;
+    border-radius: 2px;
+    background-size: cover !important;
+    background-position: center !important;
+    box-shadow: 0 0 0 1px rgba(14, 35, 54, 0.12);
+    line-height: normal;
+  }
+  /* flag-icons añade un ::before con un espacio para dar altura vía em;
+     con altura explícita no lo necesitamos. */
+  .flag::before {
+    content: none !important;
+  }
+</style>
