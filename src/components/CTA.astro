@@ -1,0 +1,86 @@
+---
+import { totalCountries } from '../data/countries';
+---
+
+<section class="cta">
+  <div class="container cta-inner reveal">
+    <div class="cta-text">
+      <h2>¿Listo para tu próximo viaje?</h2>
+      <p>
+        Cuéntame qué te gustaría vivir y lo convierto en un itinerario a medida. Asesoramiento cercano,
+        +{totalCountries} países de experiencia y acompañamiento en cada paso.
+      </p>
+    </div>
+    <div class="cta-actions">
+      <a href="mailto:hola@nilmariages.com" class="btn btn-primary">Escríbeme</a>
+      <a href="https://wa.me/" target="_blank" rel="noopener" class="btn btn-ghost">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-block: 28px clamp(48px, 7vw, 84px);
+    background: var(--navy);
+  }
+  .cta-inner {
+    background: linear-gradient(120deg, var(--teal-deep), var(--teal));
+    border-radius: var(--radius-lg);
+    padding: clamp(32px, 5vw, 56px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-inner::after {
+    content: '✈';
+    position: absolute;
+    right: -10px;
+    top: -30px;
+    font-size: 12rem;
+    color: rgba(9, 22, 34, 0.08);
+    transform: rotate(-15deg);
+    pointer-events: none;
+  }
+  .cta-text {
+    position: relative;
+    z-index: 1;
+  }
+  .cta-text h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+    color: var(--navy);
+  }
+  .cta-text p {
+    margin-top: 12px;
+    max-width: 52ch;
+    color: rgba(9, 22, 34, 0.78);
+    font-size: 1.05rem;
+    font-weight: 500;
+  }
+  .cta-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .cta-actions .btn-primary {
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .cta-actions .btn-primary:hover {
+    background: var(--navy-deep);
+  }
+  .cta-actions .btn-ghost {
+    color: var(--navy);
+    border-color: rgba(9, 22, 34, 0.45);
+  }
+  .cta-actions .btn-ghost:hover {
+    color: var(--navy-deep);
+    border-color: var(--navy);
+  }
+</style>
