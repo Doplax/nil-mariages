@@ -43,7 +43,7 @@ de las capturas de WhatsApp (marca *Haya travel*, colores navy + teal, foto
 - [x] Crear este `todo.md`.
 - [x] `npm run build` sin errores.
 - [x] Commits siguiendo **Conventional Commits**.
-- [ ] Desplegar en **Vercel** vía CLI.
+- [x] Desplegar en **Vercel** vía CLI → https://nil-mariages.vercel.app
 
 ## Notas
 - Las descripciones están generadas con IA y son orientativas.
