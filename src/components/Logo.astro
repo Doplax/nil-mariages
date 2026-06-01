@@ -1,0 +1,44 @@
+---
+interface Props {
+  /** Color del texto "travel" y del trazo: 'navy' sobre fondo claro, 'cream' sobre fondo oscuro */
+  variant?: 'navy' | 'cream';
+}
+const { variant = 'navy' } = Astro.props;
+const travelColor = variant === 'navy' ? 'var(--navy)' : 'var(--cream)';
+---
+
+<span class="logo" aria-label="Haya travel">
+  <span class="logo-mark" aria-hidden="true">
+    <svg viewBox="0 0 32 32" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M5 4v24M5 16h13M18 4v24"
+        stroke="var(--teal)"
+        stroke-width="4"
+        stroke-linecap="round"
+      ></path>
+      <path d="M24 9l4 7-4 7" stroke="var(--teal)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </span>
+  <span class="logo-text">
+    <span class="logo-haya">Haya</span><span class="logo-travel" style={`color:${travelColor}`}>travel</span>
+  </span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-mark {
+    display: inline-flex;
+  }
+  .logo-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .logo-haya {
+    color: var(--teal);
+  }
+</style>
