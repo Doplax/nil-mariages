@@ -1,0 +1,131 @@
+---
+import { regions } from '../data/countries';
+import CountryCard from './CountryCard.astro';
+
+const featured = regions.filter((r) => r.featured);
+const europe = regions.find((r) => !r.featured);
+---
+
+<section class="experience section" id="experiencia">
+  <div class="container">
+    <div class="exp-head reveal">
+      <span class="eyebrow">● Experiencia viajera</span>
+      <h2 class="section-title">Más de 40 países, cuatro continentes</h2>
+      <p class="section-lead">
+        Lo internacional es lo que más me apasiona. Cada destino me ha dejado mapas, contactos y un
+        conocimiento práctico que vuelco en cada viaje que diseño. Estos son algunos de los lugares que
+        he recorrido.
+      </p>
+    </div>
+
+    {
+      featured.map((region) => (
+        <div class="region reveal">
+          <div class="region-head">
+            <h3>
+              <span class="region-emoji">{region.emoji}</span>
+              {region.title}
+            </h3>
+            {region.subtitle && <span class="region-subtitle">{region.subtitle}</span>}
+            <span class="region-count">{region.countries.length} países</span>
+          </div>
+          <div class="region-grid">
+            {region.countries.map((c) => (
+              <CountryCard name={c.name} flag={c.flag} description={c.description} imageQuery={c.imageQuery} />
+            ))}
+          </div>
+        </div>
+      ))
+    }
+
+    {
+      europe && (
+        <div class="region region-europe reveal">
+          <div class="region-head">
+            <h3>
+              <span class="region-emoji">{europe.emoji}</span>
+              {europe.title}
+            </h3>
+            {europe.subtitle && <span class="region-subtitle">{europe.subtitle}</span>}
+            <span class="region-count">{europe.countries.length} países</span>
+          </div>
+          <div class="region-grid compact-grid">
+            {europe.countries.map((c) => (
+              <CountryCard
+                name={c.name}
+                flag={c.flag}
+                description={c.description}
+                imageQuery={c.imageQuery}
+                compact
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .exp-head {
+    margin-bottom: 48px;
+    max-width: 780px;
+  }
+  .region {
+    margin-top: 56px;
+  }
+  .region:first-of-type {
+    margin-top: 0;
+  }
+  .region-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 22px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .region-head h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .region-emoji {
+    font-size: 1.6rem;
+  }
+  .region-subtitle {
+    padding: 5px 14px;
+    background: rgba(95, 201, 188, 0.16);
+    color: var(--teal-deep);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .region-count {
+    margin-left: auto;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
+  }
+  .compact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 520px) {
+    .region-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .compact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

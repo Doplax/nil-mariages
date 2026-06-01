@@ -1,0 +1,144 @@
+---
+import { totalCountries } from '../data/countries';
+---
+
+<section class="hero" id="inicio">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <span class="hero-tag">✈️ Agente de viajes · Viajes a medida</span>
+      <h1 class="hero-title">
+        Diseño viajes que se<br />
+        <span class="hero-accent">recuerdan toda la vida</span>
+      </h1>
+      <p class="hero-lead">
+        Soy <strong>Nil Mariages</strong>. Convierto destinos en experiencias hechas a tu medida:
+        itinerarios únicos, asesoramiento cercano y acompañamiento antes, durante y después del viaje.
+      </p>
+      <div class="hero-actions">
+        <a href="#experiencia" class="btn btn-primary">Descubre dónde he estado</a>
+        <a href="#contacto" class="btn btn-ghost">Hablemos de tu viaje</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <strong>+{totalCountries}</strong>
+          <span>países visitados</span>
+        </div>
+        <div>
+          <strong>4</strong>
+          <span>continentes</span>
+        </div>
+        <div>
+          <strong>100%</strong>
+          <span>a medida</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-fade" aria-hidden="true"></div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    color: var(--cream);
+    background: var(--navy);
+    overflow: hidden;
+    padding-top: 140px;
+    padding-bottom: 110px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 80% at 80% 10%, rgba(95, 201, 188, 0.28), transparent 60%),
+      radial-gradient(50% 60% at 10% 90%, rgba(95, 201, 188, 0.16), transparent 60%),
+      linear-gradient(160deg, var(--navy), var(--navy-deep));
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(245, 250, 249, 0.06) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: linear-gradient(to bottom, black, transparent 75%);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-content {
+    max-width: 720px;
+  }
+  .hero-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(95, 201, 188, 0.14);
+    border: 1px solid rgba(95, 201, 188, 0.3);
+    color: var(--teal-bright);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .hero-title {
+    margin-top: 24px;
+    font-size: clamp(2.4rem, 6vw, 4.3rem);
+    font-weight: 800;
+  }
+  .hero-accent {
+    background: linear-gradient(100deg, var(--teal-bright), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-lead {
+    margin-top: 22px;
+    max-width: 56ch;
+    font-size: 1.18rem;
+    color: rgba(245, 250, 249, 0.82);
+  }
+  .hero-lead strong {
+    color: var(--cream);
+  }
+  .hero-actions {
+    margin-top: 34px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .hero-stats {
+    margin-top: 52px;
+    display: flex;
+    gap: 44px;
+    flex-wrap: wrap;
+  }
+  .hero-stats div {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-stats strong {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--teal-bright);
+  }
+  .hero-stats span {
+    font-size: 0.9rem;
+    color: rgba(245, 250, 249, 0.7);
+  }
+  .hero-fade {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+    z-index: 1;
+  }
+
+  @media (max-width: 640px) {
+    .hero-stats {
+      gap: 28px;
+    }
+    .hero-stats strong {
+      font-size: 1.7rem;
+    }
+  }
+</style>

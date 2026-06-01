@@ -1,0 +1,101 @@
+---
+import { futureProjects, countryImage } from '../data/countries';
+---
+
+<section class="future section" id="proyectos">
+  <div class="container">
+    <div class="future-head reveal">
+      <span class="eyebrow eyebrow-light">● Próximos destinos</span>
+      <h2 class="section-title">Futuros proyectos</h2>
+      <p class="section-lead future-lead">
+        El mapa nunca se acaba. Estos son los próximos destinos que estoy preparando para seguir
+        ampliando experiencias y rutas a medida.
+      </p>
+    </div>
+
+    <div class="future-grid reveal">
+      {
+        futureProjects.map((p) => (
+          <article class="future-card">
+            <img src={countryImage(p.imageQuery, 700, 500)} alt={`Imagen de ${p.name}`} loading="lazy" width="700" height="500" />
+            <div class="future-overlay" />
+            <div class="future-content">
+              <span class="future-flag">{p.flag} Próximamente</span>
+              <h3>{p.name}</h3>
+              <p>{p.description}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .future {
+    background: var(--navy);
+    color: var(--cream);
+  }
+  .future-head {
+    max-width: 720px;
+    margin-bottom: 44px;
+  }
+  .eyebrow-light {
+    color: var(--teal-bright);
+  }
+  .future-lead {
+    color: rgba(245, 250, 249, 0.72);
+  }
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+  }
+  .future-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 340px;
+    display: flex;
+    align-items: flex-end;
+    box-shadow: var(--shadow-lg);
+  }
+  .future-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .future-card:hover img {
+    transform: scale(1.07);
+  }
+  .future-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(9, 22, 34, 0.92) 5%, rgba(9, 22, 34, 0.35) 55%, rgba(9, 22, 34, 0.1));
+  }
+  .future-content {
+    position: relative;
+    z-index: 2;
+    padding: 24px;
+  }
+  .future-flag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--teal-bright);
+    margin-bottom: 8px;
+  }
+  .future-content h3 {
+    font-size: 1.5rem;
+  }
+  .future-content p {
+    margin-top: 8px;
+    color: rgba(245, 250, 249, 0.82);
+    font-size: 0.95rem;
+  }
+</style>
