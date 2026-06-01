@@ -52,14 +52,46 @@ la marca: la web es de Nil Mariages con logo propio.*
 - [x] Tarjetas de país con nombre sobre la imagen y degradado para legibilidad.
 - [x] Tira de banderas en las cabeceras de los continentes destacados.
 
+## ✅ Mejoras de interfaz (3ª iteración)
+- [x] Banderas **SVG** nítidas (flag-icons) en lugar de PNG borrosas; corregido
+      el bug que las estiraba enormes (selector `:first-child`).
+- [x] Hero rediseñado: fuera el degradado raro, **rutas de vuelo animadas** con
+      aviones en movimiento (SVG + offset-path).
+- [x] **Efecto parallax** suave en el hero y en el avión del CTA.
+- [x] Animaciones suaves y sutiles: entrada escalonada (stagger) al hacer scroll,
+      entrada del hero al cargar, subrayado animado en el menú, micro-hovers.
+      Todo respeta `prefers-reduced-motion`.
+
+## ✅ Currículum (CV)
+- [x] Sección **Trayectoria** con la info del CV bien estructurada en la web:
+      experiencia (timeline), educación, competencias, idiomas (con barras),
+      distinciones y datos de interés.
+- [x] Botón **Descargar CV (PDF)** (el PDF vive en `public/`).
+- [x] Datos de contacto reales del CV (email, teléfono, WhatsApp, Barcelona).
+
+## ✅ Mapas / Rutas
+- [x] Sección **Rutas** con mapa interactivo (Leaflet + tiles CARTO).
+- [x] Script `scripts/kml-to-geojson.mjs` para convertir mapas de Google My Maps
+      (KML) a GeoJSON. Instrucciones en `maps_src/README.md`.
+- [x] Ruta de **ejemplo** (Budapest) para mostrar cómo se ven los mapas.
+- [ ] Sustituir el ejemplo por las rutas reales de Nil (pendiente de sus KML).
+
+## ✅ Arquitectura / componentes
+- [x] Componentizado lo reutilizable: `Button`, `SectionHeader`, `Reveal`,
+      `Chip`, `Stat`, `Flag` (+ clase utilitaria `.card`).
+- [x] Contacto + botón de WhatsApp destacados al final (CTA) y en el footer.
+
+## ⏳ Pendiente (siguiente iteración)
+- [ ] **Internacionalización**: web en español, inglés y catalán.
+- [ ] **Test de rendimiento** (Lighthouse) y optimizaciones.
+- [ ] Revisión final multiagente.
+
 ## ✅ Entrega
-- [x] Crear este `todo.md`.
-- [x] `npm run build` sin errores.
+- [x] `npm run build` sin errores y verificación visual con capturas.
 - [x] Commits siguiendo **Conventional Commits**.
 - [x] Desplegar en **Vercel** vía CLI → https://nil-mariages.vercel.app
 
 ## Notas
-- Las descripciones están generadas con IA y son orientativas.
-- Las imágenes de países se sirven desde LoremFlickr (licencia Creative Commons).
-  Para usar imágenes propias, basta con cambiar el `imageQuery` por una URL en
-  `src/data/countries.ts` y ajustar `CountryCard.astro` / `Future.astro`.
+- Las descripciones de países están generadas con IA y son orientativas.
+- Las imágenes de países son fotos reales de lugares emblemáticos (Wikimedia
+  Commons), regenerables con `node scripts/fetch-images.mjs`.
