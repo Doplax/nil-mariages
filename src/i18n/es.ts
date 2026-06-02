@@ -71,6 +71,42 @@ export const es: Dict = {
       email: 'Escríbeme',
       whatsapp: 'WhatsApp',
     },
+    testimonials: {
+      eyebrow: 'Clientes',
+      title: 'Lo que dicen quienes viajaron con Nil',
+      lead: 'Cada viaje diseñado es una historia diferente. Estas son algunas de las experiencias de viajeros que confiaron en mí para crear el suyo.',
+      items: [
+        {
+          name: 'Laura G.',
+          role: 'Viajera de aventura',
+          text: 'Nil nos organizó 3 semanas por Kirguistán y Uzbekistán completamente a medida. Cada detalle estaba pensado: los alojamientos, el ritmo, los imprevistos. Fue el viaje de nuestra vida.',
+          country: 'kg',
+        },
+        {
+          name: 'Marc & Anna',
+          role: 'Pareja viajera',
+          text: 'Queríamos algo diferente al paquete típico. Nil nos diseñó una ruta por los Balcanes que jamás hubiéramos encontrado solos. Su conocimiento de primera mano del destino lo cambia todo.',
+          country: 'al',
+        },
+        {
+          name: 'Jordi P.',
+          role: 'Viajero solo',
+          text: 'Es de los pocos agentes que ha pisado de verdad los destinos que vende. Con Nil sabes que cada recomendación viene de la experiencia real, no de un catálogo.',
+          country: 'np',
+        },
+      ],
+    },
+    contact: {
+      eyebrow: 'Contacto',
+      title: 'Cuéntame tu próximo viaje',
+      lead: 'Rellena el formulario y te respondo en menos de 24 horas con ideas adaptadas a ti.',
+      namePlaceholder: 'Tu nombre',
+      emailPlaceholder: 'tu@email.com',
+      msgPlaceholder: '¿A dónde quieres ir? ¿Qué tipo de experiencia buscas?',
+      submit: 'Enviar mensaje',
+      success: '¡Mensaje enviado! Te respondo pronto.',
+      privacy: 'Solo uso tus datos para responderte. Sin spam.',
+    },
     footer: {
       tagline: 'Diseño y venta de viajes a medida. Experiencias auténticas, asesoramiento cercano.',
       navTitle: 'Navega',

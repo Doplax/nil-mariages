@@ -4,8 +4,10 @@ import 'flag-icons/css/flag-icons.min.css';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import LangSwitcher from '../components/LangSwitcher.astro';
+import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
 import { profile } from '../data/cv';
 import { getDict, localeUrl, LANGS, type Lang } from '../i18n';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   lang: Lang;
@@ -65,8 +67,36 @@ const year = new Date().getFullYear();
     <link rel="alternate" hreflang="x-default" href={new URL('/', site).href} />
 
     <title>{title}</title>
+
+    <!-- View Transitions (smooth page navigation) -->
+    <ClientRouter />
+
+    <!-- Plausible Analytics: activa añadiendo PUBLIC_PLAUSIBLE_DOMAIN en Vercel env vars -->
+    {import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
+      <script
+        is:inline
+        defer
+        data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
+        src="https://plausible.io/js/script.js"
+      />
+    )}
+
+    <!-- JSON-LD structured data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': ['Person', 'LocalBusiness'],
+      name: 'Nil Mariages',
+      jobTitle: lang === 'en' ? 'Travel Agent' : lang === 'ca' ? 'Agent de viatges' : 'Agente de viajes',
+      description: description,
+      email: profile.email,
+      telephone: profile.phone,
+      url: new URL(localeUrl(lang), site).href,
+      address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
+      sameAs: [profile.whatsapp],
+    })} />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Saltar al contenido</a>
     <header class="site-header" id="site-header">
       <div class="container header-inner">
         <a href={home} class="header-logo" aria-label="Nil Mariages"><Logo variant="cream" /></a>
@@ -86,9 +116,11 @@ const year = new Date().getFullYear();
       </div>
     </header>
 
-    <main>
+    <main id="main-content">
       <slot />
     </main>
+
+    <FloatingWhatsApp tooltip={d.ui.cta.whatsapp} />
 
     <footer class="site-footer" id="contacto">
       <div class="container footer-inner">
@@ -128,8 +160,9 @@ const year = new Date().getFullYear();
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
 
-      // Menú móvil (hamburguesa)
+      // Menú móvil (hamburguesa) con trampa de foco
       const toggle = document.getElementById('nav-toggle');
+      const nav = document.getElementById('site-nav');
       const closeMenu = () => {
         header?.classList.remove('is-open');
         toggle?.setAttribute('aria-expanded', 'false');
@@ -137,6 +170,24 @@ const year = new Date().getFullYear();
       toggle?.addEventListener('click', () => {
         const open = header?.classList.toggle('is-open') ?? false;
         toggle.setAttribute('aria-expanded', String(open));
+        if (open && nav) {
+          const first = nav.querySelector<HTMLElement>('a, button');
+          setTimeout(() => first?.focus(), 50);
+        }
+      });
+      // Trampa de foco cuando el menú está abierto en móvil
+      nav?.addEventListener('keydown', (e) => {
+        if (!header?.classList.contains('is-open')) return;
+        if (e.key === 'Escape') { closeMenu(); toggle?.focus(); return; }
+        if (e.key !== 'Tab') return;
+        const focusable = Array.from(nav.querySelectorAll<HTMLElement>('a, button'));
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
       });
       document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', closeMenu));
       window.addEventListener('resize', () => {
@@ -184,6 +235,21 @@ const year = new Date().getFullYear();
     </script>
 
     <style>
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 16px;
+        padding: 10px 18px;
+        background: var(--teal);
+        color: var(--navy);
+        font-weight: 700;
+        border-radius: 0 0 var(--radius) var(--radius);
+        z-index: 9999;
+        transition: top 0.15s ease;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
       .site-header {
         position: fixed;
         inset: 0 0 auto 0;

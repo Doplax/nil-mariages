@@ -69,6 +69,42 @@ export const ca: Dict = {
       email: 'Escriu-me',
       whatsapp: 'WhatsApp',
     },
+    testimonials: {
+      eyebrow: 'Clients',
+      title: 'El que diuen els que han viatjat amb en Nil',
+      lead: 'Cada viatge que dissenyo és una història diferent. Aquí tens algunes experiències de viatgers que van confiar en mi per crear la seva.',
+      items: [
+        {
+          name: 'Laura G.',
+          role: "Viatgera d'aventura",
+          text: 'En Nil ens va organitzar 3 setmanes per Kirguizistan i Uzbekistan completament a mida. Cada detall estava pensat: els allotjaments, el ritme, els imprevistos. Va ser el viatge de la nostra vida.',
+          country: 'kg',
+        },
+        {
+          name: 'Marc & Anna',
+          role: 'Parella viatgera',
+          text: 'Volíem alguna cosa diferent del paquet típic. En Nil ens va dissenyar una ruta pels Balcans que mai hauríem trobat sols. El seu coneixement de primera mà de la destinació ho canvia tot.',
+          country: 'al',
+        },
+        {
+          name: 'Jordi P.',
+          role: 'Viatger sol',
+          text: "És dels pocs agents que ha trepitjat de veritat les destinacions que ven. Amb en Nil saps que cada recomanació ve de l'experiència real, no d'un catàleg.",
+          country: 'np',
+        },
+      ],
+    },
+    contact: {
+      eyebrow: 'Contacte',
+      title: "Explica'm el teu pròxim viatge",
+      lead: 'Omple el formulari i et respondré en menys de 24 hores amb idees adaptades a tu.',
+      namePlaceholder: 'El teu nom',
+      emailPlaceholder: 'tu@email.com',
+      msgPlaceholder: "On vols anar? Quin tipus d'experiència busques?",
+      submit: 'Enviar missatge',
+      success: 'Missatge enviat! Et respondré aviat.',
+      privacy: "Només faig servir les teves dades per respondre't. Sense spam.",
+    },
     footer: {
       tagline: 'Disseny i venda de viatges a mida. Experiències autèntiques, assessorament proper.',
       navTitle: 'Navega',

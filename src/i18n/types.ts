@@ -49,6 +49,13 @@ export interface TripText {
   description: string;
 }
 
+export interface Testimonial {
+  name: string;
+  role: string;
+  text: string;
+  country: string;
+}
+
 export interface Dict {
   ui: {
     nav: { about: string; trayectoria: string; viajes: string; rutas: string; contacto: string };
@@ -87,6 +94,23 @@ export interface Dict {
     trips: { eyebrow: string; title: string; lead: string; sampleBadge: string };
     future: { eyebrow: string; title: string; lead: string; soon: string };
     cta: { title: string; text: string; email: string; whatsapp: string };
+    testimonials: {
+      eyebrow: string;
+      title: string;
+      lead: string;
+      items: Testimonial[];
+    };
+    contact: {
+      eyebrow: string;
+      title: string;
+      lead: string;
+      namePlaceholder: string;
+      emailPlaceholder: string;
+      msgPlaceholder: string;
+      submit: string;
+      success: string;
+      privacy: string;
+    };
     footer: { tagline: string; navTitle: string; contactTitle: string; madeWith: string };
     langLabel: string;
   };

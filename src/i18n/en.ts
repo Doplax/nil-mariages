@@ -69,6 +69,42 @@ export const en: Dict = {
       email: 'Email me',
       whatsapp: 'WhatsApp',
     },
+    testimonials: {
+      eyebrow: 'Clients',
+      title: 'What travellers say about Nil',
+      lead: 'Every trip I design is a different story. Here are some experiences from travellers who trusted me to create theirs.',
+      items: [
+        {
+          name: 'Laura G.',
+          role: 'Adventure traveller',
+          text: 'Nil organised a fully tailor-made 3-week trip through Kyrgyzstan and Uzbekistan for us. Every detail was thought through — accommodation, pacing, contingencies. It was the trip of our lives.',
+          country: 'kg',
+        },
+        {
+          name: 'Marc & Anna',
+          role: 'Couple travellers',
+          text: 'We wanted something different from the typical package holiday. Nil designed a Balkans route we never could have found on our own. His first-hand knowledge of the destination makes all the difference.',
+          country: 'al',
+        },
+        {
+          name: 'Jordi P.',
+          role: 'Solo traveller',
+          text: "He's one of the few agents who has genuinely been to the destinations he sells. With Nil, every recommendation comes from real experience, not a brochure.",
+          country: 'np',
+        },
+      ],
+    },
+    contact: {
+      eyebrow: 'Contact',
+      title: 'Tell me about your next trip',
+      lead: "Fill in the form and I'll reply within 24 hours with ideas tailored to you.",
+      namePlaceholder: 'Your name',
+      emailPlaceholder: 'you@email.com',
+      msgPlaceholder: 'Where do you want to go? What kind of experience are you looking for?',
+      submit: 'Send message',
+      success: "Message sent! I'll be in touch shortly.",
+      privacy: 'I only use your details to reply to you. No spam.',
+    },
     footer: {
       tagline: 'Design and sale of tailor-made trips. Authentic experiences, close guidance.',
       navTitle: 'Explore',
