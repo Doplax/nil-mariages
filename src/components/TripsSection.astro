@@ -55,12 +55,15 @@ const hasTrips = trips.length > 0;
 </section>
 
 <script>
-  import L from 'leaflet';
   import { trips } from '../data/trips';
 
   const mapEl = document.getElementById('trip-map');
-  if (mapEl && trips.length) {
-    const map = L.map(mapEl, { scrollWheelZoom: false, zoomControl: true }).setView([47.5, 19.04], 13);
+
+  // Leaflet (152 KB) se carga de forma diferida: solo cuando la sección del
+  // mapa se acerca al viewport, para no penalizar la carga inicial.
+  async function initMap() {
+    const L = (await import('leaflet')).default;
+    const map = L.map(mapEl as HTMLElement, { scrollWheelZoom: false, zoomControl: true }).setView([47.5, 19.04], 13);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution:
@@ -69,7 +72,7 @@ const hasTrips = trips.length > 0;
       subdomains: 'abcd',
     }).addTo(map);
 
-    let layer: L.GeoJSON | null = null;
+    let layer: any = null;
 
     const titleEl = document.getElementById('trip-info-title');
     const locEl = document.getElementById('trip-info-location');
@@ -127,6 +130,19 @@ const hasTrips = trips.length > 0;
     renderTrip(0);
     // Recalcula el tamaño tras el primer render (evita el mapa gris)
     setTimeout(() => map.invalidateSize(), 200);
+  }
+
+  if (mapEl && trips.length) {
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          obs.disconnect();
+          initMap();
+        }
+      },
+      { rootMargin: '300px' },
+    );
+    io.observe(mapEl);
   }
 </script>
 

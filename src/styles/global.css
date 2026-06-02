@@ -17,7 +17,7 @@
   --shadow: 0 10px 30px -12px rgba(14, 35, 54, 0.25);
   --shadow-lg: 0 24px 60px -20px rgba(14, 35, 54, 0.4);
 
-  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 *,
