@@ -81,10 +81,19 @@ la marca: la web es de Nil Mariages con logo propio.*
       `Chip`, `Stat`, `Flag` (+ clase utilitaria `.card`).
 - [x] Contacto + botón de WhatsApp destacados al final (CTA) y en el footer.
 
-## ⏳ Pendiente (siguiente iteración)
-- [ ] **Internacionalización**: web en español, inglés y catalán.
-- [ ] **Test de rendimiento** (Lighthouse) y optimizaciones.
-- [ ] Revisión final multiagente.
+## ✅ Internacionalización (i18n)
+- [x] Web en **español** (`/`), **inglés** (`/en/`) y **catalán** (`/ca/`).
+- [x] Todo el texto (UI + contenido) en diccionarios por idioma (`src/i18n/`).
+- [x] **Selector de idioma** en la cabecera y etiquetas `hreflang` para SEO.
+
+## ✅ Cabecera responsive
+- [x] Menú **hamburguesa** en móvil con panel desplegable y animación.
+
+## ✅ Rendimiento (Lighthouse, móvil)
+- [x] Fuente Inter **autoalojada** (sin petición bloqueante a Google Fonts).
+- [x] Mapa Leaflet con **carga diferida** (solo al acercarse al viewport).
+- [x] Resultado: **Rendimiento 98**, Accesibilidad 98, Buenas prácticas 100,
+      SEO 100 (FCP 1,6 s · LCP 2,1 s · TBT 0 ms · CLS 0).
 
 ## ✅ Entrega
 - [x] `npm run build` sin errores y verificación visual con capturas.
