@@ -23,7 +23,7 @@ export const regions: RegionStruct[] = [
   { id: 'africa', icon: '🌍', featured: true, countries: ['eg', 'ma'] },
   {
     id: 'europa',
-    icon: '🏰',
+    icon: '🌍',
     featured: false,
     countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'ad', 'es'],
   },

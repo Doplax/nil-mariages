@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { name, iso, description, compact = false } = Astro.props;
-const img = countryImage(name);
+const img = countryImage(iso);
 ---
 
 <article class={`country-card${compact ? ' compact' : ''}`}>

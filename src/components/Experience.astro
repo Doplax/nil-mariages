@@ -60,6 +60,11 @@ const europe = regions.find((r) => !r.featured);
               {d.regions[europe.id].title}
             </h3>
             {d.regions[europe.id].subtitle && <Chip variant="soft">{d.regions[europe.id].subtitle}</Chip>}
+            <span class="region-flags" aria-hidden="true">
+              {europe.countries.slice(0, 8).map((iso) => (
+                <Flag iso={iso} h={15} label={d.countries[iso].name} />
+              ))}
+            </span>
             <span class="region-count">
               {europe.countries.length} {t.countriesLabel}
             </span>
