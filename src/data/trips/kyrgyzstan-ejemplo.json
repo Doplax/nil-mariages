@@ -1,0 +1,46 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruta 4x4 por Kirguistán", "type": "route" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [74.5975, 42.8746],
+          [76.1803, 42.4600],
+          [77.0829, 42.6522],
+          [78.3938, 42.4922],
+          [75.7629, 42.2111],
+          [75.1486, 41.8556],
+          [75.9989, 41.4292]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bishkek", "description": "Capital kirguís. Punto de partida de la ruta." },
+      "geometry": { "type": "Point", "coordinates": [74.5975, 42.8746] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Issyk-Kul (Cholpon-Ata)", "description": "El décimo lago más grande del mundo, a 1.600 m de altitud." },
+      "geometry": { "type": "Point", "coordinates": [77.0829, 42.6522] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Karakol", "description": "Ciudad montañesa fronteriza con China. Trekking al glaciar Ak-Suu." },
+      "geometry": { "type": "Point", "coordinates": [78.3938, 42.4922] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Song-Köl", "description": "Lago alpino a 3.016 m de altitud. Noche en yurta con pastores nómadas." },
+      "geometry": { "type": "Point", "coordinates": [75.1486, 41.8556] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Naryn", "description": "Ciudad en el corazón de Kirguistán. Conexión al sur o vuelo a Uzbekistán." },
+      "geometry": { "type": "Point", "coordinates": [75.9989, 41.4292] }
+    }
+  ]
+}

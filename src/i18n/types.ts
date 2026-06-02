@@ -54,6 +54,24 @@ export interface Testimonial {
   role: string;
   text: string;
   country: string;
+  stars?: number;
+  source?: string;
+}
+
+export interface PlanningDay {
+  label: string;
+  text: string;
+}
+
+export interface PlanningItem {
+  title: string;
+  location: string;
+  duration: string;
+  type: string;
+  image: string;
+  isos: string[];
+  summary: string;
+  days: PlanningDay[];
 }
 
 export interface Dict {
@@ -110,6 +128,14 @@ export interface Dict {
       submit: string;
       success: string;
       privacy: string;
+    };
+    planning: {
+      eyebrow: string;
+      title: string;
+      lead: string;
+      showDays: string;
+      hideDays: string;
+      items: PlanningItem[];
     };
     footer: { tagline: string; navTitle: string; contactTitle: string; madeWith: string };
     langLabel: string;

@@ -1,6 +1,5 @@
-import type { Dict } from './types';
 
-export const en: Dict = {
+module.exports = {
   ui: {
     nav: {
       about: 'About',
@@ -306,15 +305,15 @@ export const en: Dict = {
     interests: ['Category B driving licence and own vehicle.', 'Available to travel.'],
   },
   trips: {
-    'budapest-ejemplo': {
-      title: 'Budapest on foot',
-      location: 'Budapest, Hungary',
+    ‘budapest-ejemplo’: {
+      title: ‘Budapest on foot’,
+      location: ‘Budapest, Hungary’,
       description: "A walk through the must-sees of Budapest: from Parliament to the Fisherman’s Bastion, crossing the Danube. Urban route sample.",
     },
-    'kyrgyzstan-ejemplo': {
-      title: 'Kyrgyzstan by 4×4',
-      location: 'Kyrgyzstan',
-      description: 'Kyrgyz Silk Road circuit: Bishkek, Lake Issyk-Kul, Karakol, Song-Köl lake at 3,000 m and Naryn. Sample of a cross-country road trip.',
+    ‘kyrgyzstan-ejemplo’: {
+      title: ‘Kyrgyzstan by 4×4’,
+      location: ‘Kyrgyzstan’,
+      description: ‘Kyrgyz Silk Road circuit: Bishkek, Lake Issyk-Kul, Karakol, Song-Köl lake at 3,000 m and Naryn. Sample of a cross-country road trip.’,
     },
   },
 };

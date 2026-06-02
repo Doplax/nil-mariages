@@ -18,18 +18,23 @@ export interface RegionStruct {
 }
 
 export const regions: RegionStruct[] = [
-  { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr'] },
+  { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn'] },
   { id: 'america', icon: '🌎', featured: true, countries: ['ve', 'us'] },
   { id: 'africa', icon: '🌍', featured: true, countries: ['eg', 'ma'] },
   {
     id: 'europa',
     icon: '🌍',
     featured: false,
-    countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'ad', 'es'],
+    countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'ad', 'es', 'va'],
   },
 ];
 
-export const futureProjects: string[] = ['pk', 'cn', 'co'];
+export const futureProjects: string[] = ['pk', 'cn', 'co', 'pe', 'baltico'];
+
+/** Flags to show for multi-country future route entries */
+export const futureGroupFlags: Record<string, string[]> = {
+  baltico: ['lt', 'lv', 'ee', 'fi'],
+};
 
 /** URL de la imagen del país (foto real del lugar), indexada por ISO. */
 export function countryImage(iso: string): string {

@@ -1,0 +1,200 @@
+---
+import { countryImage } from '../data/countries';
+import { getDict, type Lang } from '../i18n';
+import Flag from './Flag.astro';
+import SectionHeader from './ui/SectionHeader.astro';
+import Reveal from './ui/Reveal.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang).ui.planning;
+---
+
+<section class="planning section" id="planificaciones">
+  <div class="container">
+    <SectionHeader eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
+    <div class="planning-grid">
+      {t.items.map((item, i) => (
+        <Reveal delay={i * 80} class="planning-card card">
+          <div class="planning-photo-wrap">
+            <img
+              src={countryImage(item.image)}
+              alt={item.title}
+              loading="lazy"
+              width="600"
+              height="300"
+              class="planning-photo"
+            />
+            <div class="planning-photo-overlay" aria-hidden="true" />
+          </div>
+          <div class="planning-body">
+            <div class="planning-meta">
+              <span class="planning-flags">
+                {item.isos.map((iso) => <Flag iso={iso} h={16} label={iso} />)}
+              </span>
+              <span class="planning-type">{item.type}</span>
+              <span class="planning-duration">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                {item.duration}
+              </span>
+            </div>
+            <h3 class="planning-title">{item.title}</h3>
+            <p class="planning-summary">{item.summary}</p>
+            <details class="planning-details">
+              <summary class="planning-toggle">
+                <span class="show-label">{t.showDays}</span>
+                <span class="hide-label">{t.hideDays}</span>
+                <svg class="planning-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <ol class="planning-days">
+                {item.days.map((d) => (
+                  <li>
+                    <strong>{d.label}</strong>
+                    {d.text}
+                  </li>
+                ))}
+              </ol>
+            </details>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .planning {
+    background: var(--cream);
+  }
+  .planning-grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 28px;
+  }
+  .planning-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .planning-photo-wrap {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    background: var(--navy);
+  }
+  .planning-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .planning-card:hover .planning-photo {
+    transform: scale(1.04);
+  }
+  .planning-photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(9,22,34,0.3));
+  }
+  .planning-body {
+    padding: 22px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  .planning-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .planning-flags {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .planning-type {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal-deep);
+    background: rgba(95,201,188,0.12);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .planning-duration {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .planning-title {
+    font-size: 1.35rem;
+  }
+  .planning-summary {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Details accordion */
+  .planning-details {
+    margin-top: 4px;
+  }
+  .planning-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--teal-deep);
+    list-style: none;
+    user-select: none;
+    padding: 6px 0;
+  }
+  .planning-toggle::-webkit-details-marker { display: none; }
+  .hide-label { display: none; }
+  details[open] .show-label { display: none; }
+  details[open] .hide-label { display: inline; }
+  details[open] .planning-chevron { transform: rotate(180deg); }
+  .planning-chevron {
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+  }
+  .planning-days {
+    margin: 12px 0 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .planning-days li {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .planning-days li strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .planning-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

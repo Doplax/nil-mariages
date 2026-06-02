@@ -1,7 +1,6 @@
 ---
 import { getDict, type Lang } from '../i18n';
 import SectionHeader from './ui/SectionHeader.astro';
-import Reveal from './ui/Reveal.astro';
 import Flag from './Flag.astro';
 
 interface Props {
@@ -14,32 +13,100 @@ const t = getDict(lang).ui.testimonials;
 <section class="testimonials section">
   <div class="container">
     <SectionHeader eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
-    <div class="testi-grid">
-      {t.items.map((item, i) => (
-        <Reveal delay={i * 80}>
-          <blockquote class="testi-card card">
-            <div class="testi-quote" aria-hidden="true">"</div>
-            <p class="testi-text">{item.text}</p>
-            <footer class="testi-footer">
-              <div class="testi-avatar" aria-hidden="true">{item.name.charAt(0)}</div>
-              <div class="testi-meta">
-                <cite class="testi-name">{item.name}</cite>
-                <span class="testi-role">
-                  <Flag iso={item.country} h={13} label="" />
-                  {item.role}
-                </span>
-              </div>
-            </footer>
-          </blockquote>
-        </Reveal>
-      ))}
+
+    <div class="testi-wrapper reveal">
+      <button class="testi-arrow testi-prev" id="testi-prev" aria-label="Anterior" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <div class="testi-viewport">
+        <div class="testi-track" id="testi-track">
+          {t.items.map((item) => (
+            <blockquote class="testi-card card">
+              <div class="testi-quote" aria-hidden="true">"</div>
+              {item.stars && (
+                <div class="testi-stars" aria-label={`${item.stars} estrellas`}>
+                  {Array.from({ length: item.stars }).map(() => (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  ))}
+                  {item.source && <span class="testi-source">{item.source}</span>}
+                </div>
+              )}
+              <p class="testi-text">{item.text}</p>
+              <footer class="testi-footer">
+                <div class="testi-avatar" aria-hidden="true">{item.name.charAt(0)}</div>
+                <div class="testi-meta">
+                  <cite class="testi-name">{item.name}</cite>
+                  <span class="testi-role">
+                    <Flag iso={item.country} h={13} label="" />
+                    {item.role}
+                  </span>
+                </div>
+              </footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+
+      <button class="testi-arrow testi-next" id="testi-next" aria-label="Siguiente">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
+
+    <div class="testi-dots" id="testi-dots" aria-hidden="true"></div>
   </div>
 </section>
+
+<script>
+  const VISIBLE = 3;
+  const track = document.getElementById('testi-track');
+  const prevBtn = document.getElementById('testi-prev') as HTMLButtonElement | null;
+  const nextBtn = document.getElementById('testi-next') as HTMLButtonElement | null;
+  const dotsEl = document.getElementById('testi-dots');
+
+  if (track && prevBtn && nextBtn) {
+    const cards = Array.from(track.querySelectorAll<HTMLElement>('.testi-card'));
+    const total = cards.length;
+    const maxIndex = Math.max(0, total - VISIBLE);
+    let current = 0;
+
+    // Dots (one per position)
+    const dotCount = maxIndex + 1;
+    const dots: HTMLButtonElement[] = [];
+    for (let i = 0; i <= maxIndex; i++) {
+      const d = document.createElement('button');
+      d.className = 'testi-dot';
+      d.setAttribute('aria-label', `Slide ${i + 1}`);
+      d.addEventListener('click', () => goto(i));
+      dotsEl?.appendChild(d);
+      dots.push(d);
+    }
+
+    function goto(n: number) {
+      current = Math.max(0, Math.min(n, maxIndex));
+      const cardEl = cards[0];
+      const gap = 24;
+      const cardW = cardEl.offsetWidth + gap;
+      track.style.transform = `translateX(-${current * cardW}px)`;
+      prevBtn!.disabled = current === 0;
+      nextBtn!.disabled = current >= maxIndex;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    prevBtn.addEventListener('click', () => goto(current - 1));
+    nextBtn.addEventListener('click', () => goto(current + 1));
+
+    // Responsive: recalculate on resize
+    window.addEventListener('resize', () => goto(current), { passive: true });
+
+    goto(0);
+  }
+</script>
 
 <style>
   .testimonials {
     background: var(--navy);
+    overflow: hidden;
   }
   .testimonials :global(.section-title),
   .testimonials :global(.eyebrow) {
@@ -51,38 +118,87 @@ const t = getDict(lang).ui.testimonials;
   .testimonials :global(.section-lead) {
     color: rgba(245, 250, 249, 0.68);
   }
-  .testi-grid {
+
+  .testi-wrapper {
     margin-top: 48px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .testi-arrow {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(245, 250, 249, 0.2);
+    background: rgba(245, 250, 249, 0.06);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+    flex-shrink: 0;
+  }
+  .testi-arrow:hover:not(:disabled) {
+    background: rgba(95, 201, 188, 0.18);
+    border-color: var(--teal);
+  }
+  .testi-arrow:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .testi-viewport {
+    flex: 1;
+    overflow: hidden;
+  }
+  .testi-track {
+    display: flex;
     gap: 24px;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   .testi-card {
+    min-width: calc((100% - 48px) / 3);
+    flex-shrink: 0;
     position: relative;
-    padding: 32px;
+    padding: 28px;
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    transition: transform 0.22s ease, border-color 0.22s ease;
+    gap: 14px;
     margin: 0;
+    transition: border-color 0.22s ease;
   }
   .testi-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(95, 201, 188, 0.4);
+    border-color: rgba(95, 201, 188, 0.35);
   }
   .testi-quote {
-    font-size: 4.5rem;
+    font-size: 3.8rem;
     line-height: 0.6;
     color: var(--teal);
-    opacity: 0.6;
+    opacity: 0.5;
     font-family: Georgia, serif;
-    pointer-events: none;
+  }
+  .testi-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #f5c842;
+  }
+  .testi-source {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(245, 250, 249, 0.45);
+    margin-left: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
   .testi-text {
     color: rgba(245, 250, 249, 0.88);
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.7;
     font-style: italic;
     flex: 1;
@@ -90,13 +206,13 @@ const t = getDict(lang).ui.testimonials;
   .testi-footer {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-top: 16px;
+    gap: 12px;
+    padding-top: 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
   .testi-avatar {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--teal-deep), var(--teal));
     color: var(--navy);
@@ -104,7 +220,7 @@ const t = getDict(lang).ui.testimonials;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
   }
   .testi-name {
@@ -112,20 +228,60 @@ const t = getDict(lang).ui.testimonials;
     font-style: normal;
     font-weight: 700;
     color: var(--cream);
-    font-size: 0.96rem;
+    font-size: 0.92rem;
   }
   .testi-role {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
-    color: rgba(245, 250, 249, 0.55);
+    gap: 5px;
+    font-size: 0.78rem;
+    color: rgba(245, 250, 249, 0.5);
     margin-top: 2px;
   }
 
-  @media (max-width: 640px) {
-    .testi-grid {
-      grid-template-columns: 1fr;
+  /* Dots */
+  .testi-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 28px;
+  }
+  :global(.testi-dot) {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(245, 250, 249, 0.25);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    padding: 0;
+  }
+  :global(.testi-dot.active) {
+    background: var(--teal);
+    transform: scale(1.25);
+  }
+
+  /* Mobile: 1 card */
+  @media (max-width: 860px) {
+    .testi-card {
+      min-width: calc(100% - 24px);
+    }
+    .testi-arrow {
+      width: 38px;
+      height: 38px;
+    }
+  }
+  @media (max-width: 520px) {
+    .testi-wrapper {
+      gap: 8px;
+    }
+    .testi-card {
+      padding: 20px;
+      min-width: 100%;
+    }
+    .testi-arrow {
+      width: 34px;
+      height: 34px;
     }
   }
 </style>

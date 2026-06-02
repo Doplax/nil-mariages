@@ -9,6 +9,7 @@ import Future from './Future.astro';
 import CTA from './CTA.astro';
 import Testimonials from './Testimonials.astro';
 import ContactForm from './ContactForm.astro';
+import PlanningSection from './PlanningSection.astro';
 
 interface Props {
   lang: Lang;
@@ -21,6 +22,7 @@ const { lang } = Astro.props;
 <Resume lang={lang} />
 <Experience lang={lang} />
 <TripsSection lang={lang} />
+<PlanningSection lang={lang} />
 <Future lang={lang} />
 <Testimonials lang={lang} />
 <CTA lang={lang} />

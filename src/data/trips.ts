@@ -8,6 +8,7 @@
 
 import type { FeatureCollection } from 'geojson';
 import budapest from './trips/budapest-ejemplo.json';
+import kyrgyzstan from './trips/kyrgyzstan-ejemplo.json';
 
 export interface Trip {
   slug: string;
@@ -26,5 +27,12 @@ export const trips: Trip[] = [
     year: '2024',
     sample: true,
     data: budapest as FeatureCollection,
+  },
+  {
+    slug: 'kyrgyzstan-ejemplo',
+    iso: 'kg',
+    year: '2023',
+    sample: true,
+    data: kyrgyzstan as FeatureCollection,
   },
 ];
