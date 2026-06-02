@@ -1,36 +1,47 @@
 ---
 import 'leaflet/dist/leaflet.css';
 import { trips } from '../data/trips';
+import { getDict, type Lang } from '../i18n';
 import Flag from './Flag.astro';
 import SectionHeader from './ui/SectionHeader.astro';
 
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = getDict(lang);
+const t = d.ui.trips;
 const hasTrips = trips.length > 0;
 ---
 
 <section class="trips section" id="rutas">
   <div class="container">
-    <SectionHeader
-      class="trips-head"
-      eyebrow="Rutas y mapas"
-      title="Mis rutas, sobre el mapa"
-      lead="Cada viaje que diseño deja un mapa detrás. Aquí podrás explorar de forma interactiva algunos de mis itinerarios, con sus paradas y recorridos reales."
-    />
+    <SectionHeader class="trips-head" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
 
     {
       hasTrips && (
         <div class="trips-layout reveal">
-          <div class="trip-tabs" role="tablist" aria-label="Selecciona una ruta">
+          <div class="trip-tabs" role="tablist" aria-label={t.title}>
             {trips.map((trip, i) => (
-              <button class={`trip-tab${i === 0 ? ' active' : ''}`} data-index={i} type="button" role="tab" aria-selected={i === 0}>
-                <Flag iso={trip.iso} h={14} label={trip.location} />
-                <span class="trip-tab-title">{trip.title}</span>
-                {trip.sample && <span class="trip-tab-badge">Ejemplo</span>}
+              <button
+                class={`trip-tab${i === 0 ? ' active' : ''}`}
+                data-index={i}
+                data-title={d.trips[trip.slug].title}
+                data-location={`${d.trips[trip.slug].location}${trip.year ? ` · ${trip.year}` : ''}`}
+                data-desc={d.trips[trip.slug].description}
+                type="button"
+                role="tab"
+                aria-selected={i === 0}
+              >
+                <Flag iso={trip.iso} h={14} label={d.trips[trip.slug].location} />
+                <span class="trip-tab-title">{d.trips[trip.slug].title}</span>
+                {trip.sample && <span class="trip-tab-badge">{t.sampleBadge}</span>}
               </button>
             ))}
           </div>
 
           <div class="trip-stage">
-            <div id="trip-map" class="trip-map" role="application" aria-label="Mapa interactivo de la ruta"></div>
+            <div id="trip-map" class="trip-map" role="application" aria-label={t.title}></div>
             <div class="trip-info" id="trip-info">
               <h3 id="trip-info-title" />
               <p id="trip-info-location" class="trip-info-location" />
@@ -63,6 +74,7 @@ const hasTrips = trips.length > 0;
     const titleEl = document.getElementById('trip-info-title');
     const locEl = document.getElementById('trip-info-location');
     const descEl = document.getElementById('trip-info-desc');
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.trip-tab'));
 
     function renderTrip(index: number) {
       const trip = trips[index];
@@ -94,14 +106,15 @@ const hasTrips = trips.length > 0;
       const bounds = layer.getBounds();
       if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40] });
 
-      if (titleEl) titleEl.textContent = trip.title;
-      if (locEl) locEl.textContent = trip.location + (trip.year ? ` · ${trip.year}` : '');
-      if (descEl) descEl.textContent = trip.description;
+      const btn = tabs[index];
+      if (titleEl) titleEl.textContent = btn?.dataset.title ?? '';
+      if (locEl) locEl.textContent = btn?.dataset.location ?? '';
+      if (descEl) descEl.textContent = btn?.dataset.desc ?? '';
     }
 
-    document.querySelectorAll<HTMLButtonElement>('.trip-tab').forEach((btn) => {
+    tabs.forEach((btn) => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.trip-tab').forEach((b) => {
+        tabs.forEach((b) => {
           b.classList.remove('active');
           b.setAttribute('aria-selected', 'false');
         });

@@ -1,10 +1,13 @@
 ---
-const highlights = [
-  { icon: '🎯', title: 'Viajes a medida', text: 'Diseño y venta de itinerarios adaptados a las necesidades de cada viajero.' },
-  { icon: '🤝', title: 'Acompañamiento integral', text: 'Asesoramiento personalizado y gestión de reservas antes, durante y después del viaje.' },
-  { icon: '🏔️', title: 'Turismo de aventura', text: 'Apasionado por las experiencias auténticas y los destinos fuera de lo común.' },
-  { icon: '🌐', title: 'Conocimiento real', text: 'Más de 40 países visitados que aportan recomendaciones auténticas y diferenciadas.' },
-];
+import { getDict, type Lang } from '../i18n';
+import { profile } from '../data/cv';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang).ui.about;
+const icons = ['🎯', '🤝', '🏔️', '🌐'];
 ---
 
 <section class="about section" id="sobre-mi">
@@ -14,36 +17,26 @@ const highlights = [
         src="/images/nil-mariages.webp"
         width="800"
         height="800"
-        alt="Nil Mariages, agente de viajes"
+        alt={`${profile.name}, ${t.role}`}
         loading="lazy"
       />
       <div class="about-badge">
-        <span>Nil Mariages</span>
-        <small>Agente de viajes</small>
+        <span>{profile.name}</span>
+        <small>{t.role}</small>
       </div>
     </div>
 
     <div class="about-text reveal">
-      <span class="eyebrow">● Sobre mí</span>
-      <h2 class="section-title">Pasión por viajar, vocación por hacértelo fácil</h2>
-      <p class="about-body">
-        Agente de viajes especializado en el diseño y venta de viajes a medida, con experiencia en
-        asesoramiento personalizado, gestión de reservas y acompañamiento integral al cliente antes,
-        durante y después del viaje. Apasionado por el turismo de aventura y la creación de itinerarios
-        adaptados a las necesidades de cada viajero.
-      </p>
-      <p class="about-body">
-        He visitado más de 40 países en Europa, Asia, África y América, lo que me permite aportar un
-        conocimiento práctico de destinos, culturas y experiencias para ofrecer recomendaciones
-        auténticas y diferenciadas. Orientado a proporcionar un servicio cercano, profesional y enfocado
-        en crear experiencias memorables.
-      </p>
+      <span class="eyebrow">● {t.eyebrow}</span>
+      <h2 class="section-title">{t.title}</h2>
+      <p class="about-body">{t.p1}</p>
+      <p class="about-body">{t.p2}</p>
 
       <div class="about-grid">
         {
-          highlights.map((h) => (
+          t.cards.map((h, i) => (
             <div class="about-card">
-              <span class="about-card-icon">{h.icon}</span>
+              <span class="about-card-icon">{icons[i]}</span>
               <div>
                 <h3>{h.title}</h3>
                 <p>{h.text}</p>

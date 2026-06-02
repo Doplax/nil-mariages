@@ -1,0 +1,51 @@
+---
+import { LANGS, localeUrl, type Lang } from '../i18n';
+
+interface Props {
+  current: Lang;
+  class?: string;
+}
+const { current, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['lang-switcher', cls]} role="group" aria-label="Idioma / Language">
+  {
+    LANGS.map((l) => (
+      <a
+        href={localeUrl(l)}
+        class:list={['lang-link', l === current && 'active']}
+        hreflang={l}
+        aria-current={l === current ? 'true' : undefined}
+      >
+        {l.toUpperCase()}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid rgba(245, 250, 249, 0.2);
+    border-radius: 999px;
+  }
+  .lang-link {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: rgba(245, 250, 249, 0.72);
+    padding: 4px 9px;
+    border-radius: 999px;
+    transition: color 0.18s ease, background 0.18s ease;
+  }
+  .lang-link:hover {
+    color: var(--teal-bright);
+  }
+  .lang-link.active {
+    background: var(--teal);
+    color: var(--navy);
+  }
+</style>

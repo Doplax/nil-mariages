@@ -1,7 +1,14 @@
 ---
 import { totalCountries } from '../data/countries';
+import { getDict, type Lang } from '../i18n';
 import Stat from './ui/Stat.astro';
 import Button from './ui/Button.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = getDict(lang).ui.hero;
 ---
 
 <section class="hero" id="inicio">
@@ -30,23 +37,20 @@ import Button from './ui/Button.astro';
 
   <div class="container hero-inner">
     <div class="hero-content">
-      <span class="hero-tag">✈️ Agente de viajes · Viajes a medida</span>
+      <span class="hero-tag">✈️ {t.tag}</span>
       <h1 class="hero-title">
-        Diseño viajes que se<br />
-        <span class="hero-accent">recuerdan toda la vida</span>
+        {t.titleTop}<br />
+        <span class="hero-accent">{t.titleAccent}</span>
       </h1>
-      <p class="hero-lead">
-        Soy <strong>Nil Mariages</strong>. Convierto destinos en experiencias hechas a tu medida:
-        itinerarios únicos, asesoramiento cercano y acompañamiento antes, durante y después del viaje.
-      </p>
+      <p class="hero-lead" set:html={t.lead.replace('Nil Mariages', '<strong>Nil Mariages</strong>')} />
       <div class="hero-actions">
-        <Button href="#experiencia" variant="primary">Descubre dónde he estado</Button>
-        <Button href="#contacto" variant="ghost">Hablemos de tu viaje</Button>
+        <Button href="#experiencia" variant="primary">{t.ctaPrimary}</Button>
+        <Button href="#contacto" variant="ghost">{t.ctaGhost}</Button>
       </div>
       <div class="hero-stats">
-        <Stat value={`+${totalCountries}`} label="países visitados" />
-        <Stat value="4" label="continentes" />
-        <Stat value="100%" label="a medida" />
+        <Stat value={`+${totalCountries}`} label={t.statCountries} />
+        <Stat value="4" label={t.statContinents} />
+        <Stat value="100%" label={t.statTailored} />
       </div>
     </div>
   </div>
@@ -65,7 +69,8 @@ import Button from './ui/Button.astro';
   .hero-bg {
     position: absolute;
     inset: 0;
-    background: radial-gradient(46% 50% at 80% 12%, rgba(95, 201, 188, 0.22), transparent 70%);
+    /* Resplandor muy sutil y centrado en la parte superior (sin "manchas"). */
+    background: radial-gradient(120% 75% at 50% -20%, rgba(95, 201, 188, 0.1), transparent 60%);
   }
   .hero-routes {
     position: absolute;

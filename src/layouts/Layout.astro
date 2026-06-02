@@ -2,21 +2,48 @@
 import 'flag-icons/css/flag-icons.min.css';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
+import LangSwitcher from '../components/LangSwitcher.astro';
 import { profile } from '../data/cv';
+import { getDict, localeUrl, LANGS, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
 }
 
-const {
-  title = 'Nil Mariages — Agente de viajes a medida',
-  description = 'Agente de viajes especializado en el diseño y venta de viajes a medida. Más de 40 países visitados en Asia, América, África y Europa.',
-} = Astro.props;
+const meta: Record<Lang, { title: string; description: string; ogLocale: string }> = {
+  es: {
+    title: 'Nil Mariages — Agente de viajes a medida',
+    description:
+      'Agente de viajes especializado en el diseño y venta de viajes a medida. Más de 40 países visitados en Asia, América, África y Europa.',
+    ogLocale: 'es_ES',
+  },
+  en: {
+    title: 'Nil Mariages — Tailor-made travel agent',
+    description:
+      'Travel agent specialised in designing and selling tailor-made trips. 40+ countries visited across Asia, the Americas, Africa and Europe.',
+    ogLocale: 'en_GB',
+  },
+  ca: {
+    title: 'Nil Mariages — Agent de viatges a mida',
+    description:
+      'Agent de viatges especialitzat en el disseny i la venda de viatges a mida. Més de 40 països visitats a Àsia, Amèrica, Àfrica i Europa.',
+    ogLocale: 'ca_ES',
+  },
+};
+
+const { lang, title = meta[lang].title, description = meta[lang].description } = Astro.props;
+const d = getDict(lang);
+const nav = d.ui.nav;
+const foot = d.ui.footer;
+const home = localeUrl(lang);
+const site = Astro.site ?? new URL('https://nil-mariages.vercel.app');
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,6 +57,11 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content="/images/nil-mariages.webp" />
+    <meta property="og:locale" content={meta[lang].ogLocale} />
+
+    <!-- hreflang -->
+    {LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(localeUrl(l), site).href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', site).href} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,13 +75,19 @@ const {
   <body>
     <header class="site-header" id="site-header">
       <div class="container header-inner">
-        <a href="#inicio" class="header-logo"><Logo variant="cream" /></a>
-        <nav class="header-nav" aria-label="Navegación principal">
-          <a href="#sobre-mi">Sobre mí</a>
-          <a href="#trayectoria">Trayectoria</a>
-          <a href="#experiencia">Viajes</a>
-          <a href="#rutas">Rutas</a>
-          <a href="#contacto" class="header-cta">Contacto</a>
+        <a href={home} class="header-logo" aria-label="Nil Mariages"><Logo variant="cream" /></a>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menú" aria-expanded="false" aria-controls="site-nav">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav class="header-nav" id="site-nav" aria-label="Nav">
+          <a href="#sobre-mi">{nav.about}</a>
+          <a href="#trayectoria">{nav.trayectoria}</a>
+          <a href="#experiencia">{nav.viajes}</a>
+          <a href="#rutas">{nav.rutas}</a>
+          <LangSwitcher current={lang} class="nav-lang" />
+          <a href="#contacto" class="header-cta">{nav.contacto}</a>
         </nav>
       </div>
     </header>
@@ -62,18 +100,18 @@ const {
       <div class="container footer-inner">
         <div class="footer-brand">
           <Logo variant="cream" />
-          <p>Diseño y venta de viajes a medida. Experiencias auténticas, asesoramiento cercano.</p>
+          <p>{foot.tagline}</p>
         </div>
         <div class="footer-cols">
           <div>
-            <h4>Navega</h4>
-            <a href="#sobre-mi">Sobre mí</a>
-            <a href="#trayectoria">Trayectoria</a>
-            <a href="#experiencia">Viajes</a>
-            <a href="#rutas">Rutas</a>
+            <h4>{foot.navTitle}</h4>
+            <a href="#sobre-mi">{nav.about}</a>
+            <a href="#trayectoria">{nav.trayectoria}</a>
+            <a href="#experiencia">{nav.viajes}</a>
+            <a href="#rutas">{nav.rutas}</a>
           </div>
           <div>
-            <h4>Contacto</h4>
+            <h4>{foot.contactTitle}</h4>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <a href={profile.phoneHref}>{profile.phone}</a>
             <a href={profile.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
@@ -82,8 +120,8 @@ const {
         </div>
       </div>
       <div class="container footer-bottom">
-        <span>© {new Date().getFullYear()} Nil Mariages · Agente de viajes</span>
-        <span>Hecho con pasión viajera ✈️</span>
+        <span>© {year} Nil Mariages · {d.ui.about.role}</span>
+        <span>{foot.madeWith}</span>
       </div>
     </footer>
 
@@ -95,6 +133,21 @@ const {
       const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Menú móvil (hamburguesa)
+      const toggle = document.getElementById('nav-toggle');
+      const closeMenu = () => {
+        header?.classList.remove('is-open');
+        toggle?.setAttribute('aria-expanded', 'false');
+      };
+      toggle?.addEventListener('click', () => {
+        const open = header?.classList.toggle('is-open') ?? false;
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', closeMenu));
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 860) closeMenu();
+      });
 
       // Animación reveal con IntersectionObserver
       const observer = new IntersectionObserver(
@@ -111,9 +164,7 @@ const {
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
       // Efecto parallax suave en elementos con [data-parallax]
-      const parallaxEls = Array.from(
-        document.querySelectorAll<HTMLElement>('[data-parallax]'),
-      );
+      const parallaxEls = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
       if (parallaxEls.length && !reduceMotion) {
         let ticking = false;
         const apply = () => {
@@ -145,8 +196,9 @@ const {
         z-index: 50;
         transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
       }
-      .site-header.is-scrolled {
-        background: rgba(9, 22, 34, 0.85);
+      .site-header.is-scrolled,
+      .site-header.is-open {
+        background: rgba(9, 22, 34, 0.92);
         backdrop-filter: blur(12px);
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
       }
@@ -154,12 +206,13 @@ const {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-block: 18px;
+        padding-block: 16px;
+        position: relative;
       }
       .header-nav {
         display: flex;
         align-items: center;
-        gap: 28px;
+        gap: 26px;
       }
       .header-nav a:not(.header-cta) {
         position: relative;
@@ -197,6 +250,39 @@ const {
       .header-cta:hover {
         background: var(--teal-bright);
         transform: translateY(-1px);
+      }
+
+      /* Botón hamburguesa (oculto en escritorio) */
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid rgba(245, 250, 249, 0.2);
+        border-radius: 12px;
+        background: rgba(245, 250, 249, 0.04);
+        cursor: pointer;
+      }
+      .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        margin-inline: auto;
+        background: var(--cream);
+        border-radius: 2px;
+        transition: transform 0.25s ease, opacity 0.2s ease;
+      }
+      .site-header.is-open .nav-toggle span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .site-header.is-open .nav-toggle span:nth-child(2) {
+        opacity: 0;
+      }
+      .site-header.is-open .nav-toggle span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
       }
 
       .site-footer {
@@ -245,12 +331,50 @@ const {
         font-size: 0.85rem;
       }
 
-      @media (max-width: 720px) {
+      /* ---- Responsive: menú móvil desplegable ---- */
+      @media (max-width: 860px) {
+        .nav-toggle {
+          display: flex;
+        }
         .header-nav {
-          gap: 16px;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 4px;
+          padding: 14px 24px 22px;
+          background: rgba(9, 22, 34, 0.98);
+          backdrop-filter: blur(14px);
+          border-top: 1px solid rgba(245, 250, 249, 0.08);
+          box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.6);
+          opacity: 0;
+          transform: translateY(-10px);
+          pointer-events: none;
+          transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+        .site-header.is-open .header-nav {
+          opacity: 1;
+          transform: none;
+          pointer-events: auto;
         }
         .header-nav a:not(.header-cta) {
+          padding: 12px 4px;
+          font-size: 1.05rem;
+          border-bottom: 1px solid rgba(245, 250, 249, 0.06);
+        }
+        .header-nav a:not(.header-cta)::after {
           display: none;
+        }
+        .nav-lang {
+          margin-top: 14px;
+          align-self: flex-start;
+        }
+        .header-cta {
+          margin-top: 14px;
+          text-align: center;
+          padding: 13px 20px;
         }
         .footer-inner {
           grid-template-columns: 1fr;

@@ -1,33 +1,35 @@
 ---
 import { futureProjects, countryImage } from '../data/countries';
+import { getDict, type Lang } from '../i18n';
 import Flag from './Flag.astro';
 import SectionHeader from './ui/SectionHeader.astro';
 import Reveal from './ui/Reveal.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = getDict(lang);
+const t = d.ui.future;
 ---
 
 <section class="future section" id="proyectos">
   <div class="container">
-    <SectionHeader
-      light
-      class="future-head"
-      eyebrow="Próximos destinos"
-      title="Futuros proyectos"
-      lead="El mapa nunca se acaba. Estos son los próximos destinos que estoy preparando para seguir ampliando experiencias y rutas a medida."
-    />
+    <SectionHeader light class="future-head" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
 
     <div class="future-grid">
       {
-        futureProjects.map((p, i) => (
+        futureProjects.map((iso, i) => (
           <Reveal class="future-card" delay={i * 80}>
-            <img src={countryImage(p.name)} alt={`${p.name} — paisaje representativo`} loading="lazy" width="700" height="500" />
+            <img src={countryImage(iso)} alt={d.future[iso].name} loading="lazy" width="700" height="500" />
             <div class="future-overlay" />
             <div class="future-content">
               <span class="future-flag">
-                <Flag iso={p.iso} h={15} label={`Bandera de ${p.name}`} />
-                Próximamente
+                <Flag iso={iso} h={15} label={d.future[iso].name} />
+                {t.soon}
               </span>
-              <h3>{p.name}</h3>
-              <p>{p.description}</p>
+              <h3>{d.future[iso].name}</h3>
+              <p>{d.future[iso].desc}</p>
             </div>
           </Reveal>
         ))

@@ -1,0 +1,23 @@
+---
+import type { Lang } from '../i18n';
+import Hero from './Hero.astro';
+import About from './About.astro';
+import Resume from './Resume.astro';
+import Experience from './Experience.astro';
+import TripsSection from './TripsSection.astro';
+import Future from './Future.astro';
+import CTA from './CTA.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<Hero lang={lang} />
+<About lang={lang} />
+<Resume lang={lang} />
+<Experience lang={lang} />
+<TripsSection lang={lang} />
+<Future lang={lang} />
+<CTA lang={lang} />
