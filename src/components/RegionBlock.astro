@@ -1,0 +1,129 @@
+---
+// Bloque reutilizable de un continente: cabecera (icono, título, subtítulo,
+// banderas de TODOS sus países y total) + rejilla de tarjetas de país.
+// Se usa una vez por cada región en la sección "Experiencia viajera".
+import type { RegionStruct } from '../data/countries';
+import { getDict, type Lang } from '../i18n';
+import CountryCard from './CountryCard.astro';
+import Flag from './Flag.astro';
+import Reveal from './ui/Reveal.astro';
+import Chip from './ui/Chip.astro';
+
+interface Props {
+  region: RegionStruct;
+  lang: Lang;
+}
+
+const { region, lang } = Astro.props;
+const d = getDict(lang);
+const t = d.ui.experience;
+const reg = d.regions[region.id];
+// Las regiones no destacadas (Europa) usan la variante compacta.
+const compact = !region.featured;
+---
+
+<div class:list={['region', { 'region-compact': compact }]}>
+  <Reveal class="region-head">
+    <div class="region-title">
+      <h3>
+        <span class="region-icon">{region.icon}</span>
+        {reg.title}
+      </h3>
+      {reg.subtitle && <Chip variant="soft">{reg.subtitle}</Chip>}
+    </div>
+    <span class="region-flags" aria-hidden="true">
+      {region.countries.map((iso) => (
+        <Flag iso={iso} h={15} label={d.countries[iso].name} />
+      ))}
+    </span>
+    <span class="region-count">
+      {region.countries.length} {t.countriesLabel}
+    </span>
+  </Reveal>
+
+  <div class:list={['region-grid', { 'compact-grid': compact }]}>
+    {region.countries.map((iso, i) => (
+      <Reveal delay={(i % (compact ? 5 : 4)) * (compact ? 45 : 60)}>
+        <CountryCard
+          name={d.countries[iso].name}
+          iso={iso}
+          description={d.countries[iso].desc}
+          compact={compact}
+        />
+      </Reveal>
+    ))}
+  </div>
+</div>
+
+<style>
+  .region {
+    margin-top: 60px;
+  }
+  .region:first-of-type {
+    margin-top: 0;
+  }
+  .region-head {
+    display: flex;
+    align-items: center;
+    /* row-gap mayor para separar el título de las banderas al hacer wrap */
+    gap: 16px 24px;
+    flex-wrap: wrap;
+    padding-bottom: 22px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+  }
+  .region-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .region-title h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .region-icon {
+    font-size: 1.55rem;
+  }
+  .region-flags {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .region-count {
+    margin-left: auto;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .region-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
+  }
+  .compact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+    gap: 16px;
+  }
+
+  @media (min-width: 960px) {
+    .region-flags {
+      /* deja respirar las banderas respecto al título/subtítulo */
+      margin-left: 4px;
+    }
+  }
+  @media (max-width: 520px) {
+    .region-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .compact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

@@ -10,7 +10,7 @@ export const ca: Dict = {
       contacto: 'Contacte',
     },
     hero: {
-      tag: 'Agent de viatges · Viatges a mida',
+      tag: 'Travel maker · Viatges a mida i guia titulat',
       titleTop: 'Dissenyo viatges que es',
       titleAccent: 'recorden tota la vida',
       lead: 'Soc en Nil Mariages. Converteixo destinacions en experiències fetes a la teva mida: itineraris únics, assessorament proper i acompanyament abans, durant i després del viatge.',
@@ -44,10 +44,11 @@ export const ca: Dict = {
       skillsTitle: 'Competències',
       awardsTitle: 'Distincions',
       interestsTitle: 'Dades d’interès',
+      licensesTitle: 'Llicències',
     },
     experience: {
       eyebrow: 'Experiència viatgera',
-      title: 'Més de 40 països, quatre continents',
+      title: 'Més de 40 països, cinc continents',
       lead: 'L’àmbit internacional és el que més m’apassiona. Cada destinació m’ha deixat mapes, contactes i un coneixement pràctic que aboco en cada viatge que dissenyo. Aquests són alguns dels llocs que he recorregut.',
       countriesLabel: 'països',
     },
@@ -189,7 +190,8 @@ export const ca: Dict = {
   },
   regions: {
     asia: { title: 'Àsia', subtitle: 'El meu continent preferit' },
-    america: { title: 'Amèrica' },
+    america_norte: { title: 'Amèrica del Nord' },
+    america_sur: { title: 'Amèrica del Sud' },
     africa: { title: 'Àfrica' },
     europa: { title: 'Europa', subtitle: 'Recorreguda a fons, mapa a mapa' },
   },
@@ -295,6 +297,8 @@ export const ca: Dict = {
       'Negociació amb proveïdors',
       'Organització i planificació',
       'Coneixement de destinacions internacionals',
+      'Eines de disseny i presentació: Canva o PowerPoint',
+      'Plataformes de reserva i B2B (Veturis, RateHawk, etc.)',
     ],
     languages: [
       { name: 'Català', level: 'Natiu', value: 5 },
@@ -303,7 +307,8 @@ export const ca: Dict = {
       { name: 'Francès', level: 'Molt bàsic', value: 1 },
     ],
     awards: ['Primer lloc a la X Olimpíada de Geografia de Barcelona.'],
-    interests: ['Carnet de conduir B i vehicle propi.', 'Disponibilitat per viatjar.'],
+    interests: ['Vehicle propi.', 'Disponibilitat per viatjar.'],
+    licenses: ['Carnet de conduir B', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
     'budapest-ejemplo': {

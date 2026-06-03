@@ -12,7 +12,7 @@ export const es: Dict = {
       contacto: 'Contacto',
     },
     hero: {
-      tag: 'Agente de viajes · Viajes a medida',
+      tag: 'Travel maker · Viajes a medida y guía titulado',
       titleTop: 'Diseño viajes que se',
       titleAccent: 'recuerdan toda la vida',
       lead: 'Soy Nil Mariages. Convierto destinos en experiencias hechas a tu medida: itinerarios únicos, asesoramiento cercano y acompañamiento antes, durante y después del viaje.',
@@ -46,10 +46,11 @@ export const es: Dict = {
       skillsTitle: 'Competencias',
       awardsTitle: 'Distinciones',
       interestsTitle: 'Datos de interés',
+      licensesTitle: 'Licencias',
     },
     experience: {
       eyebrow: 'Experiencia viajera',
-      title: 'Más de 40 países, cuatro continentes',
+      title: 'Más de 40 países, cinco continentes',
       lead: 'Lo internacional es lo que más me apasiona. Cada destino me ha dejado mapas, contactos y un conocimiento práctico que vuelco en cada viaje que diseño. Estos son algunos de los lugares que he recorrido.',
       countriesLabel: 'países',
     },
@@ -191,9 +192,10 @@ export const es: Dict = {
   },
   regions: {
     asia: { title: 'Asia', subtitle: 'Mi continente favorito' },
-    america: { title: 'América' },
+    america_norte: { title: 'América del Norte' },
+    america_sur: { title: 'América del Sur' },
     africa: { title: 'África' },
-    europa: { title: 'Europa', subtitle: 'Recorrida a fondo, mapa a mapa' },
+    europa: { title: 'Europa' },
   },
   countries: {
     kg: { name: 'Kirguistán', desc: 'Montañas del Tien Shan, lagos alpinos y la vida nómada del Asia Central en estado puro.' },
@@ -297,6 +299,8 @@ export const es: Dict = {
       'Negociación con proveedores',
       'Organización y planificación',
       'Conocimiento de destinos internacionales',
+      'Herramientas de diseño y presentación: Canva o PowerPoint',
+      'Plataformas de reserva y B2B (Veturis, RateHawk, etc.)',
     ],
     languages: [
       { name: 'Catalán', level: 'Nativo', value: 5 },
@@ -305,7 +309,8 @@ export const es: Dict = {
       { name: 'Francés', level: 'Muy básico', value: 1 },
     ],
     awards: ['Primer puesto en la X Olimpiada de Geografía de Barcelona.'],
-    interests: ['Carnet de conducir B y vehículo propio.', 'Disponibilidad para viajar.'],
+    interests: ['Vehículo propio.', 'Disponibilidad para viajar.'],
+    licenses: ['Carné de conducir B', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
     'budapest-ejemplo': {

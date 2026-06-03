@@ -83,6 +83,10 @@ const t = getDict(lang).ui.planning;
     position: relative;
     aspect-ratio: 16 / 7;
     overflow: hidden;
+    /* Redondea las esquinas superiores en el propio contenedor de la imagen:
+       el clip del .card padre falla cuando .reveal crea capa de composición
+       (will-change/transform), así que la imagen se recortaba con esquinas rectas. */
+    border-radius: var(--radius) var(--radius) 0 0;
     background: var(--navy);
   }
   .planning-photo {

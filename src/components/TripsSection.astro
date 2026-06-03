@@ -57,7 +57,13 @@ const hasTrips = trips.length > 0;
 <script>
   import { trips } from '../data/trips';
 
-  const mapEl = document.getElementById('trip-map');
+  // Se re-inicializa en cada `astro:page-load` para que el mapa cargue tras
+  // una View Transition (cambio de idioma), no solo al recargar la página.
+  let tripsObserver: IntersectionObserver | null = null;
+
+  function initTrips() {
+    const mapEl = document.getElementById('trip-map');
+    if (!mapEl || !trips.length) return;
 
   // Leaflet (152 KB) se carga de forma diferida: solo cuando la sección del
   // mapa se acerca al viewport, para no penalizar la carga inicial.
@@ -132,8 +138,8 @@ const hasTrips = trips.length > 0;
     setTimeout(() => map.invalidateSize(), 200);
   }
 
-  if (mapEl && trips.length) {
-    const io = new IntersectionObserver(
+    tripsObserver?.disconnect();
+    tripsObserver = new IntersectionObserver(
       (entries, obs) => {
         if (entries.some((e) => e.isIntersecting)) {
           obs.disconnect();
@@ -142,8 +148,10 @@ const hasTrips = trips.length > 0;
       },
       { rootMargin: '300px' },
     );
-    io.observe(mapEl);
+    tripsObserver.observe(mapEl);
   }
+
+  document.addEventListener('astro:page-load', initTrips);
 </script>
 
 <style>

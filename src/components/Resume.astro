@@ -12,7 +12,7 @@ interface Props {
 const { lang } = Astro.props;
 const d = getDict(lang);
 const t = d.ui.resume;
-const { experience, education, skills, languages, awards, interests } = d.cv;
+const { experience, education, skills, languages, awards, interests, licenses } = d.cv;
 ---
 
 <section class="resume section" id="trayectoria">
@@ -106,6 +106,10 @@ const { experience, education, skills, languages, awards, interests } = d.cv;
           <h3 class="resume-block-title" style="margin-top:18px">{t.interestsTitle}</h3>
           <ul class="dots-list">
             {interests.map((i) => <li>{i}</li>)}
+          </ul>
+          <h3 class="resume-block-title" style="margin-top:18px">{t.licensesTitle}</h3>
+          <ul class="dots-list">
+            {licenses.map((l) => <li>{l}</li>)}
           </ul>
         </div>
       </aside>

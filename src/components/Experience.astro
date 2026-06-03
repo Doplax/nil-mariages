@@ -1,11 +1,8 @@
 ---
 import { regions } from '../data/countries';
 import { getDict, type Lang } from '../i18n';
-import CountryCard from './CountryCard.astro';
-import Flag from './Flag.astro';
+import RegionBlock from './RegionBlock.astro';
 import SectionHeader from './ui/SectionHeader.astro';
-import Reveal from './ui/Reveal.astro';
-import Chip from './ui/Chip.astro';
 
 interface Props {
   lang: Lang;
@@ -13,72 +10,13 @@ interface Props {
 const { lang } = Astro.props;
 const d = getDict(lang);
 const t = d.ui.experience;
-
-const featured = regions.filter((r) => r.featured);
-const europe = regions.find((r) => !r.featured);
 ---
 
 <section class="experience section" id="experiencia">
   <div class="container">
     <SectionHeader class="exp-head" eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
 
-    {
-      featured.map((region) => (
-        <div class="region">
-          <Reveal class="region-head">
-            <h3>
-              <span class="region-icon">{region.icon}</span>
-              {d.regions[region.id].title}
-            </h3>
-            {d.regions[region.id].subtitle && <Chip variant="soft">{d.regions[region.id].subtitle}</Chip>}
-            <span class="region-flags" aria-hidden="true">
-              {region.countries.slice(0, 8).map((iso) => (
-                <Flag iso={iso} h={15} label={d.countries[iso].name} />
-              ))}
-            </span>
-            <span class="region-count">
-              {region.countries.length} {t.countriesLabel}
-            </span>
-          </Reveal>
-          <div class="region-grid">
-            {region.countries.map((iso, i) => (
-              <Reveal delay={(i % 4) * 60}>
-                <CountryCard name={d.countries[iso].name} iso={iso} description={d.countries[iso].desc} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      ))
-    }
-
-    {
-      europe && (
-        <div class="region region-europe">
-          <Reveal class="region-head">
-            <h3>
-              <span class="region-icon">{europe.icon}</span>
-              {d.regions[europe.id].title}
-            </h3>
-            {d.regions[europe.id].subtitle && <Chip variant="soft">{d.regions[europe.id].subtitle}</Chip>}
-            <span class="region-flags" aria-hidden="true">
-              {europe.countries.slice(0, 8).map((iso) => (
-                <Flag iso={iso} h={15} label={d.countries[iso].name} />
-              ))}
-            </span>
-            <span class="region-count">
-              {europe.countries.length} {t.countriesLabel}
-            </span>
-          </Reveal>
-          <div class="region-grid compact-grid">
-            {europe.countries.map((iso, i) => (
-              <Reveal delay={(i % 5) * 45}>
-                <CountryCard name={d.countries[iso].name} iso={iso} description={d.countries[iso].desc} compact />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      )
-    }
+    {regions.map((region) => <RegionBlock region={region} lang={lang} />)}
   </div>
 </section>
 
@@ -86,66 +24,5 @@ const europe = regions.find((r) => !r.featured);
   .exp-head {
     margin-bottom: 48px;
     max-width: 780px;
-  }
-  .region {
-    margin-top: 60px;
-  }
-  .region:first-of-type {
-    margin-top: 0;
-  }
-  .region-head {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding-bottom: 22px;
-    margin-bottom: 28px;
-    border-bottom: 1px solid var(--line);
-  }
-  .region-head h3 {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-  }
-  .region-icon {
-    font-size: 1.55rem;
-  }
-  .region-flags {
-    display: none;
-    align-items: center;
-    gap: 6px;
-    margin-left: 6px;
-  }
-  .region-count {
-    margin-left: auto;
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-  .region-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 22px;
-  }
-  .compact-grid {
-    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-    gap: 16px;
-  }
-
-  @media (min-width: 960px) {
-    .region-flags {
-      display: flex;
-    }
-  }
-  @media (max-width: 520px) {
-    .region-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .compact-grid {
-      grid-template-columns: 1fr 1fr;
-    }
   }
 </style>

@@ -9,10 +9,6 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = getDict(lang).ui.contact;
-
-// Obtén tu access_key gratuita en https://web3forms.com y añádela como
-// variable de entorno PUBLIC_WEB3FORMS_KEY en Vercel.
-const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 ---
 
 <section class="contact section" id="contacto-form">
@@ -42,18 +38,11 @@ const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
     </Reveal>
 
     <Reveal class="contact-form-wrap" delay={80}>
-      {formKey ? (
-        <form
+      <form
           class="contact-form"
-          action="https://api.web3forms.com/submit"
-          method="POST"
           id="contact-form"
           novalidate
         >
-          <input type="hidden" name="access_key" value={formKey} />
-          <input type="hidden" name="subject" value="Nuevo contacto desde nil-mariages.vercel.app" />
-          <input type="hidden" name="redirect" value="false" />
-          <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" aria-hidden="true" />
 
           <div class="form-row">
             <label class="form-label" for="contact-name">Nombre</label>
@@ -72,12 +61,7 @@ const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 
           <button type="submit" class="btn btn-primary form-submit">{t.submit}</button>
           <p class="form-success" id="form-success" hidden>{t.success}</p>
-        </form>
-      ) : (
-        <div class="contact-fallback">
-          <p>Para activar el formulario, añade <code>PUBLIC_WEB3FORMS_KEY</code> en las variables de entorno de Vercel (<a href="https://web3forms.com" target="_blank" rel="noopener">obtener clave gratuita</a>).</p>
-        </div>
-      )}
+      </form>
     </Reveal>
   </div>
 </section>
@@ -94,7 +78,7 @@ const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
     submit.textContent = '…';
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         body: new FormData(form),
       });

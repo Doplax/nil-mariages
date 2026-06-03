@@ -156,114 +156,126 @@ const year = new Date().getFullYear();
     </footer>
 
     <script>
+      // Con View Transitions (<ClientRouter />), los scripts de módulo se
+      // ejecutan una sola vez: no vuelven a correr tras navegar (p. ej. al
+      // cambiar de idioma). Por eso la configuración que depende del DOM se
+      // re-ejecuta en cada `astro:page-load` (carga inicial + cada navegación),
+      // mientras que los listeners de `window` se registran una única vez y
+      // consultan el DOM en vivo.
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Header con fondo al hacer scroll + scroll-to-top button
-      const header = document.getElementById('site-header');
-      const scrollTopBtn = document.getElementById('scroll-top') as HTMLButtonElement | null;
+      // --- Listeners de window: se registran una sola vez ---
       const onScroll = () => {
+        const header = document.getElementById('site-header');
+        const scrollTopBtn = document.getElementById('scroll-top') as HTMLButtonElement | null;
         header?.classList.toggle('is-scrolled', window.scrollY > 24);
         if (scrollTopBtn) scrollTopBtn.hidden = window.scrollY < 400;
       };
-      scrollTopBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-      onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
 
-      // Menú móvil (hamburguesa) con trampa de foco
-      const toggle = document.getElementById('nav-toggle');
-      const nav = document.getElementById('site-nav');
-      const closeMenu = () => {
-        header?.classList.remove('is-open');
-        toggle?.setAttribute('aria-expanded', 'false');
+      let parallaxTicking = false;
+      const applyParallax = () => {
+        const els = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+        const vh = window.innerHeight;
+        for (const el of els) {
+          const speed = parseFloat(el.dataset.parallax || '0');
+          const rect = el.getBoundingClientRect();
+          const offset = rect.top + rect.height / 2 - vh / 2;
+          el.style.transform = `translate3d(0, ${(-offset * speed).toFixed(1)}px, 0)`;
+        }
+        parallaxTicking = false;
       };
-      toggle?.addEventListener('click', () => {
-        const open = header?.classList.toggle('is-open') ?? false;
-        toggle.setAttribute('aria-expanded', String(open));
-        if (open && nav) {
-          const first = nav.querySelector<HTMLElement>('a, button');
-          setTimeout(() => first?.focus(), 50);
-        }
-      });
-      // Trampa de foco cuando el menú está abierto en móvil
-      nav?.addEventListener('keydown', (e) => {
-        if (!header?.classList.contains('is-open')) return;
-        if (e.key === 'Escape') { closeMenu(); toggle?.focus(); return; }
-        if (e.key !== 'Tab') return;
-        const focusable = Array.from(nav.querySelectorAll<HTMLElement>('a, button'));
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault(); last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault(); first.focus();
-        }
-      });
-      document.querySelectorAll('#site-nav a').forEach((a) => a.addEventListener('click', closeMenu));
+      const onParallax = () => {
+        if (reduceMotion || parallaxTicking) return;
+        window.requestAnimationFrame(applyParallax);
+        parallaxTicking = true;
+      };
+      window.addEventListener('scroll', onParallax, { passive: true });
+      window.addEventListener('resize', onParallax, { passive: true });
       window.addEventListener('resize', () => {
-        if (window.innerWidth > 860) closeMenu();
+        if (window.innerWidth > 860) {
+          document.getElementById('site-header')?.classList.remove('is-open');
+          document.getElementById('nav-toggle')?.setAttribute('aria-expanded', 'false');
+        }
       });
 
-      // Active nav section highlighting
-      const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('#site-nav a[href^="#"]'));
-      const sections = navLinks
-        .map((a) => document.querySelector<HTMLElement>(a.getAttribute('href')!))
-        .filter(Boolean) as HTMLElement[];
+      // --- Configuración por página: carga inicial + cada View Transition ---
+      function setupPage() {
+        const header = document.getElementById('site-header');
 
-      const setActive = (id: string) => {
-        navLinks.forEach((a) => {
-          const match = a.getAttribute('href') === `#${id}`;
-          a.classList.toggle('is-active', match);
+        // Botón "volver arriba"
+        document
+          .getElementById('scroll-top')
+          ?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Menú móvil (hamburguesa) con trampa de foco
+        const toggle = document.getElementById('nav-toggle');
+        const nav = document.getElementById('site-nav');
+        const closeMenu = () => {
+          header?.classList.remove('is-open');
+          toggle?.setAttribute('aria-expanded', 'false');
+        };
+        toggle?.addEventListener('click', () => {
+          const open = header?.classList.toggle('is-open') ?? false;
+          toggle.setAttribute('aria-expanded', String(open));
+          if (open && nav) {
+            const first = nav.querySelector<HTMLElement>('a, button');
+            setTimeout(() => first?.focus(), 50);
+          }
         });
-      };
-
-      const sectionObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) setActive(entry.target.id);
+        nav?.addEventListener('keydown', (e) => {
+          if (!header?.classList.contains('is-open')) return;
+          if (e.key === 'Escape') { closeMenu(); toggle?.focus(); return; }
+          if (e.key !== 'Tab') return;
+          const focusable = Array.from(nav.querySelectorAll<HTMLElement>('a, button'));
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault(); last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault(); first.focus();
           }
-        },
-        { rootMargin: '-30% 0px -60% 0px' },
-      );
-      sections.forEach((s) => sectionObserver.observe(s));
+        });
+        nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
 
-      // Animación reveal con IntersectionObserver
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
+        // Resaltado de la sección activa en el nav
+        const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('#site-nav a[href^="#"]'));
+        const sections = navLinks
+          .map((a) => document.querySelector<HTMLElement>(a.getAttribute('href')!))
+          .filter(Boolean) as HTMLElement[];
+        const setActive = (id: string) => {
+          navLinks.forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${id}`));
+        };
+        const sectionObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) setActive(entry.target.id);
             }
-          }
-        },
-        { threshold: 0.12 },
-      );
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+          },
+          { rootMargin: '-30% 0px -60% 0px' },
+        );
+        sections.forEach((s) => sectionObserver.observe(s));
 
-      // Efecto parallax suave en elementos con [data-parallax]
-      const parallaxEls = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
-      if (parallaxEls.length && !reduceMotion) {
-        let ticking = false;
-        const apply = () => {
-          const vh = window.innerHeight;
-          for (const el of parallaxEls) {
-            const speed = parseFloat(el.dataset.parallax || '0');
-            const rect = el.getBoundingClientRect();
-            const offset = rect.top + rect.height / 2 - vh / 2;
-            el.style.transform = `translate3d(0, ${(-offset * speed).toFixed(1)}px, 0)`;
-          }
-          ticking = false;
-        };
-        const onParallax = () => {
-          if (!ticking) {
-            window.requestAnimationFrame(apply);
-            ticking = true;
-          }
-        };
-        window.addEventListener('scroll', onParallax, { passive: true });
-        window.addEventListener('resize', onParallax, { passive: true });
-        apply();
+        // Animación reveal con IntersectionObserver
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12 },
+        );
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Estado inicial del header y del parallax para la página recién cargada
+        onScroll();
+        applyParallax();
       }
+
+      document.addEventListener('astro:page-load', setupPage);
     </script>
 
     <style>

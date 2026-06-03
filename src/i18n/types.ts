@@ -107,6 +107,7 @@ export interface Dict {
       skillsTitle: string;
       awardsTitle: string;
       interestsTitle: string;
+      licensesTitle: string;
     };
     experience: { eyebrow: string; title: string; lead: string; countriesLabel: string };
     trips: { eyebrow: string; title: string; lead: string; sampleBadge: string };
@@ -151,6 +152,7 @@ export interface Dict {
     languages: CvLanguage[];
     awards: string[];
     interests: string[];
+    licenses: string[];
   };
   trips: Record<string, TripText>;
 }

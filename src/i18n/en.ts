@@ -10,7 +10,7 @@ export const en: Dict = {
       contacto: 'Contact',
     },
     hero: {
-      tag: 'Travel agent · Tailor-made trips',
+      tag: 'Travel maker · Tailor-made trips & certified guide',
       titleTop: "I design trips you'll",
       titleAccent: 'remember for a lifetime',
       lead: "I'm Nil Mariages. I turn destinations into tailor-made experiences: unique itineraries, close guidance and support before, during and after your trip.",
@@ -44,10 +44,11 @@ export const en: Dict = {
       skillsTitle: 'Skills',
       awardsTitle: 'Awards',
       interestsTitle: 'Additional info',
+      licensesTitle: 'Licences',
     },
     experience: {
       eyebrow: 'Travel experience',
-      title: '40+ countries, four continents',
+      title: '40+ countries, five continents',
       lead: 'The international side is what I’m most passionate about. Every destination has left me maps, contacts and practical knowledge that I pour into each trip I design. These are some of the places I’ve travelled.',
       countriesLabel: 'countries',
     },
@@ -189,7 +190,8 @@ export const en: Dict = {
   },
   regions: {
     asia: { title: 'Asia', subtitle: 'My favourite continent' },
-    america: { title: 'Americas' },
+    america_norte: { title: 'North America' },
+    america_sur: { title: 'South America' },
     africa: { title: 'Africa' },
     europa: { title: 'Europe', subtitle: 'Explored in depth, map by map' },
   },
@@ -295,6 +297,8 @@ export const en: Dict = {
       'Supplier negotiation',
       'Organisation and planning',
       'Knowledge of international destinations',
+      'Design & presentation tools: Canva or PowerPoint',
+      'Booking & B2B platforms (Veturis, RateHawk, etc.)',
     ],
     languages: [
       { name: 'Catalan', level: 'Native', value: 5 },
@@ -303,7 +307,8 @@ export const en: Dict = {
       { name: 'French', level: 'Basic', value: 1 },
     ],
     awards: ['First place in the 10th Barcelona Geography Olympiad.'],
-    interests: ['Category B driving licence and own vehicle.', 'Available to travel.'],
+    interests: ['Own vehicle.', 'Available to travel.'],
+    licenses: ['Category B driving licence', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
     'budapest-ejemplo': {

@@ -23,15 +23,23 @@ const { tooltip = 'Escríbeme por WhatsApp' } = Astro.props;
 </a>
 
 <script>
-  const btn = document.getElementById('floating-wa');
-  const hero = document.getElementById('inicio');
-  if (btn && hero) {
-    const io = new IntersectionObserver(
+  // Re-inicializa en cada `astro:page-load` para seguir funcionando tras
+  // una View Transition (cambio de idioma), no solo al recargar la página.
+  let waObserver: IntersectionObserver | null = null;
+
+  function initFloatingWa() {
+    const btn = document.getElementById('floating-wa');
+    const hero = document.getElementById('inicio');
+    if (!(btn && hero)) return;
+    waObserver?.disconnect();
+    waObserver = new IntersectionObserver(
       ([e]) => btn.classList.toggle('is-hidden', e.isIntersecting),
       { threshold: 0.1 },
     );
-    io.observe(hero);
+    waObserver.observe(hero);
   }
+
+  document.addEventListener('astro:page-load', initFloatingWa);
 </script>
 
 <style>

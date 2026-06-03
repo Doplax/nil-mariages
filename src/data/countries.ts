@@ -19,13 +19,14 @@ export interface RegionStruct {
 
 export const regions: RegionStruct[] = [
   { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn'] },
-  { id: 'america', icon: '🌎', featured: true, countries: ['ve', 'us'] },
+  { id: 'america_norte', icon: '🌎', featured: true, countries: ['us'] },
+  { id: 'america_sur', icon: '🌎', featured: true, countries: ['ve'] },
   { id: 'africa', icon: '🌍', featured: true, countries: ['eg', 'ma'] },
   {
     id: 'europa',
     icon: '🌍',
     featured: false,
-    countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'ad', 'es', 'va'],
+    countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'va', 'ad', 'es'],
   },
 ];
 

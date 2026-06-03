@@ -58,14 +58,20 @@ const t = getDict(lang).ui.testimonials;
 </section>
 
 <script>
-  const GAP = 24;
-  const track = document.getElementById('testi-track') as HTMLElement | null;
-  const viewport = track?.closest<HTMLElement>('.testi-viewport');
-  const prevBtn = document.getElementById('testi-prev') as HTMLButtonElement | null;
-  const nextBtn = document.getElementById('testi-next') as HTMLButtonElement | null;
-  const dotsEl = document.getElementById('testi-dots');
+  // Se re-inicializa en cada `astro:page-load` para que el carrusel funcione
+  // tras una View Transition (p. ej. al cambiar de idioma), no solo al recargar.
+  let testiResize: (() => void) | null = null;
 
-  if (track && viewport && prevBtn && nextBtn) {
+  function initTestimonials() {
+    const GAP = 24;
+    const track = document.getElementById('testi-track') as HTMLElement | null;
+    const viewport = track?.closest<HTMLElement>('.testi-viewport');
+    const prevBtn = document.getElementById('testi-prev') as HTMLButtonElement | null;
+    const nextBtn = document.getElementById('testi-next') as HTMLButtonElement | null;
+    const dotsEl = document.getElementById('testi-dots');
+
+    if (!(track && viewport && prevBtn && nextBtn)) return;
+
     const cards = Array.from(track.querySelectorAll<HTMLElement>('.testi-card'));
     const total = cards.length;
     let current = 0;
@@ -91,7 +97,8 @@ const t = getDict(lang).ui.testimonials;
       return Math.max(0, total - visibleCount());
     }
 
-    // Build dots once (for desktop max positions)
+    // Build dots (for desktop max positions)
+    if (dotsEl) dotsEl.innerHTML = '';
     const dots: HTMLButtonElement[] = [];
     for (let i = 0; i <= total - 3; i++) {
       const d = document.createElement('button');
@@ -115,14 +122,19 @@ const t = getDict(lang).ui.testimonials;
     prevBtn.addEventListener('click', () => goto(current - 1));
     nextBtn.addEventListener('click', () => goto(current + 1));
 
-    window.addEventListener('resize', () => {
+    // Un único listener de resize a la vez (evita acumular tras navegar)
+    if (testiResize) window.removeEventListener('resize', testiResize);
+    testiResize = () => {
       applyWidths();
       goto(Math.min(current, maxIndex()));
-    }, { passive: true });
+    };
+    window.addEventListener('resize', testiResize, { passive: true });
 
     applyWidths();
     goto(0);
   }
+
+  document.addEventListener('astro:page-load', initTestimonials);
 </script>
 
 <style>
