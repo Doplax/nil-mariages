@@ -5,10 +5,10 @@ import nodemailer from 'nodemailer';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const data = await request.formData();
-    const name = data.get('name')?.toString() ?? '';
-    const email = data.get('email')?.toString() ?? '';
-    const message = data.get('message')?.toString() ?? '';
+    const data = await request.json();
+    const name = (data.name ?? '').toString();
+    const email = (data.email ?? '').toString();
+    const message = (data.message ?? '').toString();
 
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ success: false, error: 'Faltan campos' }), { status: 400 });
