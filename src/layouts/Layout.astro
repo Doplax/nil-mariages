@@ -92,7 +92,7 @@ const year = new Date().getFullYear();
       telephone: profile.phone,
       url: new URL(localeUrl(lang), site).href,
       address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
-      sameAs: [profile.whatsapp],
+      sameAs: [profile.whatsapp, profile.linkedin],
     })} />
   </head>
   <body>
@@ -145,6 +145,7 @@ const year = new Date().getFullYear();
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <a href={profile.phoneHref}>{profile.phone}</a>
             <a href={profile.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+            <a href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
             <a href="#trayectoria">{profile.location}</a>
           </div>
         </div>
