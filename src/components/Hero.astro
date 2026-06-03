@@ -25,12 +25,12 @@ const t = getDict(lang).ui.hero;
       <circle class="dot dot-3" cx="880" cy="470" r="4" />
       <circle class="dot dot-4" cx="1520" cy="120" r="4" />
 
-      <!-- Aviones en movimiento a lo largo de las rutas -->
+      <!-- Aviones en movimiento a lo largo de las rutas (silueta real, morro hacia +X) -->
       <g class="plane plane-1">
-        <path d="M9,0 L-8,-6 L-3,0 L-8,6 Z" />
+        <path d="M9,0 L3.5,-1 L1,-1 L-2,-6 L-3.5,-6 L-1.5,-1 L-6,-1 L-7.5,-3 L-8.8,-3 L-8,-0.8 L-9,0 L-8,0.8 L-8.8,3 L-7.5,3 L-6,1 L-1.5,1 L-3.5,6 L-2,6 L1,1 L3.5,1 Z" />
       </g>
       <g class="plane plane-2">
-        <path d="M9,0 L-8,-6 L-3,0 L-8,6 Z" />
+        <path d="M9,0 L3.5,-1 L1,-1 L-2,-6 L-3.5,-6 L-1.5,-1 L-6,-1 L-7.5,-3 L-8.8,-3 L-8,-0.8 L-9,0 L-8,0.8 L-8.8,3 L-7.5,3 L-6,1 L-1.5,1 L-3.5,6 L-2,6 L1,1 L3.5,1 Z" />
       </g>
     </svg>
   </div>
@@ -54,7 +54,9 @@ const t = getDict(lang).ui.hero;
       </div>
     </div>
   </div>
-  <div class="hero-fade" aria-hidden="true"></div>
+  <svg class="hero-wave" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,60 C 220,110 420,10 640,44 C 860,78 1040,118 1260,70 C 1360,48 1410,40 1440,46 L1440,110 L0,110 Z" />
+  </svg>
 </section>
 
 <style>
@@ -210,12 +212,18 @@ const t = getDict(lang).ui.hero;
     gap: 44px;
     flex-wrap: wrap;
   }
-  .hero-fade {
+  .hero-wave {
     position: absolute;
-    inset: auto 0 0 0;
-    height: 120px;
-    background: linear-gradient(to bottom, transparent, var(--cream));
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: 100%;
+    height: clamp(56px, 8vw, 110px);
+    display: block;
     z-index: 1;
+  }
+  .hero-wave path {
+    fill: var(--cream);
   }
 
   /* Entrada animada del contenido del hero al cargar */
