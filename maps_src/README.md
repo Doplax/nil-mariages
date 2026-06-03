@@ -12,29 +12,6 @@ interactivas en el portafolio.
 
 > Si solo puedes descargar **KMZ**, ábrelo como `.zip` (renómbralo) y usa el
 > `doc.kml` que contiene dentro.
->
-> ⚠️ **Ojo:** el KMZ de Google My Maps a veces no lleva los datos dentro, sino un
-> `NetworkLink` que apunta al mapa online. En ese caso el `doc.kml` solo tiene una
-> URL con un `mid=...`. Para obtener el KML real con todos los puntos y recorridos,
-> descárgalo así (sustituye el `mid`):
->
-> ```bash
-> curl -L "https://www.google.com/maps/d/kml?mid=TU_MID&forcekml=1" -o maps_src/mapa.kml
-> ```
-
-## Caso especial: Kirguistán
-
-La ruta de Kirguistán (`maps_src/kyrgyzstan.kml`) viene de un mapa rico (169
-elementos: recorridos, POIs y gasolineras). Su GeoJSON **curado y simplificado**
-se genera con un script propio que se queda con las rutas y los lugares destacados
-y descarta el ruido (gasolineras, waypoints duplicados):
-
-```bash
-node scripts/build-kyrgyzstan-map.mjs
-```
-
-El mapa **completo** se muestra además en la web como embed interactivo de Google
-My Maps (campo `embedSrc` en `src/data/trips.ts`).
 
 ## Convertir a GeoJSON
 

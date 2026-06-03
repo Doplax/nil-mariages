@@ -112,16 +112,7 @@ export interface Dict {
       licensesTitle: string;
     };
     experience: { eyebrow: string; title: string; lead: string; countriesLabel: string };
-    trips: {
-      eyebrow: string;
-      title: string;
-      lead: string;
-      sampleBadge: string;
-      /** Botón: vista interactiva propia (Leaflet) */
-      mapTab: string;
-      /** Botón: mapa completo de Google My Maps (embed) */
-      embedTab: string;
-    };
+    trips: { eyebrow: string; title: string; lead: string; sampleBadge: string };
     future: { eyebrow: string; title: string; lead: string; soon: string };
     cta: { title: string; text: string; email: string; whatsapp: string };
     testimonials: {

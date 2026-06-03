@@ -59,8 +59,6 @@ export const es: Dict = {
       title: 'Mis rutas, sobre el mapa',
       lead: 'Cada viaje que diseño deja un mapa detrás. Aquí podrás explorar de forma interactiva algunos de mis itinerarios, con sus paradas y recorridos reales.',
       sampleBadge: 'Ejemplo',
-      mapTab: 'Vista interactiva',
-      embedTab: 'Mapa completo',
     },
     future: {
       eyebrow: 'Próximos destinos',
@@ -329,12 +327,6 @@ export const es: Dict = {
     licenses: ['Carné de conducir B', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
-    'budapest-ejemplo': {
-      title: 'Budapest a pie',
-      location: 'Budapest, Hungría',
-      description:
-        'Recorrido por los imprescindibles de Budapest: del Parlamento al Bastión de los Pescadores cruzando el Danubio. Ejemplo de mapa urbano a pie.',
-    },
     kyrgyzstan: {
       title: 'Kirguistán en 4×4',
       location: 'Kirguistán',

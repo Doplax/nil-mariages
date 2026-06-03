@@ -57,8 +57,6 @@ export const ca: Dict = {
       title: 'Les meves rutes, sobre el mapa',
       lead: 'Cada viatge que dissenyo deixa un mapa al darrere. Aquí podràs explorar de manera interactiva alguns dels meus itineraris, amb les seves parades i recorreguts reals.',
       sampleBadge: 'Exemple',
-      mapTab: 'Vista interactiva',
-      embedTab: 'Mapa complet',
     },
     future: {
       eyebrow: 'Pròximes destinacions',
@@ -327,11 +325,6 @@ export const ca: Dict = {
     licenses: ['Carnet de conduir B', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
-    'budapest-ejemplo': {
-      title: 'Budapest a peu',
-      location: 'Budapest, Hongria',
-      description: "Recorregut pels imprescindibles de Budapest: del Parlament al Bastió dels Pescadors creuant el Danubi. Exemple de mapa urbà a peu.",
-    },
     kyrgyzstan: {
       title: 'Kirguizistan en 4×4',
       location: 'Kirguizistan',

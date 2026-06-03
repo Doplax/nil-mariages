@@ -57,8 +57,6 @@ export const en: Dict = {
       title: 'My routes, on the map',
       lead: 'Every trip I design leaves a map behind. Here you can interactively explore some of my itineraries, with their stops and real routes.',
       sampleBadge: 'Sample',
-      mapTab: 'Interactive view',
-      embedTab: 'Full map',
     },
     future: {
       eyebrow: 'Upcoming destinations',
@@ -327,11 +325,6 @@ export const en: Dict = {
     licenses: ['Category B driving licence', 'Advanced Open Water Diver (AOWD) – SSI'],
   },
   trips: {
-    'budapest-ejemplo': {
-      title: 'Budapest on foot',
-      location: 'Budapest, Hungary',
-      description: "A walk through the must-sees of Budapest: from Parliament to the Fisherman’s Bastion, crossing the Danube. Urban route sample.",
-    },
     kyrgyzstan: {
       title: 'Kyrgyzstan by 4×4',
       location: 'Kyrgyzstan',
