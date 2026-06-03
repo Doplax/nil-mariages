@@ -1,0 +1,45 @@
+---
+// Recreación vectorial del logo de SSI (Scuba Schools International):
+// lettering rojo en itálica pesada sobre fondo negro redondeado.
+// Se usa como insignia inline junto a la certificación de buceo en el CV.
+interface Props {
+  /** Altura en píxeles (el ancho se calcula con ratio 2:1) */
+  h?: number;
+  class?: string;
+}
+const { h = 22, class: cls = '' } = Astro.props;
+const w = Math.round(h * 2);
+---
+
+<svg
+  class:list={['ssi-logo', cls]}
+  width={w}
+  height={h}
+  viewBox="0 0 160 80"
+  role="img"
+  aria-label="SSI — Scuba Schools International"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect width="160" height="80" rx="11" fill="#000000"></rect>
+  <g transform="translate(11 0) skewX(-11)">
+    <text
+      x="80"
+      y="57"
+      text-anchor="middle"
+      font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+      font-weight="900"
+      font-size="56"
+      letter-spacing="-5"
+      fill="#E11B22">SSI</text>
+  </g>
+  <text x="150" y="31" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#E11B22">®</text>
+</svg>
+
+<style>
+  .ssi-logo {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+</style>

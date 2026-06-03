@@ -5,6 +5,7 @@ import SectionHeader from './ui/SectionHeader.astro';
 import Reveal from './ui/Reveal.astro';
 import Button from './ui/Button.astro';
 import Chip from './ui/Chip.astro';
+import SsiLogo from './SsiLogo.astro';
 
 interface Props {
   lang: Lang;
@@ -103,13 +104,20 @@ const { experience, education, skills, languages, awards, interests, licenses } 
           {awards.map((a) => (
             <p class="award">🏆 {a}</p>
           ))}
+          <h3 class="resume-block-title" style="margin-top:18px">{t.licensesTitle}</h3>
+          <ul class="dots-list">
+            {licenses.map((l) => {
+              const i = l.indexOf('SSI');
+              return i === -1 ? (
+                <li>{l}</li>
+              ) : (
+                <li class="license-ssi">{l.slice(0, i)}<SsiLogo h={20} /></li>
+              );
+            })}
+          </ul>
           <h3 class="resume-block-title" style="margin-top:18px">{t.interestsTitle}</h3>
           <ul class="dots-list">
             {interests.map((i) => <li>{i}</li>)}
-          </ul>
-          <h3 class="resume-block-title" style="margin-top:18px">{t.licensesTitle}</h3>
-          <ul class="dots-list">
-            {licenses.map((l) => <li>{l}</li>)}
           </ul>
         </div>
       </aside>
@@ -332,6 +340,12 @@ const { experience, education, skills, languages, awards, interests, licenses } 
   }
   .dots-list li {
     font-size: 0.9rem;
+  }
+  .license-ssi {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
   }
 
   @media (max-width: 860px) {
