@@ -77,82 +77,113 @@ const hasTrips = trips.length > 0;
 <script>
   import { trips } from '../data/trips';
 
-  // Se re-inicializa en cada `astro:page-load` para que el mapa cargue tras
-  // una View Transition (cambio de idioma), no solo al recargar la página.
-  let tripsObserver: IntersectionObserver | null = null;
-
+  // El mapa PRINCIPAL es el embed de Google My Maps (un simple iframe, sin
+  // dependencias JS): siempre se ve, aunque Leaflet o la caché de Vite fallaran.
+  // La "Vista interactiva" (Leaflet) es secundaria y se carga BAJO DEMANDA, solo
+  // si el visitante la pide o si la ruta no tiene embed.
   function initTrips() {
-    const mapEl = document.getElementById('trip-map');
+    const mapEl = document.getElementById('trip-map') as HTMLElement | null;
+    const embedEl = document.getElementById('trip-embed') as HTMLIFrameElement | null;
     if (!mapEl || !trips.length) return;
     // Idempotente: si initTrips se llama dos veces sobre el mismo nodo (por el
-    // fallback de readyState además de astro:page-load) la segunda salida temprana.
+    // fallback de readyState además de astro:page-load) la segunda sale temprano.
     if (mapEl.dataset.tripsReady === '1') return;
     mapEl.dataset.tripsReady = '1';
-
-  // Leaflet (152 KB) se carga de forma diferida: solo cuando la sección del
-  // mapa se acerca al viewport, para no penalizar la carga inicial.
-  async function initMap() {
-    let L: typeof import('leaflet');
-    try {
-      L = (await import('leaflet')).default;
-    } catch (err) {
-      // En dev, Vite puede invalidar su caché de dependencias y devolver un 504
-      // "Outdated Optimize Dep" en el import dinámico. En producción, un deploy
-      // puede renombrar el chunk mientras hay una pestaña abierta. En ambos casos
-      // un único recargado recupera el módulo correcto (la guarda evita un bucle).
-      console.warn('[trips] no se pudo cargar leaflet, se recarga una vez', err);
-      if (!sessionStorage.getItem('trips-map-reloaded')) {
-        sessionStorage.setItem('trips-map-reloaded', '1');
-        location.reload();
-      }
-      return;
-    }
-    sessionStorage.removeItem('trips-map-reloaded');
-    const map = L.map(mapEl as HTMLElement, { scrollWheelZoom: false, zoomControl: true }).setView([41.9, 75.5], 7);
-
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      maxZoom: 20,
-      subdomains: 'abcd',
-    }).addTo(map);
-
-    let layer: any = null;
 
     const titleEl = document.getElementById('trip-info-title');
     const locEl = document.getElementById('trip-info-location');
     const descEl = document.getElementById('trip-info-desc');
-    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.trip-tab'));
-
-    // Conmutador "Vista interactiva" (Leaflet) ↔ "Mapa completo" (embed de Google
-    // My Maps). El embed solo está disponible en las rutas que tienen `embedSrc`.
-    const embedEl = document.getElementById('trip-embed') as HTMLIFrameElement | null;
     const viewbar = document.getElementById('trip-viewbar');
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.trip-tab'));
     const viewBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.vt-btn'));
+
     let currentIndex = 0;
-    let currentView: 'map' | 'embed' = 'map';
+    let currentView: 'map' | 'embed' = 'embed'; // vista realmente mostrada
+    let userPref: 'map' | 'embed' = 'embed'; // preferencia explícita del visitante
+
+    // --- Leaflet bajo demanda -------------------------------------------------
+    type LeafletBundle = { L: any; map: any; layer: any };
+    let leaflet: LeafletBundle | null = null;
+    let leafletPromise: Promise<LeafletBundle | null> | null = null;
+
+    async function ensureLeaflet() {
+      if (leaflet) return leaflet;
+      if (leafletPromise) return leafletPromise;
+      leafletPromise = (async () => {
+        let L: any;
+        try {
+          L = (await import('leaflet')).default;
+        } catch (err) {
+          // En dev, Vite puede invalidar su caché de deps (504 "Outdated Optimize
+          // Dep"); en prod, un deploy puede renombrar el chunk. Un único recargado
+          // recupera el módulo (la guarda evita un bucle).
+          console.warn('[trips] no se pudo cargar leaflet, se recarga una vez', err);
+          if (!sessionStorage.getItem('trips-map-reloaded')) {
+            sessionStorage.setItem('trips-map-reloaded', '1');
+            location.reload();
+          }
+          leafletPromise = null;
+          return null;
+        }
+        sessionStorage.removeItem('trips-map-reloaded');
+        const map = L.map(mapEl as HTMLElement, { scrollWheelZoom: false, zoomControl: true }).setView([41.9, 75.5], 7);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          maxZoom: 20,
+          subdomains: 'abcd',
+        }).addTo(map);
+        leaflet = { L, map, layer: null };
+        return leaflet;
+      })();
+      return leafletPromise;
+    }
+
+    async function renderLeaflet(index: number) {
+      const trip = trips[index];
+      const lf = await ensureLeaflet();
+      if (!lf || !trip) return;
+      // Si el visitante cambió de vista/ruta mientras cargaba, no pisamos.
+      if (currentView !== 'map' || currentIndex !== index) return;
+      const { L, map } = lf;
+      if (lf.layer) lf.layer.remove();
+      lf.layer = L.geoJSON(trip.data as any, {
+        style: () => ({ color: '#3da093', weight: 4, opacity: 0.9 }),
+        pointToLayer: (_feature: any, latlng: any) =>
+          L.circleMarker(latlng, { radius: 7, fillColor: '#5fc9bc', color: '#0e2336', weight: 2, opacity: 1, fillOpacity: 1 }),
+        onEachFeature: (feature: any, lyr: any) => {
+          const props = feature.properties || {};
+          if (props.name && feature.geometry?.type === 'Point') {
+            lyr.bindPopup(`<strong>${props.name}</strong>${props.description ? `<br>${props.description}` : ''}`);
+          }
+        },
+      }).addTo(map);
+      const fit = () => { const b = lf.layer.getBounds(); if (b.isValid()) map.fitBounds(b, { padding: [40, 40] }); };
+      fit();
+      // El contenedor pudo estar oculto (tamaño 0): recalcula y reencuadra.
+      setTimeout(() => { map.invalidateSize(); fit(); }, 60);
+    }
+
+    function setInfo(index: number) {
+      const btn = tabs[index];
+      if (titleEl) titleEl.textContent = btn?.dataset.title ?? '';
+      if (locEl) locEl.textContent = btn?.dataset.location ?? '';
+      if (descEl) descEl.textContent = btn?.dataset.desc ?? '';
+    }
 
     function applyView(view: 'map' | 'embed') {
       const trip = trips[currentIndex];
       const hasEmbed = !!trip?.embedSrc;
       currentView = view === 'embed' && hasEmbed ? 'embed' : 'map';
 
-      if (currentView === 'embed' && embedEl) {
-        if (embedEl.getAttribute('src') !== trip!.embedSrc) {
-          embedEl.setAttribute('src', trip!.embedSrc as string);
-        }
+      if (currentView === 'embed' && embedEl && trip?.embedSrc) {
+        if (embedEl.getAttribute('src') !== trip.embedSrc) embedEl.setAttribute('src', trip.embedSrc);
         embedEl.hidden = false;
         mapEl!.hidden = true;
       } else {
         if (embedEl) embedEl.hidden = true;
         mapEl!.hidden = false;
-        // Recalcula tamaño y reencuadra: si el mapa estuvo oculto (en el embed),
-        // su tamaño era 0 y el último fitBounds pudo quedar descuadrado.
-        setTimeout(() => {
-          map.invalidateSize();
-          const b = layer?.getBounds();
-          if (b && b.isValid()) map.fitBounds(b, { padding: [40, 40] });
-        }, 60);
+        renderLeaflet(currentIndex);
       }
 
       viewBtns.forEach((b) => {
@@ -162,86 +193,33 @@ const hasTrips = trips.length > 0;
       });
     }
 
-    function syncViewbar(index: number) {
+    function selectTrip(index: number) {
       currentIndex = index;
+      setInfo(index);
       const hasEmbed = !!trips[index]?.embedSrc;
       if (viewbar) viewbar.hidden = !hasEmbed;
-      // Una ruta sin embed siempre se ve en el mapa interactivo; si estábamos en
-      // el embed y cambiamos a otra ruta con mapa propio, refrescamos el iframe.
-      if (!hasEmbed) applyView('map');
-      else if (currentView === 'embed') applyView('embed');
-    }
-
-    viewBtns.forEach((b) =>
-      b.addEventListener('click', () => applyView((b.dataset.view as 'map' | 'embed') || 'map')),
-    );
-
-    function renderTrip(index: number) {
-      const trip = trips[index];
-      if (!trip) return;
-
-      if (layer) layer.remove();
-
-      layer = L.geoJSON(trip.data as any, {
-        style: () => ({ color: '#3da093', weight: 4, opacity: 0.9 }),
-        pointToLayer: (_feature, latlng) =>
-          L.circleMarker(latlng, {
-            radius: 7,
-            fillColor: '#5fc9bc',
-            color: '#0e2336',
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 1,
-          }),
-        onEachFeature: (feature, lyr) => {
-          const props = feature.properties || {};
-          if (props.name && feature.geometry?.type === 'Point') {
-            lyr.bindPopup(
-              `<strong>${props.name}</strong>${props.description ? `<br>${props.description}` : ''}`,
-            );
-          }
-        },
-      }).addTo(map);
-
-      const bounds = layer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40] });
-
-      const btn = tabs[index];
-      if (titleEl) titleEl.textContent = btn?.dataset.title ?? '';
-      if (locEl) locEl.textContent = btn?.dataset.location ?? '';
-      if (descEl) descEl.textContent = btn?.dataset.desc ?? '';
-
-      syncViewbar(index);
+      // Por defecto cada ruta muestra el embed (respetando la preferencia del
+      // visitante si eligió "Vista interactiva"); sin embed, Leaflet.
+      applyView(hasEmbed ? userPref : 'map');
     }
 
     tabs.forEach((btn) => {
       btn.addEventListener('click', () => {
-        tabs.forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
+        tabs.forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
-        renderTrip(Number(btn.dataset.index));
+        selectTrip(Number(btn.dataset.index));
       });
     });
 
-    renderTrip(0);
-    // Recalcula el tamaño tras el primer render (evita el mapa gris)
-    setTimeout(() => map.invalidateSize(), 200);
-  }
-
-    tripsObserver?.disconnect();
-    tripsObserver = new IntersectionObserver(
-      (entries, obs) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          obs.disconnect();
-          initMap();
-        }
-      },
-      { rootMargin: '300px' },
+    viewBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        userPref = (b.dataset.view as 'map' | 'embed') || 'embed';
+        applyView(userPref);
+      }),
     );
-    tripsObserver.observe(mapEl);
+
+    selectTrip(0);
   }
 
   document.addEventListener('astro:page-load', initTrips);
