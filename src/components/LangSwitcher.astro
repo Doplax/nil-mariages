@@ -13,6 +13,7 @@ const { current, class: cls = '' } = Astro.props;
     LANGS.map((l) => (
       <a
         href={localeUrl(l)}
+        data-base={localeUrl(l)}
         class:list={['lang-link', l === current && 'active']}
         hreflang={l}
         aria-current={l === current ? 'true' : undefined}
@@ -22,6 +23,49 @@ const { current, class: cls = '' } = Astro.props;
     ))
   }
 </div>
+
+<script>
+  // Al cambiar de idioma, llevar al visitante a la MISMA sección en la que estaba.
+  // Los IDs de sección (`#rutas`, `#experiencia`, …) son los mismos en los tres
+  // idiomas, así que basta con añadir el ancla actual al enlace de idioma. Un
+  // scroll-spy mantiene los `href` actualizados según la sección visible.
+  function initLangScrollSpy() {
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('a.lang-link'));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'));
+    if (!links.length || !sections.length) return;
+
+    let currentId = '';
+    const inView = new Set<string>();
+
+    function updateLinks(id: string) {
+      if (id === currentId) return;
+      currentId = id;
+      links.forEach((a) => {
+        const base = (a.dataset.base || a.getAttribute('href') || '/').replace(/#.*$/, '');
+        a.setAttribute('href', id ? `${base}#${id}` : base);
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) inView.add(e.target.id);
+          else inView.delete(e.target.id);
+        }
+        // La sección "actual" es la primera (en orden del documento) dentro de la
+        // banda central del viewport.
+        const topmost = sections.map((s) => s.id).find((id) => inView.has(id)) || '';
+        updateLinks(topmost);
+      },
+      // Banda estrecha alrededor del centro vertical: solo una sección la cruza.
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+
+  document.addEventListener('astro:page-load', initLangScrollSpy);
+  if (document.readyState !== 'loading') initLangScrollSpy();
+</script>
 
 <style>
   .lang-switcher {
