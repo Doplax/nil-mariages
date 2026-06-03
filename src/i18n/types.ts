@@ -47,6 +47,8 @@ export interface TripText {
   title: string;
   location: string;
   description: string;
+  /** Paradas/destacados de la ruta (chips junto a la descripción) */
+  stops?: string[];
 }
 
 export interface Testimonial {
@@ -112,7 +114,19 @@ export interface Dict {
       licensesTitle: string;
     };
     experience: { eyebrow: string; title: string; lead: string; countriesLabel: string };
-    trips: { eyebrow: string; title: string; lead: string; sampleBadge: string };
+    trips: {
+      eyebrow: string;
+      title: string;
+      lead: string;
+      /** Botón de la fachada que carga el mapa */
+      loadMap: string;
+      /** Nota bajo el botón: avisa de que se cargará Google */
+      loadNote: string;
+      /** Enlace para abrir el mapa completo en Google Maps */
+      openMap: string;
+      /** Etiqueta accesible de la lista de paradas */
+      stopsLabel: string;
+    };
     future: { eyebrow: string; title: string; lead: string; soon: string };
     cta: { title: string; text: string; email: string; whatsapp: string };
     testimonials: {

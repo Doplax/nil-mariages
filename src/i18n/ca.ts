@@ -56,7 +56,10 @@ export const ca: Dict = {
       eyebrow: 'Rutes i mapes',
       title: 'Les meves rutes, sobre el mapa',
       lead: 'Cada viatge que dissenyo deixa un mapa al darrere. Aquí podràs explorar de manera interactiva alguns dels meus itineraris, amb les seves parades i recorreguts reals.',
-      sampleBadge: 'Exemple',
+      loadMap: 'Veure mapa interactiu',
+      loadNote: 'Es carregarà Google My Maps',
+      openMap: 'Obrir a Google Maps',
+      stopsLabel: 'Parades destacades',
     },
     future: {
       eyebrow: 'Pròximes destinacions',
@@ -329,6 +332,7 @@ export const ca: Dict = {
       title: 'Kirguizistan en 4×4',
       location: 'Kirguizistan',
       description: "Gran circuit per la Kirguizistan nòmada: de Bixkek i el parc Ala Archa al llac Issyk-Kul (Cholpon-Ata), Karakol i la vall de Jeti-Öguz, el congost Skazka i els llacs d'altura Song-Köl i Köl-Suu. Mapa real amb parades, miradors i logística del viatge.",
+      stops: ['Bixkek', 'Parc Ala Archa', 'Llac Issyk-Kul', 'Karakol', 'Vall de Jeti-Öguz', 'Congost de Skazka', 'Llac Song-Köl', 'Köl-Suu'],
     },
   },
 };

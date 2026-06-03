@@ -56,7 +56,10 @@ export const en: Dict = {
       eyebrow: 'Routes & maps',
       title: 'My routes, on the map',
       lead: 'Every trip I design leaves a map behind. Here you can interactively explore some of my itineraries, with their stops and real routes.',
-      sampleBadge: 'Sample',
+      loadMap: 'View interactive map',
+      loadNote: 'Google My Maps will load',
+      openMap: 'Open in Google Maps',
+      stopsLabel: 'Key stops',
     },
     future: {
       eyebrow: 'Upcoming destinations',
@@ -329,6 +332,7 @@ export const en: Dict = {
       title: 'Kyrgyzstan by 4×4',
       location: 'Kyrgyzstan',
       description: 'A grand loop through nomadic Kyrgyzstan: from Bishkek and Ala Archa park to Lake Issyk-Kul (Cholpon-Ata), Karakol and the Jeti-Ögüz valley, Skazka canyon and the high-altitude lakes Song-Köl and Köl-Suu. The real map, with stops, viewpoints and trip logistics.',
+      stops: ['Bishkek', 'Ala Archa park', 'Lake Issyk-Kul', 'Karakol', 'Jeti-Ögüz valley', 'Skazka canyon', 'Song-Köl lake', 'Köl-Suu'],
     },
   },
 };

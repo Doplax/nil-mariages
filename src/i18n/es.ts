@@ -58,7 +58,10 @@ export const es: Dict = {
       eyebrow: 'Rutas y mapas',
       title: 'Mis rutas, sobre el mapa',
       lead: 'Cada viaje que diseño deja un mapa detrás. Aquí podrás explorar de forma interactiva algunos de mis itinerarios, con sus paradas y recorridos reales.',
-      sampleBadge: 'Ejemplo',
+      loadMap: 'Ver mapa interactivo',
+      loadNote: 'Se cargará Google My Maps',
+      openMap: 'Abrir en Google Maps',
+      stopsLabel: 'Paradas destacadas',
     },
     future: {
       eyebrow: 'Próximos destinos',
@@ -332,6 +335,7 @@ export const es: Dict = {
       location: 'Kirguistán',
       description:
         'Gran circuito por la Kirguistán nómada: de Bishkek y el parque Ala Archa al lago Issyk-Kul (Cholpon-Ata), Karakol y el valle de Jeti-Ögüz, el cañón Skazka y los lagos de altura Song-Köl y Köl-Suu. Mapa real con paradas, miradores y logística del viaje.',
+      stops: ['Biskek', 'Parque Ala Archa', 'Lago Issyk-Kul', 'Karakol', 'Valle de Jeti-Ögüz', 'Cañón de Skazka', 'Lago Song-Köl', 'Köl-Suu'],
     },
   },
 };

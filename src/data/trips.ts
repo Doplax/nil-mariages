@@ -12,8 +12,6 @@ export interface Trip {
   /** Código ISO del país (para la bandera) */
   iso: string;
   year?: string;
-  /** true si es un ejemplo de muestra y no una ruta real de Nil */
-  sample?: boolean;
   /** URL embebible de Google My Maps (endpoint `/embed`). Es el mapa de la ruta. */
   embedSrc: string;
 }
