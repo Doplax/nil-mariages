@@ -40,8 +40,28 @@ const hasTrips = trips.length > 0;
             ))}
           </div>
 
+          <div class="trip-viewbar" id="trip-viewbar" hidden>
+            <div class="trip-viewtoggle" role="group" aria-label={t.title}>
+              <button class="vt-btn active" data-view="map" type="button" aria-pressed="true">
+                {t.mapTab}
+              </button>
+              <button class="vt-btn" data-view="embed" type="button" aria-pressed="false">
+                {t.embedTab}
+              </button>
+            </div>
+          </div>
+
           <div class="trip-stage">
-            <div id="trip-map" class="trip-map" role="application" aria-label={t.title}></div>
+            <div class="trip-canvas">
+              <div id="trip-map" class="trip-map" role="application" aria-label={t.title}></div>
+              <iframe
+                id="trip-embed"
+                class="trip-embed"
+                title={t.title}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                hidden></iframe>
+            </div>
             <div class="trip-info" id="trip-info">
               <h3 id="trip-info-title" />
               <p id="trip-info-location" class="trip-info-location" />
@@ -64,12 +84,31 @@ const hasTrips = trips.length > 0;
   function initTrips() {
     const mapEl = document.getElementById('trip-map');
     if (!mapEl || !trips.length) return;
+    // Idempotente: si initTrips se llama dos veces sobre el mismo nodo (por el
+    // fallback de readyState además de astro:page-load) la segunda salida temprana.
+    if (mapEl.dataset.tripsReady === '1') return;
+    mapEl.dataset.tripsReady = '1';
 
   // Leaflet (152 KB) se carga de forma diferida: solo cuando la sección del
   // mapa se acerca al viewport, para no penalizar la carga inicial.
   async function initMap() {
-    const L = (await import('leaflet')).default;
-    const map = L.map(mapEl as HTMLElement, { scrollWheelZoom: false, zoomControl: true }).setView([47.5, 19.04], 13);
+    let L: typeof import('leaflet');
+    try {
+      L = (await import('leaflet')).default;
+    } catch (err) {
+      // En dev, Vite puede invalidar su caché de dependencias y devolver un 504
+      // "Outdated Optimize Dep" en el import dinámico. En producción, un deploy
+      // puede renombrar el chunk mientras hay una pestaña abierta. En ambos casos
+      // un único recargado recupera el módulo correcto (la guarda evita un bucle).
+      console.warn('[trips] no se pudo cargar leaflet, se recarga una vez', err);
+      if (!sessionStorage.getItem('trips-map-reloaded')) {
+        sessionStorage.setItem('trips-map-reloaded', '1');
+        location.reload();
+      }
+      return;
+    }
+    sessionStorage.removeItem('trips-map-reloaded');
+    const map = L.map(mapEl as HTMLElement, { scrollWheelZoom: false, zoomControl: true }).setView([41.9, 75.5], 7);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution:
@@ -84,6 +123,58 @@ const hasTrips = trips.length > 0;
     const locEl = document.getElementById('trip-info-location');
     const descEl = document.getElementById('trip-info-desc');
     const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.trip-tab'));
+
+    // Conmutador "Vista interactiva" (Leaflet) ↔ "Mapa completo" (embed de Google
+    // My Maps). El embed solo está disponible en las rutas que tienen `embedSrc`.
+    const embedEl = document.getElementById('trip-embed') as HTMLIFrameElement | null;
+    const viewbar = document.getElementById('trip-viewbar');
+    const viewBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.vt-btn'));
+    let currentIndex = 0;
+    let currentView: 'map' | 'embed' = 'map';
+
+    function applyView(view: 'map' | 'embed') {
+      const trip = trips[currentIndex];
+      const hasEmbed = !!trip?.embedSrc;
+      currentView = view === 'embed' && hasEmbed ? 'embed' : 'map';
+
+      if (currentView === 'embed' && embedEl) {
+        if (embedEl.getAttribute('src') !== trip!.embedSrc) {
+          embedEl.setAttribute('src', trip!.embedSrc as string);
+        }
+        embedEl.hidden = false;
+        mapEl!.hidden = true;
+      } else {
+        if (embedEl) embedEl.hidden = true;
+        mapEl!.hidden = false;
+        // Recalcula tamaño y reencuadra: si el mapa estuvo oculto (en el embed),
+        // su tamaño era 0 y el último fitBounds pudo quedar descuadrado.
+        setTimeout(() => {
+          map.invalidateSize();
+          const b = layer?.getBounds();
+          if (b && b.isValid()) map.fitBounds(b, { padding: [40, 40] });
+        }, 60);
+      }
+
+      viewBtns.forEach((b) => {
+        const on = b.dataset.view === currentView;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+    }
+
+    function syncViewbar(index: number) {
+      currentIndex = index;
+      const hasEmbed = !!trips[index]?.embedSrc;
+      if (viewbar) viewbar.hidden = !hasEmbed;
+      // Una ruta sin embed siempre se ve en el mapa interactivo; si estábamos en
+      // el embed y cambiamos a otra ruta con mapa propio, refrescamos el iframe.
+      if (!hasEmbed) applyView('map');
+      else if (currentView === 'embed') applyView('embed');
+    }
+
+    viewBtns.forEach((b) =>
+      b.addEventListener('click', () => applyView((b.dataset.view as 'map' | 'embed') || 'map')),
+    );
 
     function renderTrip(index: number) {
       const trip = trips[index];
@@ -119,6 +210,8 @@ const hasTrips = trips.length > 0;
       if (titleEl) titleEl.textContent = btn?.dataset.title ?? '';
       if (locEl) locEl.textContent = btn?.dataset.location ?? '';
       if (descEl) descEl.textContent = btn?.dataset.desc ?? '';
+
+      syncViewbar(index);
     }
 
     tabs.forEach((btn) => {
@@ -152,6 +245,11 @@ const hasTrips = trips.length > 0;
   }
 
   document.addEventListener('astro:page-load', initTrips);
+  // Fallback: si este módulo se evalúa DESPUÉS de que `astro:page-load` ya haya
+  // disparado (orden de carga / caché / HMR), el listener no se ejecutaría nunca
+  // y la sección quedaría en blanco. Inicializamos también de inmediato cuando el
+  // DOM ya está listo; la guarda `tripsReady` evita la doble inicialización.
+  if (document.readyState !== 'loading') initTrips();
 </script>
 
 <style>
@@ -208,6 +306,41 @@ const hasTrips = trips.length > 0;
     background: rgba(95, 201, 188, 0.18);
   }
 
+  .trip-viewbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .trip-viewbar[hidden] {
+    display: none;
+  }
+  .trip-viewtoggle {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .vt-btn {
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.86rem;
+    color: var(--ink);
+    padding: 7px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .vt-btn:hover {
+    color: var(--teal-deep);
+  }
+  .vt-btn.active {
+    background: var(--navy);
+    color: var(--cream);
+  }
+
   .trip-stage {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
@@ -218,11 +351,28 @@ const hasTrips = trips.length > 0;
     border: 1px solid var(--line);
     background: #fff;
   }
+  .trip-canvas {
+    position: relative;
+    min-width: 0;
+  }
   .trip-map {
     height: 480px;
     width: 100%;
     background: #e8eef0;
     z-index: 1;
+  }
+  .trip-map[hidden] {
+    display: none;
+  }
+  .trip-embed {
+    display: block;
+    height: 480px;
+    width: 100%;
+    border: 0;
+    background: #e8eef0;
+  }
+  .trip-embed[hidden] {
+    display: none;
   }
   .trip-info {
     padding: 28px;
@@ -256,7 +406,8 @@ const hasTrips = trips.length > 0;
     .trip-stage {
       grid-template-columns: 1fr;
     }
-    .trip-map {
+    .trip-map,
+    .trip-embed {
       height: 380px;
     }
   }

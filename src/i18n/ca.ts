@@ -57,6 +57,8 @@ export const ca: Dict = {
       title: 'Les meves rutes, sobre el mapa',
       lead: 'Cada viatge que dissenyo deixa un mapa al darrere. Aquí podràs explorar de manera interactiva alguns dels meus itineraris, amb les seves parades i recorreguts reals.',
       sampleBadge: 'Exemple',
+      mapTab: 'Vista interactiva',
+      embedTab: 'Mapa complet',
     },
     future: {
       eyebrow: 'Pròximes destinacions',
@@ -330,10 +332,10 @@ export const ca: Dict = {
       location: 'Budapest, Hongria',
       description: "Recorregut pels imprescindibles de Budapest: del Parlament al Bastió dels Pescadors creuant el Danubi. Exemple de mapa urbà a peu.",
     },
-    'kyrgyzstan-ejemplo': {
+    kyrgyzstan: {
       title: 'Kirguizistan en 4×4',
       location: 'Kirguizistan',
-      description: "Circuit de la Ruta de la Seda kirguís: Bixkek, el llac Issyk-Kul, Karakol, el llac Song-Köl a 3.000 m i Naryn. Exemple de ruta en cotxe per país.",
+      description: "Gran circuit per la Kirguizistan nòmada: de Bixkek i el parc Ala Archa al llac Issyk-Kul (Cholpon-Ata), Karakol i la vall de Jeti-Öguz, el congost Skazka i els llacs d'altura Song-Köl i Köl-Suu. Mapa real amb parades, miradors i logística del viatge.",
     },
   },
 };

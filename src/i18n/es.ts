@@ -59,6 +59,8 @@ export const es: Dict = {
       title: 'Mis rutas, sobre el mapa',
       lead: 'Cada viaje que diseño deja un mapa detrás. Aquí podrás explorar de forma interactiva algunos de mis itinerarios, con sus paradas y recorridos reales.',
       sampleBadge: 'Ejemplo',
+      mapTab: 'Vista interactiva',
+      embedTab: 'Mapa completo',
     },
     future: {
       eyebrow: 'Próximos destinos',
@@ -333,11 +335,11 @@ export const es: Dict = {
       description:
         'Recorrido por los imprescindibles de Budapest: del Parlamento al Bastión de los Pescadores cruzando el Danubio. Ejemplo de mapa urbano a pie.',
     },
-    'kyrgyzstan-ejemplo': {
+    kyrgyzstan: {
       title: 'Kirguistán en 4×4',
       location: 'Kirguistán',
       description:
-        'Ruta de la Ruta de la Seda kirguís: Bishkek, el lago Issyk-Kul, Karakol, el lago Song-Köl a 3.000 m y Naryn. Ejemplo de ruta en coche por país.',
+        'Gran circuito por la Kirguistán nómada: de Bishkek y el parque Ala Archa al lago Issyk-Kul (Cholpon-Ata), Karakol y el valle de Jeti-Ögüz, el cañón Skazka y los lagos de altura Song-Köl y Köl-Suu. Mapa real con paradas, miradores y logística del viaje.',
     },
   },
 };

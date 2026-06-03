@@ -57,6 +57,8 @@ export const en: Dict = {
       title: 'My routes, on the map',
       lead: 'Every trip I design leaves a map behind. Here you can interactively explore some of my itineraries, with their stops and real routes.',
       sampleBadge: 'Sample',
+      mapTab: 'Interactive view',
+      embedTab: 'Full map',
     },
     future: {
       eyebrow: 'Upcoming destinations',
@@ -330,10 +332,10 @@ export const en: Dict = {
       location: 'Budapest, Hungary',
       description: "A walk through the must-sees of Budapest: from Parliament to the Fisherman’s Bastion, crossing the Danube. Urban route sample.",
     },
-    'kyrgyzstan-ejemplo': {
+    kyrgyzstan: {
       title: 'Kyrgyzstan by 4×4',
       location: 'Kyrgyzstan',
-      description: 'Kyrgyz Silk Road circuit: Bishkek, Lake Issyk-Kul, Karakol, Song-Köl lake at 3,000 m and Naryn. Sample of a cross-country road trip.',
+      description: 'A grand loop through nomadic Kyrgyzstan: from Bishkek and Ala Archa park to Lake Issyk-Kul (Cholpon-Ata), Karakol and the Jeti-Ögüz valley, Skazka canyon and the high-altitude lakes Song-Köl and Köl-Suu. The real map, with stops, viewpoints and trip logistics.',
     },
   },
 };
