@@ -72,6 +72,8 @@ export interface PlanningItem {
   isos: string[];
   summary: string;
   days: PlanningDay[];
+  /** Ruta a la versión "muestra" (con marca de agua) para el visor protegido. */
+  pdf?: string;
 }
 
 export interface Dict {
@@ -136,6 +138,15 @@ export interface Dict {
       lead: string;
       showDays: string;
       hideDays: string;
+      /** Botón que abre el visor protegido de la planificación completa */
+      viewPlan: string;
+      /** Aviso bajo el visor: muestra de portfolio, solo lectura */
+      viewerHint: string;
+      viewerClose: string;
+      viewerPrev: string;
+      viewerNext: string;
+      viewerPageLabel: string;
+      viewerLoading: string;
       items: PlanningItem[];
     };
     footer: { tagline: string; navTitle: string; contactTitle: string; madeWith: string };

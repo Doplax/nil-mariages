@@ -16,3 +16,6 @@ pnpm-debug.log*
 .DS_Store
 # vercel
 .vercel
+# PDFs originales de planificaciones (fuente sensible: hoteles, vuelos, datos
+# personales). Solo se publican las versiones "muestra" en public/planificaciones.
+planning-src/
