@@ -1,7 +1,6 @@
 ---
-import { totalCountries } from '../data/countries';
 import { profile } from '../data/cv';
-import { getDict, interpolate, type Lang } from '../i18n';
+import { getDict, type Lang } from '../i18n';
 import Button from './ui/Button.astro';
 
 interface Props {
@@ -16,7 +15,7 @@ const t = getDict(lang).ui.cta;
     <span class="cta-plane" data-parallax="0.14" aria-hidden="true">✈</span>
     <div class="cta-text">
       <h2>{t.title}</h2>
-      <p>{interpolate(t.text, { count: totalCountries })}</p>
+      <p>{t.text}</p>
     </div>
     <div class="cta-actions">
       <Button href={`mailto:${profile.email}`} variant="primary">

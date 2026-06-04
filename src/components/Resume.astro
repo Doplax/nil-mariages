@@ -341,11 +341,10 @@ const { experience, education, skills, languages, awards, interests, licenses } 
   .dots-list li {
     font-size: 0.9rem;
   }
-  .license-ssi {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    flex-wrap: wrap;
+  /* El logo SSI va inline tras el texto para que el <li> conserve su viñeta
+     (un display:flex en el li elimina el marker de la lista). */
+  .license-ssi :global(.ssi-logo) {
+    margin-left: 4px;
   }
 
   @media (max-width: 860px) {

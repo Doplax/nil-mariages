@@ -22,7 +22,7 @@ const items = trips.map((trip) => {
     text,
     image: countryImage(trip.iso),
     viewerSrc: trip.embedSrc.replace('/embed', '/viewer'),
-    locationLabel: `${text.location}${trip.year ? ` · ${trip.year}` : ''}`,
+    locationLabel: text.location,
   };
 });
 
@@ -273,7 +273,12 @@ const first = items[0];
     border: 1px solid var(--line);
     background: #e8eef0;
   }
-  .trip-embed {
+  /* El iframe se crea por JS (sin el atributo de scope de Astro), así que la
+     regla debe ser :global o no se le aplicaría ningún estilo y se quedaría al
+     tamaño por defecto del iframe (≈300×150) en una esquina. */
+  :global(.trip-embed) {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;

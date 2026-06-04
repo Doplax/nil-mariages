@@ -10,6 +10,68 @@ Desplegado en → **https://nil-mariages.vercel.app**
 
 ---
 
+## 🔧 Correcciones pendientes (revisión de Nil — 2026-06-04)
+
+Lote de correcciones detectadas sobre capturas anotadas. Cada punto explica
+**qué falla**, **por qué** y **qué hacer**.
+
+- [x] **1. Mapa de la sección Rutas "se ve culero" (iframe diminuto).**
+      En `TripsSection.astro`, al pulsar la fachada se inserta el `<iframe>` del
+      embed de Google My Maps con clase `.trip-embed` (`width:100%;height:100%`).
+      El iframe se queda al tamaño intrínseco por defecto (≈300×150 px) en la
+      esquina superior izquierda en vez de rellenar la caja 16:9, dejando un
+      enorme hueco gris ("se ve culero" / "el texto está bastante mal" señalan
+      ese hueco). **Qué hacer:** posicionar el iframe en absoluto
+      (`position:absolute; inset:0`) dentro de `.trip-stage` para que rellene
+      siempre el contenedor con independencia de cómo resuelva el `height:100%`.
+      Archivo: `src/components/TripsSection.astro` (CSS `.trip-embed`).
+
+- [x] **2. Quitar el año en la ficha de ruta ("Kirguistán · 2023").**
+      En `TripsSection.astro` el `locationLabel` concatena
+      `` `${location} · ${year}` ``. Nil quiere que NO aparezca el año.
+      **Qué hacer:** mostrar solo `text.location` (sin ` · año`). Archivo:
+      `src/components/TripsSection.astro` (constante `locationLabel`).
+
+- [x] **3. CTA: "+41 países" → "más de 40".**
+      El número exacto (41, dinámico) "queda raro"; Nil prefiere "más de 40".
+      El texto del CTA usa `+{count}` interpolado con `totalCountries`.
+      **Qué hacer:** cambiar el texto en los 3 idiomas (`es/en/ca`) a "más de
+      40 países" / "more than 40 countries" / "més de 40 països" y dejar de
+      interpolar el contador en `CTA.astro` (quitar imports `totalCountries` e
+      `interpolate` si quedan sin uso). Archivos: `src/i18n/{es,en,ca}.ts`
+      (`ui.cta.text`) y `src/components/CTA.astro`.
+
+- [x] **4. Iconos en la columna "Contacto" del footer ("los emojis molarían aquí también").**
+      El formulario de contacto muestra los enlaces con icono (mail, teléfono,
+      WhatsApp, LinkedIn), pero la columna Contacto del footer son enlaces de
+      texto pelados. **Qué hacer:** añadir los mismos iconos SVG (mail, teléfono,
+      WhatsApp, LinkedIn y un pin de ubicación para Barcelona) a cada enlace del
+      footer, con los colores de marca de WhatsApp/LinkedIn. Archivo:
+      `src/layouts/Layout.astro` (footer, columna `contactTitle`) + CSS del footer.
+
+- [x] **5. "Falta el punto" en LICENCIAS (CV).**
+      En `Resume.astro` la lista de licencias es un `<ul class="dots-list">` con
+      viñetas. El item que contiene el logo SSI usa `class="license-ssi"` con
+      `display:flex`, y `display:flex` en un `<li>` ELIMINA su viñeta (marker).
+      Por eso "Advanced Open Water Diver (AOWD) – [SSI]" aparece sin punto
+      mientras "Carné de conducir B" sí lo tiene. **Qué hacer:** que ese `<li>`
+      conserve su viñeta (no usar `display:flex` en el `li`; el logo SSI ya es
+      inline con `vertical-align:middle`, basta con alinearlo en línea).
+      Archivo: `src/components/Resume.astro` (CSS `.license-ssi`).
+
+- [x] **6. Revisar el día a día de "Kirguistán y Uzbekistán en 18 días".** ⚠️ Validar con Nil.
+      Suma correctamente 18 días y los nombres/monumentos son correctos, pero
+      dos entradas son genéricas/flojas: "Días 7-8 — Noches en yurta" (sin
+      nombrar el lago icónico) y "Día 9 — Regreso a Bishkek / Travesía por el
+      corazón de Kirguistán" (relleno vago). **Qué hacer:** concretar los días
+      7-8 nombrando **Song-Köl** (el lago alpino donde se duerme en yurta, la
+      experiencia estrella) y dar contenido real al día 9 (descenso por
+      Kochkor / desfiladero de Boom). En los 3 idiomas. ⚠️ Es contenido: Nil
+      debe validar que casa con su itinerario real. Archivos:
+      `src/i18n/{es,en,ca}.ts` (`ui.planning.items[1].days`).
+
+---
+
 ## ✅ Preparación
 - [x] Foto perfil: `.jfif` → `public/images/nil-mariages.webp` (800×800, 54 KB).
 
