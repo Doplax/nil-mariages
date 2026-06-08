@@ -12,9 +12,9 @@ export const es: Dict = {
       contacto: 'Contacto',
     },
     hero: {
-      tag: 'Travel maker · Viajes a medida y guía titulado',
-      titleTop: 'Diseño viajes que se',
-      titleAccent: 'recuerdan toda la vida',
+      tag: 'Travel maker · Agente de viajes · Guía titulado',
+      titleTop: 'Diseño viajes para que se',
+      titleAccent: 'recuerden toda la vida',
       lead: 'Soy Nil Mariages. Convierto destinos en experiencias hechas a tu medida: itinerarios únicos, asesoramiento cercano y acompañamiento antes, durante y después del viaje.',
       ctaPrimary: 'Descubre dónde he estado',
       ctaGhost: 'Hablemos de tu viaje',
@@ -30,7 +30,7 @@ export const es: Dict = {
       role: 'Agente de viajes',
       cards: [
         { title: 'Viajes a medida', text: 'Diseño y venta de itinerarios adaptados a las necesidades de cada viajero.' },
-        { title: 'Acompañamiento integral', text: 'Asesoramiento personalizado y gestión de reservas antes, durante y después del viaje.' },
+        { title: 'Acompañamiento integral', text: 'Asesoramiento personalizado y gestión de incidencias antes, durante y después del viaje.' },
         { title: 'Turismo de aventura', text: 'Apasionado por las experiencias auténticas y los destinos fuera de lo común.' },
         { title: 'Conocimiento real', text: 'Más de 40 países visitados que aportan recomendaciones auténticas y diferenciadas.' },
       ],

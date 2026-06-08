@@ -13,13 +13,15 @@ const icons = ['🎯', '🤝', '🏔️', '🌐'];
 <section class="about section" id="sobre-mi">
   <div class="container about-inner">
     <div class="about-photo reveal">
-      <img
-        src="/images/nil-mariages.webp"
-        width="800"
-        height="800"
-        alt={`${profile.name}, ${t.role}`}
-        loading="lazy"
-      />
+      <div class="about-photo-frame">
+        <img
+          src="/images/nil-mariages.webp"
+          width="800"
+          height="800"
+          alt={`${profile.name}, ${t.role}`}
+          loading="lazy"
+        />
+      </div>
       <div class="about-badge">
         <span>{profile.name}</span>
         <small>{t.role}</small>
@@ -59,12 +61,20 @@ const icons = ['🎯', '🤝', '🏔️', '🌐'];
   .about-photo {
     position: relative;
   }
-  .about-photo img {
+  .about-photo-frame {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+  /* La foto original deja mucho paisaje sobre la cabeza: hacemos un ligero
+     zoom centrado en el rostro para recortar ese aire y centrar la cara. */
+  .about-photo-frame img {
+    display: block;
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    transform: scale(1.32);
+    transform-origin: 50% 80%;
   }
   .about-photo::before {
     content: '';

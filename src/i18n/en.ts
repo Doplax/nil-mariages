@@ -10,7 +10,7 @@ export const en: Dict = {
       contacto: 'Contact',
     },
     hero: {
-      tag: 'Travel maker · Tailor-made trips & certified guide',
+      tag: 'Travel maker · Travel agent · Certified guide',
       titleTop: "I design trips you'll",
       titleAccent: 'remember for a lifetime',
       lead: "I'm Nil Mariages. I turn destinations into tailor-made experiences: unique itineraries, close guidance and support before, during and after your trip.",
@@ -28,7 +28,7 @@ export const en: Dict = {
       role: 'Travel agent',
       cards: [
         { title: 'Tailor-made trips', text: 'Designing and selling itineraries adapted to each traveller’s needs.' },
-        { title: 'End-to-end support', text: 'Personalised advice and booking management before, during and after the trip.' },
+        { title: 'End-to-end support', text: 'Personalised advice and issue handling before, during and after the trip.' },
         { title: 'Adventure tourism', text: 'Passionate about authentic experiences and off-the-beaten-path destinations.' },
         { title: 'Real knowledge', text: 'More than 40 countries visited, bringing authentic and distinctive recommendations.' },
       ],

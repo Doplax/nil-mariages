@@ -10,9 +10,9 @@ export const ca: Dict = {
       contacto: 'Contacte',
     },
     hero: {
-      tag: 'Travel maker · Viatges a mida i guia titulat',
-      titleTop: 'Dissenyo viatges que es',
-      titleAccent: 'recorden tota la vida',
+      tag: 'Travel maker · Agent de viatges · Guia titulat',
+      titleTop: 'Dissenyo viatges perquè es',
+      titleAccent: 'recordin tota la vida',
       lead: 'Soc en Nil Mariages. Converteixo destinacions en experiències fetes a la teva mida: itineraris únics, assessorament proper i acompanyament abans, durant i després del viatge.',
       ctaPrimary: 'Descobreix on he estat',
       ctaGhost: 'Parlem del teu viatge',
@@ -28,7 +28,7 @@ export const ca: Dict = {
       role: 'Agent de viatges',
       cards: [
         { title: 'Viatges a mida', text: 'Disseny i venda d’itineraris adaptats a les necessitats de cada viatger.' },
-        { title: 'Acompanyament integral', text: 'Assessorament personalitzat i gestió de reserves abans, durant i després del viatge.' },
+        { title: 'Acompanyament integral', text: 'Assessorament personalitzat i gestió d’incidències abans, durant i després del viatge.' },
         { title: 'Turisme d’aventura', text: 'Apassionat per les experiències autèntiques i les destinacions fora del comú.' },
         { title: 'Coneixement real', text: 'Més de 40 països visitats que aporten recomanacions autèntiques i diferenciades.' },
       ],
