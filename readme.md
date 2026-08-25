@@ -51,6 +51,7 @@ solo hay que tocar estos ficheros:
 | Países visitados y proyectos futuros | `src/data/countries.ts` |
 | Fotos de cada país (por código ISO) | `src/data/images.json` |
 | Datos de contacto (email, teléfono, LinkedIn) | `src/data/cv.ts` |
+| Logotipos de las empresas del CV | `src/assets/logos/`, `public/images/` |
 | Rutas del mapa | `src/data/trips.ts` |
 | CV en PDF y planificaciones | `public/` |
 

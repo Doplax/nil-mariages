@@ -7,9 +7,10 @@
 // blanca oficial con los rellenos pasados a `currentColor`, para poder teñirlo
 // desde CSS sobre la tarjeta blanca; el de Bon Preu conserva sus colores.
 //
-// Wakea Travel solo publica su logo en PNG (blanco sobre transparente), así que
-// se sirve como imagen ya horneada sobre su disco azul marino: la marca es
-// circular, de modo que sigue leyéndose como el logo y no como un añadido.
+// Wakea Travel solo publica el suyo en PNG, así que el SVG es una vectorización
+// de ese PNG (ver el comentario del propio fichero). Al pesar bastante más que
+// los otros dos, se sirve como fichero aparte y no incrustado: así se cachea una
+// vez en lugar de repetirse en cada página.
 //
 // El logo es DECORATIVO: el nombre de la empresa va escrito justo al lado, así
 // que se oculta a lectores de pantalla para no duplicar la información.
@@ -19,7 +20,7 @@ import bonpreu from '../assets/logos/bonpreu.svg?raw';
 const SVG_LOGOS: Record<string, string> = { exoticca, bonpreu };
 
 const IMG_LOGOS: Record<string, { src: string; w: number; h: number }> = {
-  wakea: { src: '/images/wakea-travel-logo.png', w: 128, h: 128 },
+  wakea: { src: '/images/wakea-travel-logo.svg', w: 512, h: 512 },
 };
 
 interface Props {
