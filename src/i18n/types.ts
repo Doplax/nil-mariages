@@ -25,6 +25,8 @@ export interface RegionText {
 export interface CvExperience {
   role: string;
   company: string;
+  /** Clave del logotipo de la empresa (ver `CompanyLogo.astro`). Opcional. */
+  logo?: string;
   type: string;
   period: string;
   summary: string;

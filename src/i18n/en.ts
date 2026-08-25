@@ -271,6 +271,7 @@ export const en: Dict = {
       {
         role: 'B2B Group Specialist',
         company: 'Exoticca',
+        logo: 'exoticca',
         type: 'Full-time',
         period: 'Jul 2026 — present',
         summary:
@@ -288,6 +289,7 @@ export const en: Dict = {
       {
         role: 'Travel agent',
         company: 'Wakea Travel España',
+        logo: 'wakea',
         type: 'Full-time',
         period: 'Mar 2023 — Jan 2026',
         summary:
@@ -305,6 +307,7 @@ export const en: Dict = {
       {
         role: 'Stocker',
         company: 'Bon Preu S.A.U.',
+        logo: 'bonpreu',
         type: 'Part-time',
         period: 'Sept 2021 — Mar 2023',
         summary:

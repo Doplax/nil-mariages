@@ -1,0 +1,71 @@
+---
+// Logotipos de las empresas de la trayectoria profesional, para mostrarlos
+// delante del nombre de cada una en el CV.
+//
+// Exoticca y Bon Preu publican su logo en SVG, así que va incrustado (sin
+// petición extra y nítido a cualquier tamaño). El de Exoticca es la versión
+// blanca oficial con los rellenos pasados a `currentColor`, para poder teñirlo
+// desde CSS sobre la tarjeta blanca; el de Bon Preu conserva sus colores.
+//
+// Wakea Travel solo publica su logo en PNG (blanco sobre transparente), así que
+// se sirve como imagen ya horneada sobre su disco azul marino: la marca es
+// circular, de modo que sigue leyéndose como el logo y no como un añadido.
+//
+// El logo es DECORATIVO: el nombre de la empresa va escrito justo al lado, así
+// que se oculta a lectores de pantalla para no duplicar la información.
+import exoticca from '../assets/logos/exoticca.svg?raw';
+import bonpreu from '../assets/logos/bonpreu.svg?raw';
+
+const SVG_LOGOS: Record<string, string> = { exoticca, bonpreu };
+
+const IMG_LOGOS: Record<string, { src: string; w: number; h: number }> = {
+  wakea: { src: '/images/wakea-travel-logo.png', w: 128, h: 128 },
+};
+
+interface Props {
+  /** Clave del logo (`exoticca`, `bonpreu`, `wakea`). Sin ella no se pinta nada. */
+  logo?: string;
+}
+const { logo } = Astro.props;
+const svg = logo ? SVG_LOGOS[logo] : undefined;
+const img = logo ? IMG_LOGOS[logo] : undefined;
+---
+
+{svg && <span class="company-logo" aria-hidden="true" set:html={svg} />}
+{
+  img && (
+    <img
+      class="company-logo-img"
+      src={img.src}
+      alt=""
+      aria-hidden="true"
+      width={img.w}
+      height={img.h}
+      loading="lazy"
+      decoding="async"
+    />
+  )
+}
+
+<style>
+  .company-logo {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    /* El SVG de Exoticca usa currentColor: lo teñimos del color del texto. */
+    color: var(--ink);
+  }
+  /* El SVG llega por set:html, así que queda fuera del scope de Astro. */
+  .company-logo :global(svg) {
+    display: block;
+    height: 15px;
+    width: auto;
+  }
+  .company-logo-img {
+    display: block;
+    flex-shrink: 0;
+    width: auto;
+    height: 22px;
+    border-radius: 50%;
+  }
+</style>

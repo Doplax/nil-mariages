@@ -6,6 +6,7 @@ import Reveal from './ui/Reveal.astro';
 import Button from './ui/Button.astro';
 import Chip from './ui/Chip.astro';
 import SsiLogo from './SsiLogo.astro';
+import CompanyLogo from './CompanyLogo.astro';
 
 interface Props {
   lang: Lang;
@@ -45,7 +46,10 @@ const { experience, education, skills, languages, awards, interests, licenses } 
                     <span class="timeline-period">{job.period}</span>
                   </div>
                   <p class="timeline-company">
-                    <strong>{job.company}</strong> · {job.type}
+                    <CompanyLogo logo={job.logo} />
+                    <span>
+                      <strong>{job.company}</strong> · {job.type}
+                    </span>
                   </p>
                   <p class="timeline-summary">{job.summary}</p>
                   <ul class="timeline-bullets">
@@ -217,7 +221,11 @@ const { experience, education, skills, languages, awards, interests, licenses } 
     white-space: nowrap;
   }
   .timeline-company {
-    margin-top: 6px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 9px;
     color: var(--muted);
     font-size: 0.95rem;
   }
