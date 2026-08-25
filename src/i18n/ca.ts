@@ -10,7 +10,7 @@ export const ca: Dict = {
       contacto: 'Contacte',
     },
     hero: {
-      tag: 'Travel maker · Agent de viatges · Guia titulat',
+      tag: 'Travel maker · Agent de viatges · Guia titulat · Especialista en grups',
       titleTop: 'Dissenyo viatges perquè es',
       titleAccent: 'recordin tota la vida',
       lead: 'Soc en Nil Mariages. Converteixo destinacions en experiències fetes a la teva mida: itineraris únics, assessorament proper i acompanyament abans, durant i després del viatge.',
@@ -229,6 +229,7 @@ export const ca: Dict = {
     us: { name: 'Estats Units', desc: 'Grans parcs nacionals, ciutats icòniques i carreteres infinites.' },
     eg: { name: 'Egipte', desc: 'Piràmides mil·lenàries, el Nil etern i els tresors dels faraons.' },
     ma: { name: 'Marroc', desc: 'Zocs, desert del Sàhara i ciutats imperials plenes de color.' },
+    tn: { name: 'Tunísia', desc: 'Ruïnes romanes com El Jem, medines blaves i blanques i les portes del Sàhara.' },
     al: { name: 'Albània', desc: 'Costa jònica verge, muntanyes i un país autèntic per descobrir.' },
     rs: { name: 'Sèrbia', desc: 'Belgrad vibrant, història balcànica i hospitalitat sincera.' },
     sk: { name: 'Eslovàquia', desc: 'Castells, els Alts Tatres i un encant centreeuropeu discret.' },
@@ -266,6 +267,23 @@ export const ca: Dict = {
     summary:
       'Agent de viatges especialitzat en el disseny i la venda de viatges a mida, amb experiència en assessorament personalitzat, gestió de reserves i acompanyament integral al client abans, durant i després del viatge.',
     experience: [
+      {
+        role: 'B2B Group Specialist',
+        company: 'Exoticca',
+        type: 'Jornada completa',
+        period: 'jul. 2026 — actualitat',
+        summary:
+          'Gestió comercial de viatges en grup per a clients B2B, desenvolupant propostes personalitzades, gestionant oportunitats de venda i assegurant el seguiment de cada grup durant tot el procés de contractació.',
+        bullets: [
+          'Venda i comercialització de viatges en grup per a clients B2B.',
+          'Elaboració de propostes i pressupostos adaptats a les necessitats de cada client.',
+          'Seguiment comercial d’oportunitats des de la primera sol·licitud fins al tancament de la venda.',
+          'Assessorament a agències i partners B2B en la selecció de productes i serveis.',
+          'Negociació i gestió de condicions comercials amb clients i proveïdors.',
+          'Coordinació amb equips interns i proveïdors per garantir la correcta execució dels viatges contractats.',
+          'Gestió de modificacions, peticions especials i incidències relacionades amb els grups.',
+        ],
+      },
       {
         role: 'Agent de viatges',
         company: 'Wakea Travel España',
@@ -316,6 +334,15 @@ export const ca: Dict = {
       'Coneixement de destinacions internacionals',
       'Eines de disseny i presentació: Canva o PowerPoint',
       'Plataformes de reserva i B2B (Veturis, RateHawk, etc.)',
+      'Venda B2B',
+      'Gestió comercial',
+      'Seguiment d’oportunitats',
+      'Tancament de vendes',
+      'Elaboració de pressupostos',
+      'Gestió de grups',
+      'Relació amb agències i partners',
+      'Negociació comercial',
+      'Fidelització de clients',
     ],
     languages: [
       { name: 'Català', level: 'Natiu', value: 5 },

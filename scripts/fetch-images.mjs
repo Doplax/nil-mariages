@@ -29,6 +29,7 @@ const landmarks = {
   // África
   Egipto: 'Giza pyramid complex',
   Marruecos: 'Chefchaouen',
+  Túnez: 'Amphitheatre of El Jem',
   // Europa
   Albania: 'Gjirokastër',
   Serbia: 'Belgrade Fortress',

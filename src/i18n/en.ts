@@ -10,7 +10,7 @@ export const en: Dict = {
       contacto: 'Contact',
     },
     hero: {
-      tag: 'Travel maker · Travel agent · Certified guide',
+      tag: 'Travel maker · Travel agent · Certified guide · Group specialist',
       titleTop: "I design trips you'll",
       titleAccent: 'remember for a lifetime',
       lead: "I'm Nil Mariages. I turn destinations into tailor-made experiences: unique itineraries, close guidance and support before, during and after your trip.",
@@ -229,6 +229,7 @@ export const en: Dict = {
     us: { name: 'United States', desc: 'Great national parks, iconic cities and endless highways.' },
     eg: { name: 'Egypt', desc: 'Ancient pyramids, the eternal Nile and the treasures of the pharaohs.' },
     ma: { name: 'Morocco', desc: 'Souks, the Sahara desert and imperial cities full of colour.' },
+    tn: { name: 'Tunisia', desc: 'Roman ruins such as El Jem, blue-and-white medinas and the gateway to the Sahara.' },
     al: { name: 'Albania', desc: 'An unspoilt Ionian coast, mountains and an authentic country to discover.' },
     rs: { name: 'Serbia', desc: 'A vibrant Belgrade, Balkan history and sincere hospitality.' },
     sk: { name: 'Slovakia', desc: 'Castles, the High Tatras and a discreet Central European charm.' },
@@ -266,6 +267,23 @@ export const en: Dict = {
     summary:
       'Travel agent specialised in designing and selling tailor-made trips, with experience in personalised advice, booking management and comprehensive client support before, during and after the trip.',
     experience: [
+      {
+        role: 'B2B Group Specialist',
+        company: 'Exoticca',
+        type: 'Full-time',
+        period: 'Jul 2026 — present',
+        summary:
+          'Commercial management of group travel for B2B clients, developing tailored proposals, managing sales opportunities and ensuring the follow-up of each group throughout the whole booking process.',
+        bullets: [
+          'Selling and marketing group trips to B2B clients.',
+          'Preparing proposals and quotes adapted to each client’s needs.',
+          'Commercial follow-up of opportunities from the first enquiry to closing the sale.',
+          'Advising agencies and B2B partners on the selection of products and services.',
+          'Negotiating and managing commercial terms with clients and suppliers.',
+          'Coordinating with internal teams and suppliers to ensure the correct delivery of booked trips.',
+          'Handling amendments, special requests and issues related to the groups.',
+        ],
+      },
       {
         role: 'Travel agent',
         company: 'Wakea Travel España',
@@ -316,6 +334,15 @@ export const en: Dict = {
       'Knowledge of international destinations',
       'Design & presentation tools: Canva or PowerPoint',
       'Booking & B2B platforms (Veturis, RateHawk, etc.)',
+      'B2B sales',
+      'Commercial management',
+      'Opportunity follow-up',
+      'Closing sales',
+      'Quote preparation',
+      'Group management',
+      'Agency & partner relations',
+      'Commercial negotiation',
+      'Client retention',
     ],
     languages: [
       { name: 'Catalan', level: 'Native', value: 5 },
