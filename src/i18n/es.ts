@@ -263,6 +263,7 @@ export const es: Dict = {
     cn: { name: 'China', desc: 'Milenaria y colosal: de la Gran Muralla a megaciudades futuristas.' },
     co: { name: 'Colombia', desc: 'Caribe, café, selva amazónica y la energía contagiosa de su gente.' },
     pe: { name: 'Perú', desc: 'Machu Picchu, el Camino Inca, el Titicaca y una gastronomía que conquista el mundo.' },
+    md: { name: 'Moldavia (con Transnistria)', desc: 'Viñedos de Cricova, los monasterios rupestres de Orheiul Vechi y el enclave soviético de Transnistria.' },
     baltico: { name: 'Ruta por el Báltico', desc: 'Lituania, Letonia, Estonia y Finlandia: ciudades medievales, naturaleza nórdica y mares de ámbar.' },
   },
   cv: {

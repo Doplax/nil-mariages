@@ -30,7 +30,7 @@ export const regions: RegionStruct[] = [
   },
 ];
 
-export const futureProjects: string[] = ['pk', 'cn', 'co', 'pe', 'baltico'];
+export const futureProjects: string[] = ['pk', 'cn', 'co', 'pe', 'md', 'baltico'];
 
 /** Flags to show for multi-country future route entries */
 export const futureGroupFlags: Record<string, string[]> = {

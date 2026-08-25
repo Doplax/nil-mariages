@@ -261,6 +261,7 @@ export const ca: Dict = {
     cn: { name: 'Xina', desc: 'Mil·lenària i colossal: de la Gran Muralla a megaciutats futuristes.' },
     co: { name: 'Colòmbia', desc: "Carib, cafè, selva amazònica i l’energia contagiosa de la seva gent." },
     pe: { name: 'Perú', desc: 'Machu Picchu, el Camí Inca, el Titicaca i una gastronomia que conquesta el món.' },
+    md: { name: 'Moldàvia (amb Transnístria)', desc: 'Vinyes de Cricova, els monestirs rupestres d’Orheiul Vechi i l’enclavament soviètic de Transnístria.' },
     baltico: { name: 'Ruta pel Bàltic', desc: "Lituània, Letònia, Estònia i Finlàndia: ciutats medievals, natura nòrdica i mars d’ambre." },
   },
   cv: {

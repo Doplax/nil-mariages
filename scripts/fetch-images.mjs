@@ -57,6 +57,7 @@ const landmarks = {
   Pakistán: 'Badshahi Mosque',
   China: 'Great Wall of China',
   Colombia: 'Cartagena, Colombia',
+  Moldavia: 'Orheiul Vechi',
 };
 
 async function fetchImage(title, attempt = 1) {

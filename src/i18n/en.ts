@@ -261,6 +261,7 @@ export const en: Dict = {
     cn: { name: 'China', desc: 'Ancient and colossal: from the Great Wall to futuristic megacities.' },
     co: { name: 'Colombia', desc: 'Caribbean, coffee, Amazon rainforest and the contagious energy of its people.' },
     pe: { name: 'Peru', desc: 'Machu Picchu, the Inca Trail, Lake Titicaca and a gastronomy conquering the world.' },
+    md: { name: 'Moldova (with Transnistria)', desc: 'Cricova’s wine cellars, the cave monasteries of Orheiul Vechi and the Soviet-era enclave of Transnistria.' },
     baltico: { name: 'Baltic Route', desc: 'Lithuania, Latvia, Estonia and Finland: medieval cities, Nordic nature and amber seas.' },
   },
   cv: {
