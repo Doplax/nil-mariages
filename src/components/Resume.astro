@@ -46,10 +46,8 @@ const { experience, education, skills, languages, awards, interests, licenses } 
                     <span class="timeline-period">{job.period}</span>
                   </div>
                   <p class="timeline-company">
-                    <CompanyLogo logo={job.logo} />
-                    <span>
-                      <strong>{job.company}</strong> · {job.type}
-                    </span>
+                    <CompanyLogo logo={job.logo} name={job.company} />
+                    <span>· {job.type}</span>
                   </p>
                   <p class="timeline-summary">{job.summary}</p>
                   <ul class="timeline-bullets">
@@ -228,9 +226,6 @@ const { experience, education, skills, languages, awards, interests, licenses } 
     gap: 4px 9px;
     color: var(--muted);
     font-size: 0.95rem;
-  }
-  .timeline-company strong {
-    color: var(--ink);
   }
   .timeline-summary {
     margin-top: 12px;

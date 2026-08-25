@@ -1,6 +1,6 @@
 ---
-// Logotipos de las empresas de la trayectoria profesional, para mostrarlos
-// delante del nombre de cada una en el CV.
+// Logotipo + nombre de las empresas de la trayectoria profesional, para
+// encabezar con la marca cada puesto del CV.
 //
 // Exoticca y Bon Preu publican su logo en SVG, así que va incrustado (sin
 // petición extra y nítido a cualquier tamaño). El de Exoticca es la versión
@@ -12,8 +12,11 @@
 // los otros dos, se sirve como fichero aparte y no incrustado: así se cachea una
 // vez en lugar de repetirse en cada página.
 //
-// El logo es DECORATIVO: el nombre de la empresa va escrito justo al lado, así
-// que se oculta a lectores de pantalla para no duplicar la información.
+// Los logos de Exoticca y Bon Preu son logotipos: el nombre de la empresa YA va
+// escrito dentro de la marca, así que no se repite al lado. Sigue estando en el
+// HTML, oculto a la vista, para lectores de pantalla y buscadores. El de Wakea
+// es un emblema circular sin nombre legible a ese tamaño, así que ese sí lo
+// lleva escrito.
 import exoticca from '../assets/logos/exoticca.svg?raw';
 import bonpreu from '../assets/logos/bonpreu.svg?raw';
 
@@ -23,32 +26,49 @@ const IMG_LOGOS: Record<string, { src: string; w: number; h: number }> = {
   wakea: { src: '/images/wakea-travel-logo.svg', w: 512, h: 512 },
 };
 
+/** Marcas cuyo logo ya incluye el nombre de la empresa. */
+const WORDMARKS = new Set(['exoticca', 'bonpreu']);
+
 interface Props {
-  /** Clave del logo (`exoticca`, `bonpreu`, `wakea`). Sin ella no se pinta nada. */
+  /** Clave del logo (`exoticca`, `bonpreu`, `wakea`). Sin ella solo se pinta el nombre. */
   logo?: string;
+  /** Nombre de la empresa. */
+  name: string;
 }
-const { logo } = Astro.props;
+const { logo, name } = Astro.props;
 const svg = logo ? SVG_LOGOS[logo] : undefined;
 const img = logo ? IMG_LOGOS[logo] : undefined;
+const wordmark = (svg || img) && logo ? WORDMARKS.has(logo) : false;
 ---
 
-{svg && <span class="company-logo" aria-hidden="true" set:html={svg} />}
-{
-  img && (
-    <img
-      class="company-logo-img"
-      src={img.src}
-      alt=""
-      aria-hidden="true"
-      width={img.w}
-      height={img.h}
-      loading="lazy"
-      decoding="async"
-    />
-  )
-}
+<span class="company">
+  {svg && <span class="company-logo" aria-hidden="true" set:html={svg} />}
+  {
+    img && (
+      <img
+        class="company-logo-img"
+        src={img.src}
+        alt=""
+        aria-hidden="true"
+        width={img.w}
+        height={img.h}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+  {wordmark ? <span class="sr-only">{name}</span> : <strong>{name}</strong>}
+</span>
 
 <style>
+  .company {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .company strong {
+    color: var(--ink);
+  }
   .company-logo {
     display: inline-flex;
     align-items: center;
@@ -68,5 +88,16 @@ const img = logo ? IMG_LOGOS[logo] : undefined;
     width: auto;
     height: 22px;
     border-radius: 50%;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>
