@@ -46,7 +46,7 @@ export const es: Dict = {
       skillsTitle: 'Competencias',
       awardsTitle: 'Distinciones',
       interestsTitle: 'Datos de interés',
-      licensesTitle: 'Licencias',
+      licensesTitle: 'Licencias y certificaciones',
     },
     experience: {
       eyebrow: 'Experiencia viajera',
@@ -120,7 +120,7 @@ export const es: Dict = {
         },
         {
           name: 'Adrià F.',
-          role: 'Viajero solo · Asia',
+          role: 'Nepal',
           text: 'Lo que más valoro es que Nil ha visitado personalmente los destinos que vende. No recomienda lo que no conoce, y eso se nota en cada detalle del viaje.',
           country: 'np',
           stars: 5,
@@ -366,7 +366,11 @@ export const es: Dict = {
     ],
     awards: ['Primer puesto en la X Olimpiada de Geografía de Barcelona.'],
     interests: ['Vehículo propio.', 'Disponibilidad para viajar.'],
-    licenses: ['Carné de conducir B', 'Advanced Open Water Diver (AOWD) – SSI'],
+    licenses: [
+      'Carné de conducir B',
+      'Advanced Open Water Diver (AOWD) – SSI',
+      'Advanced Certificate in English (CAE) – Cambridge',
+    ],
   },
   trips: {
     kyrgyzstan: {

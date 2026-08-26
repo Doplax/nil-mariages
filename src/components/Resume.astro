@@ -6,6 +6,7 @@ import Reveal from './ui/Reveal.astro';
 import Button from './ui/Button.astro';
 import Chip from './ui/Chip.astro';
 import SsiLogo from './SsiLogo.astro';
+import CambridgeLogo from './CambridgeLogo.astro';
 import CompanyLogo from './CompanyLogo.astro';
 
 interface Props {
@@ -15,6 +16,13 @@ const { lang } = Astro.props;
 const d = getDict(lang);
 const t = d.ui.resume;
 const { experience, education, skills, languages, awards, interests, licenses } = d.cv;
+
+// Licencias que llevan el sello del organismo que las emite. El texto acaba
+// con el nombre de la marca y ese trozo se sustituye por su logotipo.
+const LICENSE_BADGES = [
+  { token: 'SSI', Logo: SsiLogo },
+  { token: 'Cambridge', Logo: CambridgeLogo },
+];
 ---
 
 <section class="resume section" id="trayectoria">
@@ -109,12 +117,10 @@ const { experience, education, skills, languages, awards, interests, licenses } 
           <h3 class="resume-block-title" style="margin-top:18px">{t.licensesTitle}</h3>
           <ul class="dots-list">
             {licenses.map((l) => {
-              const i = l.indexOf('SSI');
-              return i === -1 ? (
-                <li>{l}</li>
-              ) : (
-                <li class="license-ssi">{l.slice(0, i)}<SsiLogo h={20} /></li>
-              );
+              const badge = LICENSE_BADGES.find((b) => l.includes(b.token));
+              if (!badge) return <li>{l}</li>;
+              const Logo = badge.Logo;
+              return <li class="license-badge">{l.slice(0, l.indexOf(badge.token))}<Logo h={20} /></li>;
             })}
           </ul>
           <h3 class="resume-block-title" style="margin-top:18px">{t.interestsTitle}</h3>
@@ -344,9 +350,10 @@ const { experience, education, skills, languages, awards, interests, licenses } 
   .dots-list li {
     font-size: 0.9rem;
   }
-  /* El logo SSI va inline tras el texto para que el <li> conserve su viñeta
+  /* El sello va inline tras el texto para que el <li> conserve su viñeta
      (un display:flex en el li elimina el marker de la lista). */
-  .license-ssi :global(.ssi-logo) {
+  .license-badge :global(.ssi-logo),
+  .license-badge :global(.cambridge-logo) {
     margin-left: 4px;
   }
 

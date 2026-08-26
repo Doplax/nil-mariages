@@ -44,7 +44,7 @@ export const ca: Dict = {
       skillsTitle: 'Competències',
       awardsTitle: 'Distincions',
       interestsTitle: 'Dades d’interès',
-      licensesTitle: 'Llicències',
+      licensesTitle: 'Llicències i certificacions',
     },
     experience: {
       eyebrow: 'Experiència viatgera',
@@ -118,7 +118,7 @@ export const ca: Dict = {
         },
         {
           name: 'Adrià F.',
-          role: "Viatger sol · Àsia",
+          role: 'Nepal',
           text: "El que més valoro és que en Nil ha visitat personalment les destinacions que ven. No recomana el que no coneix, i això es nota en cada detall del viatge.",
           country: 'np',
           stars: 5,
@@ -364,7 +364,11 @@ export const ca: Dict = {
     ],
     awards: ['Primer lloc a la X Olimpíada de Geografia de Barcelona.'],
     interests: ['Vehicle propi.', 'Disponibilitat per viatjar.'],
-    licenses: ['Carnet de conduir B', 'Advanced Open Water Diver (AOWD) – SSI'],
+    licenses: [
+      'Carnet de conduir B',
+      'Advanced Open Water Diver (AOWD) – SSI',
+      'Advanced Certificate in English (CAE) – Cambridge',
+    ],
   },
   trips: {
     kyrgyzstan: {

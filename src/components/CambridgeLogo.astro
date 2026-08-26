@@ -1,0 +1,42 @@
+---
+// Logotipo de Cambridge University Press & Assessment, el organismo que emite
+// el certificado de inglés del CV. Se usa como insignia inline junto a la
+// certificación, igual que el de SSI con la titulación de buceo.
+//
+// Ellos no publican vectorial de la marca completa (en su web el escudo y la
+// palabra «Cambridge» solo existen en mapa de bits; el único SVG es la palabra
+// «English» suelta), así que va como imagen. Al ser un logo —color plano y
+// bordes duros— el WebP es SIN pérdida, no lossy: ver CLAUDE.md.
+interface Props {
+  /** Altura en píxeles (el ancho se calcula con el ratio 280:55 del original) */
+  h?: number;
+  class?: string;
+}
+const { h = 20, class: cls = '' } = Astro.props;
+const w = Math.round((h * 280) / 55);
+---
+
+<img
+  class:list={['cambridge-logo', cls]}
+  src="/images/cambridge-logo.webp"
+  width={w}
+  height={h}
+  alt="Cambridge University Press & Assessment"
+  loading="lazy"
+  decoding="async"
+/>
+
+<style>
+  /* La marca es tinta oscura sobre transparente y la tarjeta de licencias es
+     azul marino: va sobre una pastilla blanca, que es como se presenta un logo
+     oscuro sobre fondo oscuro sin tocarle los colores. */
+  .cambridge-logo {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 4px;
+    padding: 3px 5px;
+    box-sizing: content-box;
+  }
+</style>
