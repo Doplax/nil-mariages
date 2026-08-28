@@ -12,7 +12,7 @@ interface Props {
   h?: number;
   class?: string;
 }
-const { h = 20, class: cls = '' } = Astro.props;
+const { h = 13, class: cls = '' } = Astro.props;
 const w = Math.round((h * 280) / 55);
 ---
 
@@ -32,11 +32,14 @@ const w = Math.round((h * 280) / 55);
      oscuro sobre fondo oscuro sin tocarle los colores. */
   .cambridge-logo {
     display: inline-block;
-    vertical-align: middle;
+    /* Con `middle` la pastilla queda ~1,5 px por debajo de la caja de
+       mayúsculas y parece que cuelga de la línea. El desplazamiento centra la
+       pastilla sobre esa caja: sobresale lo mismo por arriba que por abajo. */
+    vertical-align: -0.23em;
     flex-shrink: 0;
     background: #fff;
-    border-radius: 4px;
-    padding: 3px 5px;
+    border-radius: 3px;
+    padding: 2px 4px;
     box-sizing: content-box;
   }
 </style>

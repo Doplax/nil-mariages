@@ -7,7 +7,7 @@ interface Props {
   h?: number;
   class?: string;
 }
-const { h = 22, class: cls = '' } = Astro.props;
+const { h = 17, class: cls = '' } = Astro.props;
 const w = Math.round(h * 2);
 ---
 
@@ -38,8 +38,10 @@ const w = Math.round(h * 2);
 <style>
   .ssi-logo {
     display: inline-block;
-    vertical-align: middle;
-    border-radius: 5px;
+    /* Mismo anclaje que el sello de Cambridge para que las dos líneas de
+       licencias apoyen igual sobre la base del texto. */
+    vertical-align: -0.23em;
+    border-radius: 4px;
     flex-shrink: 0;
   }
 </style>

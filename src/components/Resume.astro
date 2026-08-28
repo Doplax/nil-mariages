@@ -19,9 +19,14 @@ const { experience, education, skills, languages, awards, interests, licenses } 
 
 // Licencias que llevan el sello del organismo que las emite. El texto acaba
 // con el nombre de la marca y ese trozo se sustituye por su logotipo.
+// La altura va por marca: en la columna lateral no caben en la misma línea si
+// son grandes, y el wordmark de Cambridge es mucho más ancho que el sello
+// cuadrado de SSI, así que se le da menos alto para igualar la presencia.
 const LICENSE_BADGES = [
-  { token: 'SSI', Logo: SsiLogo },
-  { token: 'Cambridge', Logo: CambridgeLogo },
+  // Las alturas son distintas a propósito: la caja final tiene que medir lo
+  // mismo en los dos (el de Cambridge suma 2 px de pastilla arriba y abajo).
+  { token: 'SSI', Logo: SsiLogo, h: 17 },
+  { token: 'Cambridge', Logo: CambridgeLogo, h: 13 },
 ];
 ---
 
@@ -120,7 +125,22 @@ const LICENSE_BADGES = [
               const badge = LICENSE_BADGES.find((b) => l.includes(b.token));
               if (!badge) return <li>{l}</li>;
               const Logo = badge.Logo;
-              return <li class="license-badge">{l.slice(0, l.indexOf(badge.token))}<Logo h={20} /></li>;
+              // El sello es un bloque que no se puede partir: si va suelto al
+              // final de la línea, la línea se queda corta y el logo cae solo a
+              // la siguiente. Las dos últimas palabras («(CAE) –») viajan con
+              // él en un tramo sin ruptura, así el salto cae antes y el logo
+              // siempre queda en línea con texto.
+              const words = l.slice(0, l.indexOf(badge.token)).trim().split(' ');
+              const tail = words.slice(-2).join(' ');
+              const head = words.slice(0, -2).join(' ');
+              return (
+                <li class="license-badge">
+                  {head}{' '}
+                  <span class="badge-tail">
+                    {tail} <Logo h={badge.h} />
+                  </span>
+                </li>
+              );
             })}
           </ul>
           <h3 class="resume-block-title" style="margin-top:18px">{t.interestsTitle}</h3>
@@ -352,9 +372,12 @@ const LICENSE_BADGES = [
   }
   /* El sello va inline tras el texto para que el <li> conserve su viñeta
      (un display:flex en el li elimina el marker de la lista). */
+  .badge-tail {
+    white-space: nowrap;
+  }
   .license-badge :global(.ssi-logo),
   .license-badge :global(.cambridge-logo) {
-    margin-left: 4px;
+    margin-left: 1px;
   }
 
   @media (max-width: 860px) {
