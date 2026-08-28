@@ -3,6 +3,8 @@ import { totalCountries } from '../data/countries';
 import { getDict, type Lang } from '../i18n';
 import Stat from './ui/Stat.astro';
 import Button from './ui/Button.astro';
+import { faPlaneUp } from '@fortawesome/free-solid-svg-icons';
+import Icon from './ui/Icon.astro';
 
 interface Props {
   lang: Lang;
@@ -37,7 +39,7 @@ const t = getDict(lang).ui.hero;
 
   <div class="container hero-inner">
     <div class="hero-content">
-      <span class="hero-tag">✈️ {t.tag}</span>
+      <span class="hero-tag"><Icon icon={faPlaneUp} size={13} class="hero-tag-icon" />{t.tag}</span>
       <h1 class="hero-title">
         {t.titleTop}<br />
         <span class="hero-accent">{t.titleAccent}</span>
@@ -179,6 +181,10 @@ const t = getDict(lang).ui.hero;
     font-weight: 600;
     font-size: 0.9rem;
     backdrop-filter: blur(4px);
+  }
+  :global(.hero-tag-icon) {
+    margin-right: 8px;
+    vertical-align: -0.1em;
   }
   .hero-title {
     margin-top: 24px;

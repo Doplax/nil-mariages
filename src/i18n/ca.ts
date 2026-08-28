@@ -209,7 +209,7 @@ export const ca: Dict = {
       tagline: 'Disseny i venda de viatges a mida. Experiències autèntiques, assessorament proper.',
       navTitle: 'Navega',
       contactTitle: 'Contacte',
-      madeWith: 'Fet amb passió viatgera ✈️',
+      madeWith: 'Fet amb passió viatgera',
     },
     langLabel: 'Idioma',
   },

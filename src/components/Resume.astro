@@ -8,6 +8,8 @@ import Chip from './ui/Chip.astro';
 import SsiLogo from './SsiLogo.astro';
 import CambridgeLogo from './CambridgeLogo.astro';
 import CompanyLogo from './CompanyLogo.astro';
+import Icon from './ui/Icon.astro';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   lang: Lang;
@@ -117,7 +119,7 @@ const LICENSE_BADGES = [
         <div class="side-card side-card-accent">
           <h3 class="resume-block-title">{t.awardsTitle}</h3>
           {awards.map((a) => (
-            <p class="award">🏆 {a}</p>
+            <p class="award"><Icon icon={faTrophy} size={15} class="award-icon" />{a}</p>
           ))}
           <h3 class="resume-block-title" style="margin-top:18px">{t.licensesTitle}</h3>
           <ul class="dots-list">
@@ -294,6 +296,11 @@ const LICENSE_BADGES = [
   .side-card-accent .award {
     color: var(--cream);
     font-size: 0.95rem;
+  }
+  .side-card-accent :global(.award-icon) {
+    margin-right: 9px;
+    vertical-align: -0.1em;
+    color: var(--teal-bright);
   }
   .side-card-accent .dots-list li {
     color: rgba(245, 250, 249, 0.82);

@@ -211,7 +211,7 @@ export const es: Dict = {
       tagline: 'Diseño y venta de viajes a medida. Experiencias auténticas, asesoramiento cercano.',
       navTitle: 'Navega',
       contactTitle: 'Contacto',
-      madeWith: 'Hecho con pasión viajera ✈️',
+      madeWith: 'Hecho con pasión viajera',
     },
     langLabel: 'Idioma',
   },

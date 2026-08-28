@@ -8,6 +8,7 @@ import CountryCard from './CountryCard.astro';
 import Flag from './Flag.astro';
 import Reveal from './ui/Reveal.astro';
 import Chip from './ui/Chip.astro';
+import Icon from './ui/Icon.astro';
 
 interface Props {
   region: RegionStruct;
@@ -26,7 +27,7 @@ const compact = !region.featured;
   <Reveal class="region-head">
     <div class="region-title">
       <h3>
-        <span class="region-icon">{region.icon}</span>
+        <Icon icon={region.icon} size={25} class="region-icon" />
         {reg.title}
       </h3>
       {reg.subtitle && <Chip variant="soft">{reg.subtitle}</Chip>}
@@ -84,8 +85,9 @@ const compact = !region.featured;
     gap: 12px;
     font-size: clamp(1.5rem, 3vw, 2rem);
   }
-  .region-icon {
-    font-size: 1.55rem;
+  :global(.region-icon) {
+    color: var(--teal-deep);
+    vertical-align: -0.14em;
   }
   .region-flags {
     margin: 10px 0;

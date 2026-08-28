@@ -1,7 +1,15 @@
 // Estructura de la experiencia viajera (qué países, en qué continente y orden).
 // El TEXTO (nombres y descripciones) vive en los diccionarios de i18n
 // (`src/i18n/*`), indexado por código ISO. Las imágenes son fotos reales de
-// lugares emblemáticos (Wikimedia Commons), también indexadas por ISO.
+// lugares emblemáticos (propias o de Wikimedia Commons), también por ISO.
+
+import {
+  faEarthAfrica,
+  faEarthAmericas,
+  faEarthAsia,
+  faEarthEurope,
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 
 import images from './images.json';
 
@@ -9,8 +17,8 @@ const countryImages: Record<string, string> = images;
 
 export interface RegionStruct {
   id: string;
-  /** Emoji decorativo del continente */
-  icon: string;
+  /** Icono decorativo del continente (Font Awesome solid) */
+  icon: IconDefinition;
   /** Las regiones destacadas (internacional) reciben más protagonismo */
   featured: boolean;
   /** Códigos ISO de los países, en orden */
@@ -18,13 +26,13 @@ export interface RegionStruct {
 }
 
 export const regions: RegionStruct[] = [
-  { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn'] },
-  { id: 'america_norte', icon: '🌎', featured: true, countries: ['us'] },
-  { id: 'america_sur', icon: '🌎', featured: true, countries: ['ve'] },
-  { id: 'africa', icon: '🌍', featured: true, countries: ['eg', 'ma', 'tn'] },
+  { id: 'asia', icon: faEarthAsia, featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn'] },
+  { id: 'america_norte', icon: faEarthAmericas, featured: true, countries: ['us'] },
+  { id: 'america_sur', icon: faEarthAmericas, featured: true, countries: ['ve'] },
+  { id: 'africa', icon: faEarthAfrica, featured: true, countries: ['eg', 'ma', 'tn'] },
   {
     id: 'europa',
-    icon: '🌍',
+    icon: faEarthEurope,
     featured: false,
     countries: ['al', 'rs', 'sk', 'at', 'hu', 'ch', 'de', 'dk', 'se', 'pl', 'cz', 'nl', 'bg', 'pt', 'it', 'fr', 'mc', 'be', 'gb', 'ie', 'va', 'ad', 'es'],
   },

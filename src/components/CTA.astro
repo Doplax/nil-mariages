@@ -2,6 +2,8 @@
 import { profile } from '../data/cv';
 import { getDict, type Lang } from '../i18n';
 import Button from './ui/Button.astro';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import Icon from './ui/Icon.astro';
 
 interface Props {
   lang: Lang;
@@ -12,7 +14,9 @@ const t = getDict(lang).ui.cta;
 
 <section class="cta">
   <div class="container cta-inner reveal">
-    <span class="cta-plane" data-parallax="0.14" aria-hidden="true">✈</span>
+    <span class="cta-plane" data-parallax="0.14" aria-hidden="true">
+      <Icon icon={faPaperPlane} size={150} />
+    </span>
     <div class="cta-text">
       <h2>{t.title}</h2>
       <p>{t.text}</p>
@@ -52,10 +56,9 @@ const t = getDict(lang).ui.cta;
   }
   .cta-plane {
     position: absolute;
-    right: 4%;
-    top: -34px;
-    font-size: 12rem;
-    line-height: 1;
+    right: 5%;
+    top: 34px;
+    line-height: 0;
     color: rgba(9, 22, 34, 0.08);
     pointer-events: none;
     will-change: transform;

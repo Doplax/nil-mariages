@@ -1,0 +1,31 @@
+---
+// Icono decorativo de Font Awesome, dibujado como SVG inline. Ver `icon.ts`
+// para el porqué de no usar la fuente ni el runtime de la librería.
+//
+// El SVG no lleva el atributo de ámbito de Astro del componente que lo usa,
+// así que para darle color o tamaño desde fuera hay que envolver el selector
+// en `:global()`.
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { iconParts } from './icon';
+
+interface Props {
+  icon: IconDefinition;
+  /** Altura en píxeles; el ancho se calcula con el ratio del icono */
+  size?: number;
+  class?: string;
+}
+const { icon, size = 20, class: cls = '' } = Astro.props;
+const { viewBox, path, width, height } = iconParts(icon, size);
+---
+
+<svg
+  class:list={[cls]}
+  width={width}
+  height={height}
+  viewBox={viewBox}
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={path}></path>
+</svg>
