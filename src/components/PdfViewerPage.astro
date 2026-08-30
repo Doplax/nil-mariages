@@ -8,8 +8,6 @@ import '@fontsource-variable/inter';
 import '../styles/global.css';
 import Logo from './Logo.astro';
 import { getDict, localeUrl, type Lang } from '../i18n';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { iconSvg } from './ui/icon';
 
 interface Props {
   lang: Lang;
@@ -45,9 +43,7 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
     </header>
 
     <main class="vp-stage" id="vp-stage">
-      <div class="vp-loading" id="vp-loading" data-error-icon={iconSvg(faTriangleExclamation, 30)}>
-        {t.viewerLoading}
-      </div>
+      <div class="vp-loading" id="vp-loading">{t.viewerLoading}</div>
       <div class="vp-pages" id="vp-pages"></div>
     </main>
 
@@ -67,10 +63,6 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
       const curEl = document.getElementById('vp-cur')!;
       const totalEl = document.getElementById('vp-total')!;
       const loading = document.getElementById('vp-loading')!;
-      // El icono de error viene dibujado desde el servidor en el data-attribute.
-      const showError = () => {
-        loading.innerHTML = loading.dataset.errorIcon ?? '';
-      };
       const pagesEl = document.getElementById('vp-pages')!;
 
       titleEl.textContent = title;
@@ -87,7 +79,7 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
 
       async function main() {
         if (!src.startsWith(ALLOWED_PREFIX)) {
-          showError();
+          loading.textContent = '⚠︎';
           return;
         }
         const pdfjs: any = await import(/* @vite-ignore */ PDFJS_URL);
@@ -177,7 +169,7 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
       }
 
       main().catch(() => {
-        showError();
+        loading.textContent = '⚠︎';
       });
     </script>
 

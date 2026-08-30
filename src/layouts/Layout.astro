@@ -8,8 +8,6 @@ import FloatingWhatsApp from '../components/FloatingWhatsApp.astro';
 import { profile } from '../data/cv';
 import { getDict, localeUrl, LANGS, type Lang } from '../i18n';
 import { ClientRouter } from 'astro:transitions';
-import { faPlaneUp } from '@fortawesome/free-solid-svg-icons';
-import Icon from '../components/ui/Icon.astro';
 
 interface Props {
   lang: Lang;
@@ -169,7 +167,7 @@ const year = new Date().getFullYear();
       </div>
       <div class="container footer-bottom">
         <span>© {year} Nil Mariages · {d.ui.about.role}</span>
-        <span>{foot.madeWith}<Icon icon={faPlaneUp} size={13} class="footer-plane" /></span>
+        <span>{foot.madeWith}</span>
       </div>
     </footer>
 
@@ -504,11 +502,6 @@ const year = new Date().getFullYear();
         margin-top: 8px;
         border-top: 1px solid rgba(245, 250, 249, 0.1);
         font-size: 0.85rem;
-      }
-      :global(.footer-plane) {
-        margin-left: 8px;
-        vertical-align: -0.1em;
-        color: var(--teal);
       }
 
       /* ---- Responsive: menú móvil desplegable ---- */

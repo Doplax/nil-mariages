@@ -1,21 +1,13 @@
 ---
 import { getDict, type Lang } from '../i18n';
 import { profile } from '../data/cv';
-import {
-  faBullseye,
-  faGlobe,
-  faHandshake,
-  faMountainSun,
-} from '@fortawesome/free-solid-svg-icons';
-import Icon from './ui/Icon.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = getDict(lang).ui.about;
-// Un icono por tarjeta, en el mismo orden que `t.cards`.
-const icons = [faBullseye, faHandshake, faMountainSun, faGlobe];
+const icons = ['🎯', '🤝', '🏔️', '🌐'];
 ---
 
 <section class="about section" id="sobre-mi">
@@ -46,7 +38,7 @@ const icons = [faBullseye, faHandshake, faMountainSun, faGlobe];
         {
           t.cards.map((h, i) => (
             <div class="about-card">
-              <Icon icon={icons[i]} size={24} class="about-card-icon" />
+              <span class="about-card-icon">{icons[i]}</span>
               <div>
                 <h3>{h.title}</h3>
                 <p>{h.text}</p>
@@ -139,10 +131,9 @@ const icons = [faBullseye, faHandshake, faMountainSun, faGlobe];
   .about-card:hover {
     transform: translateY(-3px);
   }
-  :global(.about-card-icon) {
-    flex-shrink: 0;
-    margin-top: 2px;
-    color: var(--teal-deep);
+  .about-card-icon {
+    font-size: 1.5rem;
+    line-height: 1;
   }
   .about-card h3 {
     font-size: 1rem;

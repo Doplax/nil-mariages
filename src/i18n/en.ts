@@ -209,7 +209,7 @@ export const en: Dict = {
       tagline: 'Design and sale of tailor-made trips. Authentic experiences, close guidance.',
       navTitle: 'Explore',
       contactTitle: 'Contact',
-      madeWith: 'Made with a passion for travel',
+      madeWith: 'Made with a passion for travel ✈️',
     },
     langLabel: 'Language',
   },
