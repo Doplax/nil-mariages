@@ -18,7 +18,7 @@ export interface RegionStruct {
 }
 
 export const regions: RegionStruct[] = [
-  { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn'] },
+  { id: 'asia', icon: '🌏', featured: true, countries: ['kg', 'th', 'id', 'my', 'np', 'la', 'kh', 'uz', 'tj', 'qa', 'sg', 'tr', 'in', 'vn', 'jp'] },
   { id: 'america_norte', icon: '🌎', featured: true, countries: ['us'] },
   { id: 'america_sur', icon: '🌎', featured: true, countries: ['ve'] },
   { id: 'africa', icon: '🌍', featured: true, countries: ['eg', 'ma', 'tn'] },

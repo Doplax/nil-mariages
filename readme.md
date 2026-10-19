@@ -11,7 +11,7 @@ itinerarios que ha diseñado y un formulario de contacto directo.
 
 - **Hero + Sobre mí** — presentación, foto y contadores de países y continentes.
 - **Trayectoria** — CV completo (experiencia, formación, idiomas, competencias, distinciones) y descarga en PDF.
-- **Experiencia viajera** — los 42 países visitados agrupados por continente, con foto y descripción de cada uno.
+- **Experiencia viajera** — los 43 países visitados agrupados por continente, con foto y descripción de cada uno.
 - **Rutas sobre el mapa** — itinerarios reales embebidos desde Google My Maps, con carga diferida para no penalizar el rendimiento.
 - **Planificaciones** — ejemplos de itinerarios día a día, con visor de PDF protegido (solo lectura, sin descarga).
 - **Proyectos futuros** — próximos destinos en preparación.

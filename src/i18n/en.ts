@@ -262,6 +262,7 @@ export const en: Dict = {
     es: { name: 'Spain', desc: 'Home base: sun, culture, gastronomy and a diversity of landscapes.' },
     in: { name: 'India', desc: 'The Taj Mahal, the Ganges, Rajasthan and a cultural diversity without equal.' },
     vn: { name: 'Vietnam', desc: 'Ha Long Bay, terraced rice fields and a cuisine that delights from north to south.' },
+    jp: { name: 'Japan', desc: 'Mount Fuji, centuries-old temples and pagodas, and a tradition that lives alongside the cutting edge.' },
     va: { name: 'Vatican City', desc: "The world's smallest state: St. Peter's Basilica and the Vatican Museums." },
   },
   future: {

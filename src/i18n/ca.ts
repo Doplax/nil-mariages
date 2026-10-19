@@ -262,6 +262,7 @@ export const ca: Dict = {
     es: { name: 'Espanya', desc: 'Casa i base: sol, cultura, gastronomia i diversitat de paisatges.' },
     in: { name: 'Índia', desc: 'El Taj Mahal, el Ganges, el Rajasthan i una diversitat cultural sense parangó.' },
     vn: { name: 'Vietnam', desc: 'Badia de Ha Long, arrossars en terrassa i una cuina que enamora de nord a sud.' },
+    jp: { name: 'Japó', desc: 'El mont Fuji, temples i pagodes centenaris i una tradició que conviu amb l\'avantguarda.' },
     va: { name: 'Ciutat del Vaticà', desc: "L'estat més petit del món: la Basílica de Sant Pere i els Museus Vaticans." },
   },
   future: {
