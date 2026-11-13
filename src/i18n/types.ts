@@ -156,7 +156,7 @@ export interface Dict {
       lead: string;
       showDays: string;
       hideDays: string;
-      /** Botón que abre el visor protegido de la planificación completa */
+      /** Botón que abre el PDF de la planificación en el visor protegido */
       viewPlan: string;
       /** Botón que abre la versión interactiva de la planificación */
       viewInteractive: string;

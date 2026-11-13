@@ -151,7 +151,7 @@ export const es: Dict = {
       lead: 'Así quedan dos de los tipos de viaje que más preparo: un circuito en coche por Albania y una Ruta de la Seda por Asia Central. Cada itinerario es completamente a medida.',
       showDays: 'Ver día a día',
       hideDays: 'Cerrar',
-      viewPlan: 'Ver planificación completa',
+      viewPlan: 'Ver en PDF',
       viewInteractive: 'Ver versión interactiva',
       viewerHint: 'Muestra de portfolio · solo lectura, sin descarga',
       viewerClose: 'Cerrar',

@@ -149,7 +149,7 @@ export const en: Dict = {
       lead: 'Two examples of the trips I plan most: a road circuit through Albania and a Silk Road journey across Central Asia. Every itinerary is fully tailor-made.',
       showDays: 'See day by day',
       hideDays: 'Close',
-      viewPlan: 'View the full itinerary',
+      viewPlan: 'View as PDF',
       viewInteractive: 'Interactive version (in Spanish)',
       viewerHint: 'Portfolio sample · read-only, no download',
       viewerClose: 'Close',

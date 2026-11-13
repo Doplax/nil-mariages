@@ -21,6 +21,11 @@ const titleByLang: Record<Lang, string> = {
   ca: 'Planificació · Nil Mariages',
 };
 const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar' };
+// PDF → página interactiva, para el botón de la barra (solo sale si el PDF
+// abierto tiene versión interactiva; hoy, Albania)
+const interactiveByPdf = Object.fromEntries(
+  t.items.filter((i) => i.pdf && i.interactive).map((i) => [i.pdf, i.interactive]),
+);
 ---
 
 <!doctype html>
@@ -40,6 +45,18 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
       </a>
       <h1 class="vp-title" id="vp-title"></h1>
       <span class="vp-page"><span id="vp-cur">1</span> / <span id="vp-total">…</span></span>
+      <a
+        class="vp-interactive"
+        id="vp-interactive"
+        href="#"
+        data-map={JSON.stringify(interactiveByPdf)}
+        aria-label={t.viewInteractive}
+        title={t.viewInteractive}
+        hidden
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>
+        <span class="vp-interactive-label">{t.viewInteractive}</span>
+      </a>
     </header>
 
     <main class="vp-stage" id="vp-stage">
@@ -67,6 +84,14 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
 
       titleEl.textContent = title;
       if (title) document.title = title + ' · Nil Mariages';
+
+      // Botón a la versión interactiva, si este PDF la tiene
+      const interactiveLink = document.getElementById('vp-interactive') as HTMLAnchorElement;
+      const interactiveByPdf: Record<string, string> = JSON.parse(interactiveLink.dataset.map || '{}');
+      if (interactiveByPdf[src]) {
+        interactiveLink.href = interactiveByPdf[src];
+        interactiveLink.hidden = false;
+      }
 
       // Fricción anti-copia
       document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -263,8 +288,27 @@ const backLabel: Record<Lang, string> = { es: 'Volver', en: 'Back', ca: 'Tornar'
         background: var(--navy-deep, #0b1b29);
         border-top: 1px solid rgba(255, 255, 255, 0.08);
       }
+      .vp-interactive {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        border-radius: 999px;
+        background: var(--teal);
+        color: var(--navy);
+        font-size: 0.88rem;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: background 0.18s ease;
+      }
+      .vp-interactive:hover { background: var(--teal-bright); }
+      .vp-interactive:visited { color: var(--navy); }
+      .vp-interactive[hidden] { display: none; }
       @media (max-width: 560px) {
         .vp-title { display: none; }
+        .vp-interactive { padding: 8px 10px; }
+        .vp-interactive-label { display: none; }
       }
     </style>
   </body>

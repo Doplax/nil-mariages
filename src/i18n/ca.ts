@@ -149,7 +149,7 @@ export const ca: Dict = {
       lead: "Dos exemples dels tipus de viatge que més preparo: un circuit en cotxe per Albània i una Ruta de la Seda per l'Àsia Central. Cada itinerari és completament a mida.",
       showDays: 'Veure dia a dia',
       hideDays: 'Tancar',
-      viewPlan: 'Veure la planificació completa',
+      viewPlan: 'Veure en PDF',
       viewInteractive: 'Versió interactiva (en castellà)',
       viewerHint: 'Mostra de portfolio · només lectura, sense descàrrega',
       viewerClose: 'Tancar',
