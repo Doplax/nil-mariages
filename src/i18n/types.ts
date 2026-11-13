@@ -78,6 +78,8 @@ export interface PlanningItem {
   days: PlanningDay[];
   /** Ruta a la versión "muestra" (con marca de agua) para el visor protegido. */
   pdf?: string;
+  /** Ruta de la versión interactiva (página del sitio; contenido solo en castellano). */
+  interactive?: string;
 }
 
 export interface Dict {
@@ -156,6 +158,8 @@ export interface Dict {
       hideDays: string;
       /** Botón que abre el visor protegido de la planificación completa */
       viewPlan: string;
+      /** Botón que abre la versión interactiva de la planificación */
+      viewInteractive: string;
       /** Aviso bajo el visor: muestra de portfolio, solo lectura */
       viewerHint: string;
       viewerClose: string;

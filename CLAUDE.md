@@ -46,3 +46,9 @@ Los contadores de países (total y por continente) se calculan solos a partir de
 
 Todo cambio de contenido se aplica **en los tres diccionarios** (`es`, `ca`,
 `en`). Si `types.ts` declara un campo, existe en los tres o el build falla.
+
+Excepción, las **planificaciones interactivas** (`src/pages/planificaciones/`):
+su contenido sale del PDF de la planificación y, como el PDF, va solo en
+castellano. Lo que sí va en los tres diccionarios es el botón que las abre
+(`ui.planning.viewInteractive`, que en `en` y `ca` avisa de que está en
+castellano) y el campo `interactive` de la tarjeta.

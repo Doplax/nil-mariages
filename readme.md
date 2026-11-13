@@ -13,7 +13,7 @@ itinerarios que ha diseñado y un formulario de contacto directo.
 - **Trayectoria** — CV completo (experiencia, formación, idiomas, competencias, distinciones) y descarga en PDF.
 - **Experiencia viajera** — los 43 países visitados agrupados por continente, con foto y descripción de cada uno.
 - **Rutas sobre el mapa** — itinerarios reales embebidos desde Google My Maps, con carga diferida para no penalizar el rendimiento.
-- **Planificaciones** — ejemplos de itinerarios día a día, con visor de PDF protegido (solo lectura, sin descarga).
+- **Planificaciones** — ejemplos de itinerarios día a día, con visor de PDF protegido (solo lectura, sin descarga). Albania tiene además una **versión interactiva** en `/planificaciones/albania`: mapa que sigue el día que se lee, horarios, hoteles, información práctica, conversor euro-lek, platos y lista de equipaje con casillas (solo en castellano, como el PDF).
 - **Proyectos futuros** — próximos destinos en preparación.
 - **Testimonios y contacto** — reseñas de clientes y formulario que envía email por SMTP.
 
@@ -54,6 +54,9 @@ solo hay que tocar estos ficheros:
 | Logotipos de las empresas del CV | `src/assets/logos/`, `public/images/` |
 | Rutas del mapa | `src/data/trips.ts` |
 | CV en PDF y planificaciones | `public/` |
+| Planificación interactiva de Albania (texto, paradas del mapa y datos) | `src/pages/planificaciones/albania.astro` |
+| Fotos de la planificación interactiva | `public/images/planificaciones/albania/` |
+| Contorno del mapa de la planificación | `src/data/plans/albania-map.json` (generado) |
 
 Los contadores de países (total y por continente) se calculan solos a partir de
 `countries.ts`: al añadir un país, las cifras se actualizan sin tocar nada más.
@@ -63,4 +66,5 @@ Los contadores de países (total y por continente) se calculan solos a partir de
 ```bash
 node scripts/fetch-images.mjs          # busca la foto de cada país en Wikipedia
 node scripts/build-kyrgyzstan-map.mjs  # convierte el KML de Google My Maps a GeoJSON
+node scripts/build-plan-map.mjs        # contorno del mapa de la planificación interactiva (Natural Earth)
 ```

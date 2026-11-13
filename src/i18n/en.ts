@@ -150,6 +150,7 @@ export const en: Dict = {
       showDays: 'See day by day',
       hideDays: 'Close',
       viewPlan: 'View the full itinerary',
+      viewInteractive: 'Interactive version (in Spanish)',
       viewerHint: 'Portfolio sample · read-only, no download',
       viewerClose: 'Close',
       viewerPrev: 'Previous page',
@@ -165,6 +166,7 @@ export const en: Dict = {
           image: 'al',
           isos: ['al'],
           pdf: '/planificaciones/albania-muestra.pdf',
+          interactive: '/planificaciones/albania',
           summary: 'From Tirana to the Ionian Riviera through the Albanian Alps, Ottoman castles, stone villages and turquoise beaches. A country that surprises at every turn.',
           days: [
             { label: 'Day 1 — Barcelona → Tiranë', text: 'Evening flight and first night near Krujë.' },

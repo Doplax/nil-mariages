@@ -150,6 +150,7 @@ export const ca: Dict = {
       showDays: 'Veure dia a dia',
       hideDays: 'Tancar',
       viewPlan: 'Veure la planificació completa',
+      viewInteractive: 'Versió interactiva (en castellà)',
       viewerHint: 'Mostra de portfolio · només lectura, sense descàrrega',
       viewerClose: 'Tancar',
       viewerPrev: 'Pàgina anterior',
@@ -165,6 +166,7 @@ export const ca: Dict = {
           image: 'al',
           isos: ['al'],
           pdf: '/planificaciones/albania-muestra.pdf',
+          interactive: '/planificaciones/albania',
           summary: "De Tirana a la Riviera jònica passant pels Alps albanesos, castells otomans, pobles de pedra i platges d'aigües turquesa. Un país que sorprèn a cada revolt.",
           days: [
             { label: 'Dia 1 — Barcelona → Tiranë', text: 'Vol de tarda i primera nit a prop de Krujë.' },

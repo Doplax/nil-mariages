@@ -57,16 +57,26 @@ const t = getDict(lang).ui.planning;
                 ))}
               </ol>
             </details>
-            {item.pdf && (
-              <a
-                class="planning-view"
-                href={`${localeUrl(lang)}visor?src=${encodeURIComponent(item.pdf)}&title=${encodeURIComponent(item.title)}`}
-                target="_blank"
-                rel="noopener"
-              >
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                {t.viewPlan}
-              </a>
+            {(item.interactive || item.pdf) && (
+              <div class="planning-actions">
+                {item.interactive && (
+                  <a class="planning-view is-interactive" href={item.interactive} data-astro-reload>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>
+                    {t.viewInteractive}
+                  </a>
+                )}
+                {item.pdf && (
+                  <a
+                    class="planning-view"
+                    href={`${localeUrl(lang)}visor?src=${encodeURIComponent(item.pdf)}&title=${encodeURIComponent(item.title)}`}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    {t.viewPlan}
+                  </a>
+                )}
+              </div>
             )}
           </div>
         </Reveal>
@@ -208,10 +218,14 @@ const t = getDict(lang).ui.planning;
     margin-bottom: 1px;
   }
 
-  /* Botón "Ver planificación" */
-  .planning-view {
+  /* Botones "Versión interactiva" y "Ver planificación" */
+  .planning-actions {
     margin-top: 14px;
-    align-self: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .planning-view {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -232,6 +246,14 @@ const t = getDict(lang).ui.planning;
   }
   .planning-view svg { flex-shrink: 0; }
   .planning-view:visited { color: var(--cream); }
+  .planning-view.is-interactive,
+  .planning-view.is-interactive:visited {
+    background: var(--teal);
+    color: var(--navy);
+  }
+  .planning-view.is-interactive:hover {
+    background: var(--teal-bright);
+  }
 
   @media (max-width: 640px) {
     .planning-grid {
