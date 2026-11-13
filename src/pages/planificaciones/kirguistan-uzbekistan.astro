@@ -1,0 +1,652 @@
+---
+// Planificación interactiva «Kirguistán y Uzbekistán en 18 días» (muestra de
+// portfolio). Sale del PDF public/planificaciones/kirguistan-uzbekistan-muestra.pdf,
+// que cubre los días 4 a 21 de un viaje de 21 (sin los tres de Estambul ni el
+// día 18, que falta en el PDF) y, como él, está solo en castellano.
+// Aquí va el texto de cada día; el mapa, los platos, la maleta y el conversor
+// salen de src/data/plans/kirguistan-uzbekistan.ts, y el resto, de
+// src/layouts/PlanLayout.astro. Fotos: public/images/planificaciones/kirguistan-uzbekistan/
+// (scripts/plan-images.mjs). Contorno: scripts/build-plan-map.mjs.
+import PlanLayout from '../../layouts/PlanLayout.astro';
+import PlanPhoto from '../../components/plan/PlanPhoto.astro';
+import PlanConverter from '../../components/plan/PlanConverter.astro';
+import { kirguistanUzbekistan } from '../../data/plans/kirguistan-uzbekistan';
+import map from '../../data/plans/kirguistan-uzbekistan-map.json';
+import sizes from '../../data/plans/kirguistan-uzbekistan-images.json';
+
+const pdfUrl = `/visor?src=${encodeURIComponent('/planificaciones/kirguistan-uzbekistan-muestra.pdf')}&title=${encodeURIComponent('Kirguistán y Uzbekistán en 18 días')}`;
+const img = (name: string) => `/images/planificaciones/kirguistan-uzbekistan/${name}.webp`;
+---
+
+<PlanLayout
+  plan={kirguistanUzbekistan}
+  map={map}
+  title="Kirguistán y Uzbekistán en 18 días"
+  description="Planificación interactiva de un viaje de 18 días por Kirguistán y Uzbekistán, del 15 de julio al 1 de agosto de 2025, por Nil Mariages."
+  brand="Kirguistán · Uzbekistán"
+  brandYear="2025"
+  pdfUrl={pdfUrl}
+  mapLabel="Mapa de Kirguistán y Uzbekistán con la ruta del viaje"
+  footerTitle="Kirguistán y Uzbekistán 2025"
+>
+<section id="inicio" aria-label="Portada" slot="hero">
+  <img class="hero-photo" src={img('ala-kol-lago-panoramica')} srcset={`${img('ala-kol-lago-panoramica-480')} 480w, ${img('ala-kol-lago-panoramica')} 1200w`} sizes="100vw" width="1200" height="573" alt="Lago Ala-Kol entre montañas" fetchpriority="high">
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow">Ruta de la Seda · Planificación de viaje</p>
+      <h1>Kirguistán y Uzbekistán<span>en 18 días</span></h1>
+      <p class="dates">Martes 15 de julio – viernes 1 de agosto de 2025</p>
+      <p class="lead">De Bishkek a Bujará: el lago Issyk-Kul, el trekking del lago Ala-Kol a Altyn Arashan, noches en yurta junto al lago Son-Kul y, en tren, las ciudades de la Ruta de la Seda: Tashkent, Samarcanda y Bujará.</p>
+      <div class="cta">
+        <a class="btn solid" href="#dia-4">Empezar por el día 4</a>
+        <a class="btn" href="#ruta">Ver la ruta en el mapa</a>
+      </div>
+      <p class="byline">Planificación de <b>Nil Mariages</b> · Muestra de portfolio, no reproducir</p>
+    </div>
+    <ul class="stats" aria-label="El viaje en cifras">
+      <li><b>18</b><span>días</span></li>
+      <li><b>17</b><span>noches</span></li>
+      <li><b>8</b><span>alojamientos</span></li>
+      <li><b>3</b><span>noches en yurta</span></li>
+      <li><b>2</b><span>trenes</span></li>
+      <li><b>3</b><span>vuelos</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="checkin" slot="hero"><div class="wrap"><p>Muestra de los días 4 a 21 de un viaje de 21: los tres primeros, en Estambul, no están en ella</p></div></div>
+
+      <article class="day" id="dia-4" data-day="4">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>04</b></div>
+          <div>
+            <p class="day-date">Martes 15 jul</p>
+            <h3 class="day-route">Aeropuerto de Manas <i>→</i> Bishkek</h3>
+            <ul class="tags"><li>Llegada</li><li>Ciudad</li><li>Mercado</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>281 Hotel</b><span class="stars" aria-label="2 estrellas">★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>06:35</b>llegada a Manas</li><li><b>05:00–22:00</b>Mezquita Central, gratis</li><li><b>9:00–17:00</b>Bazar Osh (cierra los lunes)</li><li><b>2–3 €</b>taxi Bazar Osh → parque Togolok Moldo</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bishkek-mezquita-central" alt="Mezquita Central de Bishkek" caption="Mezquita Central de Bishkek" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bishkek-plaza-ala-too" alt="Plaza Ala-Too" caption="Plaza Ala-Too" />
+        </div>
+        <ol class="flow">
+          <li class="fixed"><span class="when">06:35</span><div class="step"><p>Llegada al Aeropuerto Internacional de <button class="place" type="button" data-stop="manas">Manas</button> (<button class="place" type="button" data-stop="bishkek">Bishkek</button>), hora local. Control de pasaportes, recogida del equipaje facturado y, a la salida, el conductor os espera con un cartel con vuestro nombre para llevaros al hotel.</p></div></li>
+          <li><span class="when">Hotel</span><div class="step"><p>Puede que la habitación aún no esté lista: pedid que guarden el equipaje en recepción y aprovechad para empezar a explorar la capital.</p></div></li>
+          <li><span class="when">Mezquita Central</span><div class="step"><p>Unos 20 minutos a pie hacia el sureste hasta la Mezquita Central del Imam Sarakhsi, la más grande de Kirguistán (cuatro minaretes de 68 m y cúpula de 37 m, inaugurada en 2018). Abre todos los días de 05:00 a 22:00, entrada gratuita; id vestidos de forma adecuada.</p></div></li>
+          <li><span class="when">Centro</span><div class="step"><p>Unos 10 minutos a pie hacia el oeste: Oficina Central de Registro Civil, Biblioteca Nacional, el Circo Estatal (con forma de platillo volante, 1978), la Plaza de la Victoria (1985) y el Teatro de Ópera y Ballet, con la estatua de Toktogul y el edificio «Ulitka» en su parque.</p></div></li>
+          <li><span class="when">Plaza Ala-Too</span><div class="step"><p>Monumento a los Luchadores de la Revolución, Parque de los Robles (más de 90 esculturas), Plaza Ala-Too con la estatua de <button class="place" type="button" data-stop="manas">Manas</button> y el cambio de guardia, Museo Estatal de Historia (con la estatua de Lenin detrás) y el Parlamento (Joguorku Kenesh).</p></div></li>
+          <li><span class="when">Kiev Street</span><div class="step"><p>Unos 20 minutos por Kiev Street hacia el ayuntamiento, pasando por la Guardia Nacional (caza MIG-21) y el centro comercial <button class="place" type="button" data-stop="bishkek">Bishkek</button> Park. Ayuntamiento y, enfrente, la Filarmónica Toktogul Satylganov con la estatua de <button class="place" type="button" data-stop="manas">Manas</button>.</p></div></li>
+          <li><span class="when">Bazar Osh</span><div class="step"><p>Paseo de unos 20 minutos por la avenida Chuy hasta el Bulevar Jash Gvardiya: a la izquierda hasta el mural soviético y a la derecha hasta el Bazar Osh. Abre de martes a domingo de 9:00 a 17:00 y cierra los lunes; llevad efectivo, regatead y probad plov, samsas o shashlik.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Al Parque Togolok Moldo: 30 minutos a pie o taxi (en la calle o con la app Yandex, 2–3 €, con cuidado con las estafas), o los buses T10, 213, 195, 174 o A35 (bus.kg). En las marshrutkas se paga al subir; en los autobuses grandes, al bajar.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Estación de Ferrocarril <button class="place" type="button" data-stop="bishkek">Bishkek</button>-2 (1938) y Bulevar Erkindik (unos 2,3 km) de vuelta a Oak Park. Resto del día libre: un bar, o los barrios de bloques soviéticos y la iglesia ortodoxa del sur de la ciudad.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Horarios</h4><ul><li>Mezquita Central: todos los días de 05:00 a 22:00, gratis, con ropa respetuosa.</li><li>Bazar Osh: martes a domingo de 9:00 a 17:00; cierra los lunes.</li></ul></div>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="http://bus.kg/" target="_blank" rel="noopener">bus.kg (autobuses de Bishkek)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><span></span><a href="#dia-5">Día 5 →</a></nav>
+      </article>
+      <article class="day" id="dia-5" data-day="5">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>05</b></div>
+          <div>
+            <p class="day-date">Miércoles 16 jul</p>
+            <h3 class="day-route">Bishkek <i>→</i> Ala Archa <i>→</i> Bishkek</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mont">Montaña</li><li class="t-mont">Senderismo</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>281 Hotel</b><span class="stars" aria-label="2 estrellas">★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>400 $</b>fianza del coche</li><li><b>40 km</b>algo más de 1 h a Ala Archa</li><li><b>700 som</b>entrada por vehículo (≈7,5 €)</li><li><b>8,28 km</b>ruta Ak-Sai, +652 m</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="ala-archa-parque-nacional" alt="Parque Nacional Ala Archa" caption="Parque Nacional Ala Archa" wide />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Temprano</span><div class="step"><p>Recogida del coche de alquiler lo antes posible: la planificación da un teléfono de contacto para la recogida. En principio es un Subaru Forester del 2019 con seguro incluido (puede cambiar por otro de la misma categoría) y hay que dejar una fianza de 400 $.</p></div></li>
+          <li><span class="when">40 km</span><div class="step"><p>Al Parque Nacional de <button class="place" type="button" data-stop="ala_archa">Ala Archa</button>, al sur de <button class="place" type="button" data-stop="bishkek">Bishkek</button>: unos 40 km y algo más de una hora según el tráfico. En la entrada se pagan 700 som (unos 7,5 €) por vehículo; aparcad y id al inicio de los senderos.</p></div></li>
+          <li><span class="when">Ruta</span><div class="step"><p>Ruta circular Broken Heart / Cascada de <button class="place" type="button" data-stop="ak_sai">Ak-Sai</button>, de dificultad moderada: 8,28 km, +652 m de desnivel y 2.786 m de altitud máxima.</p></div></li>
+          <li><span class="when">Opcional</span><div class="step"><p>Con energía y tiempo, seguid hasta el Glaciar <button class="place" type="button" data-stop="ak_sai">Ak-Sai</button>: circular y más exigente, 13,92 km, +1.575 m y 3.622 m de altitud máxima. Para navegar sin conexión, la app Maps.me.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Regreso a <button class="place" type="button" data-stop="bishkek">Bishkek</button>, cena tranquila y a descansar temprano para la ruta del día siguiente.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Ala Archa</h4><ul><li>Parque nacional desde 1976, 194 km² en los montes Ala-Too (Tian Shan); el pico Semenov-Tian-Shanski roza los 5.000 m.</li><li>Es el parque más popular del país y se llena los fines de semana.</li><li>El leopardo de las nieves es difícil de ver; lo normal son ardillas, marmotas o buitres.</li></ul></div>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://es.wikiloc.com/rutas-senderismo/ak-sai-waterfall-ala-archa-kyrgyzstan-174079543" target="_blank" rel="noopener">Ruta corta: Broken Heart / Cascada de Ak-Sai (Wikiloc)</a></li><li><a href="https://es.wikiloc.com/rutas-senderismo/small-glacier-lake-uchitel-10308853" target="_blank" rel="noopener">Ruta larga: Glaciar Ak-Sai (Wikiloc)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-4">← Día 4</a><a href="#dia-6">Día 6 →</a></nav>
+      </article>
+      <article class="day" id="dia-6" data-day="6">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>06</b></div>
+          <div>
+            <p class="day-date">Jueves 17 jul</p>
+            <h3 class="day-route">Bishkek <i>→</i> Torre de Burana <i>→</i> Konorchek <i>→</i> Balykchy <i>→</i> Cholpon-Ata</h3>
+            <ul class="tags"><li>Coche</li><li class="t-unesco">Historia</li><li class="t-mont">Cañón</li><li class="t-mar">Lago</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>The Lake Townhouse</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Sólo alojamiento</span></div>
+        <ul class="keys"><li><b>80,5 km</b>≈1 h 20 hasta Burana</li><li><b>60 som</b>entrada Burana (≈0,60 €)</li><li><b>201 km</b>≈2 h 47 de Burana a Cholpon-Ata, sin paradas</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="torre-de-burana" alt="Torre de Burana" caption="Torre de Burana" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="cholpon-ata-lago-issyk-kul" alt="Cholpon-Ata, a orillas del lago Issyk-Kul" caption="Cholpon-Ata, a orillas del lago Issyk-Kul" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">80,5 km</span><div class="step"><p>Después de desayunar, en coche a la <button class="place" type="button" data-stop="burana">Torre de Burana</button>: carretera A365 hacia Tokmok unos 58,6 km y, desde Tokmok, 18,2 km más. Son 80,5 km, alrededor de 1 h 20 min.</p></div></li>
+          <li><span class="when">Torre de Burana</span><div class="step"><p>Minarete de los siglos X–XI de la ciudad medieval de Balasagun (hoy 21,7 m), con escalera hasta lo alto, lápidas, restos de fortificaciones y balbals. Abre todos los días de 9:00 a 19:00; entrada unos 60 som (≈0,60 €).</p></div></li>
+          <li><span class="when">64,2 km</span><div class="step"><p>Desde Tokmok, por la A365 hacia el sur hasta el <button class="place" type="button" data-stop="chu">Chu River Canyon</button> Observation Point, en Cholok, entrada al Parque Nacional de Chon Kemin: parada para estirar las piernas y ver la confluencia de los ríos Chu y Chon Kemin.</p></div></li>
+          <li><span class="when">16,7 km</span><div class="step"><p>Kan'ony <button class="place" type="button" data-stop="konorchek">Konorchek</button>, en Krasnyy Most: cañón de formaciones rocosas con una excursión opcional de unas 2 horas.</p></div></li>
+          <li><span class="when">42,6 km</span><div class="step"><p><button class="place" type="button" data-stop="balykchy">Balykchy</button>, para una breve parada si os hace falta; en este tramo se ve el monumento de la bandera de Kirguistán en la ladera de la montaña.</p></div></li>
+          <li><span class="when">77,6 km</span><div class="step"><p>Por la A363 hasta <button class="place" type="button" data-stop="cholpon_ata">Cholpon-Ata</button>. En total, 201 km en unas 2 h 47 min sin contar las paradas.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Check-in y resto del día libre en <button class="place" type="button" data-stop="cholpon_ata">Cholpon-Ata</button>, en la costa norte del lago Issyk-Kul: playas de arena, baño en el lago o alguna actividad acuática. La ciudad es famosa por sus petroglifos.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://es.wikiloc.com/rutas-senderismo/konorchek-canyon-kyrgyzstan-174681369" target="_blank" rel="noopener">Konorchek Canyon (Wikiloc)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-5">← Día 5</a><a href="#dia-7">Día 7 →</a></nav>
+      </article>
+      <article class="day" id="dia-7" data-day="7">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>07</b></div>
+          <div>
+            <p class="day-date">Viernes 18 jul</p>
+            <h3 class="day-route">Cholpon-Ata <i>→</i> Grigorievka <i>→</i> Gargantas de Grigoriev y Semyonov <i>→</i> Karakol</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mont">Montaña</li><li class="t-mar">Lago</li><li>Ciudad</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Madanur Hotel</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>169 km</b>≈4 h de Cholpon-Ata a Karakol</li><li><b>34,5 km</b>hasta Grigorievka</li><li><b>98,4 km</b>≈2 h por la A363 hasta Karakol</li><li><b>20:00</b>cierra el callejón Ashlan-Fu</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="garganta-de-grigoriev-lagos" alt="Lagos de la garganta de Grigoriev" caption="Lagos de la garganta de Grigoriev" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="karakol-mezquita-dungan" alt="Mezquita Dungan, Karakol" caption="Mezquita Dungan, Karakol" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Temprano</span><div class="step"><p>Levantaos temprano: de <button class="place" type="button" data-stop="cholpon_ata">Cholpon-Ata</button> a <button class="place" type="button" data-stop="karakol">Karakol</button> son 169 km, unas 4 horas, por la costa del Issyk-Kul. Por la A363 hacia el noreste, a los 34,5 km llegáis a <button class="place" type="button" data-stop="grigoriev">Grigorievka</button>; girad a la izquierda en Ulitsa Likholetova hacia la garganta.</p></div></li>
+          <li><span class="when">Garganta de Grigoriev</span><div class="step"><p>Subid por la garganta de <button class="place" type="button" data-stop="grigoriev">Grigoriev</button> (Chon Ak-Suu, 35 km) y bajad por la de <button class="place" type="button" data-stop="semyonov">Semyonov</button> (30 km) para no repetir camino; con un 4x4 se recorren con facilidad. A los 10–11 km se abren los prados de At-Jailoo, con yurtas en verano, y más arriba tres lagos (Inferior, Medio y Superior), buen sitio para un picnic frente a los picos Eshen-Bulak (4.647 m) y Kum-Bel (4.200 m).</p></div></li>
+          <li><span class="when">Garganta de Semyonov</span><div class="step"><p>La bajada por <button class="place" type="button" data-stop="semyonov">Semyonov</button> es más amplia, con praderas y caballos; podéis visitar comunidades nómadas y probar el kumis, leche de yegua fermentada.</p></div></li>
+          <li><span class="when">98,4 km</span><div class="step"><p>Retomad la A363 bordeando el lago 98,4 km (unas 2 horas) hasta <button class="place" type="button" data-stop="karakol">Karakol</button>. Si habéis madrugado llegaréis hacia mediodía: comed y visitad la Mezquita Dungan (1907–1910, sin un solo clavo); solo se ve por fuera y es gratis.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Check-in y paseo por <button class="place" type="button" data-stop="karakol">Karakol</button>: Gran Bazar (todos los días de 8:00 a 18:00), Catedral de la Santa Trinidad, de madera (9:00–18:00, gratis con donativo; las mujeres, con la cabeza cubierta), Parque Central y Parque Pobedy, a unos 15 minutos.</p></div></li>
+          <li><span class="when">Cena</span><div class="step"><p>Cenad en el Callejón Ashlan-Fu del Bazar Pequeño: samsas, piroshki, mantis, laghman y ashlan-fu, el plato típico de <button class="place" type="button" data-stop="karakol">Karakol</button>. Cierra a las 20:00. A dormir temprano: al día siguiente empieza el trekking de dos días.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Gargantas de Grigoriev y Semyonov</h4><ul><li>En primavera o con lluvias intensas de verano puede haber deslizamientos de tierra, poco frecuentes; las carreteras se despejan rápido.</li><li>Más arriba, el paso de Ak-Suu conecta con el valle del Chon-Kemin y con Almaty (Kazajistán) por el paso de Ozerny.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-6">← Día 6</a><a href="#dia-8">Día 8 →</a></nav>
+      </article>
+      <article class="day" id="dia-8" data-day="8">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>08</b></div>
+          <div>
+            <p class="day-date">Sábado 19 jul</p>
+            <h3 class="day-route">Karakol <i>→</i> Valle de Karakol <i>→</i> Lago Ala Kol</h3>
+            <ul class="tags"><li class="t-mont">Senderismo</li><li class="t-mont">Montaña</li><li class="t-mar">Lago</li><li>Yurta</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Yurta a la llegada</b><span class="regimen">Media pensión</span></div>
+        <ul class="keys"><li><b>300 som</b>tasa del Parque Nacional (≈3 €)</li><li><b>10 km</b>≈3 h del primer tramo</li><li><b>3.500 m</b>altitud del lago Ala Kol</li><li><b>≈40 €</b>por persona en el campamento del lago</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="valle-de-karakol" alt="Valle de Karakol" caption="Valle de Karakol" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="ala-kol-lago-panoramica" alt="Lago Ala Kol" caption="Lago Ala Kol" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Madrugad</span><div class="step"><p>Taxi (u otro transporte) hasta el Valle de <button class="place" type="button" data-stop="karakol">Karakol</button>, al segundo puente, donde ya no se puede seguir en coche y empieza la ruta a pie; os ahorra unas dos horas de caminata. Allí se paga la tasa del Parque Nacional, unos 300 som (≈3 €).</p></div></li>
+          <li><span class="when">10 km</span><div class="step"><p>Primer tramo de unos 10 km (unas tres horas) siguiendo el río por un sendero bien marcado, entre bosques y con el Pico <button class="place" type="button" data-stop="karakol">Karakol</button> (5.216 m) al fondo. Llevad agua y snacks.</p></div></li>
+          <li><span class="when">Puente Sirota</span><div class="step"><p>Desde el Puente Sirota empieza una subida empinada hasta el Campamento Sirota, unos 500 m más arriba, donde podéis quedaros si estáis muy cansados (con tienda propia o si hay sitio). Si no, seguid hacia el lago.</p></div></li>
+          <li><span class="when">Lago Ala Kol</span><div class="step"><p>Llegada al lago <button class="place" type="button" data-stop="ala_kol">Ala Kol</button>, a 3.500 m, de aguas turquesas entre picos nevados. Cerca hay un campamento con tiendas, sacos y comida (unos 40 € por persona) que se reparten por orden de llegada: cuanto antes lleguéis, mejor.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Para dormir junto al lago</h4><ul><li>Ropa térmica y de abrigo: incluso en pleno verano las noches son extremadamente frías y ventosas.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-7">← Día 7</a><a href="#dia-9">Día 9 →</a></nav>
+      </article>
+      <article class="day" id="dia-9" data-day="9">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>09</b></div>
+          <div>
+            <p class="day-date">Domingo 20 jul</p>
+            <h3 class="day-route">Lago Ala Kol <i>→</i> Paso Ala Kol <i>→</i> Altyn Arashan <i>→</i> Karakol</h3>
+            <ul class="tags"><li class="t-mont">Senderismo</li><li class="t-mont">Montaña</li><li class="t-mar">Aguas termales</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Madanur Hotel</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>≈3.900 m</b>paso Ala Kol, el punto más alto</li><li><b>≈1 h 30</b>de subida al paso</li><li><b>≈17:00</b>sale el jeep a Karakol (≈100 €)</li><li><b>28,16 km</b>todo el trek, +2.147 m</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="valle-de-altyn-arashan" alt="Valle de Altyn Arashan" caption="Valle de Altyn Arashan" wide />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Temprano</span><div class="step"><p>Desayuno rápido y subida al paso <button class="place" type="button" data-stop="ala_kol">Ala Kol</button> (unos 3.900 m), el punto más alto del trekking: alrededor de una hora y media, con vistas espectaculares del lago.</p></div></li>
+          <li><span class="when">Descenso</span><div class="step"><p>Bajada hacia el valle de <button class="place" type="button" data-stop="altyn_arashan">Altyn Arashan</button>: rocas resbaladizas y un tramo más exigente que la subida. Después hay que cruzar un río; hacedlo con cuidado.</p></div></li>
+          <li><span class="when">Altyn Arashan</span><div class="step"><p>Aguas termales para relajaros y alojamientos en yurta. Es un área protegida de investigación botánica, con leopardo de las nieves y osos, aunque no siempre se ven.</p></div></li>
+          <li><span class="when">≈17:00</span><div class="step"><p>Vuelta a <button class="place" type="button" data-stop="karakol">Karakol</button>: tres horas más a pie hasta el final del sendero y taxi o marshrutka, o el jeep directo que sale sobre las cinco de la tarde (unos 100 € el coche completo; compartidlo con otros viajeros).</p></div></li>
+          <li><span class="when">Noche</span><div class="step"><p>Cena en <button class="place" type="button" data-stop="karakol">Karakol</button> y a descansar temprano.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>El trek Ala Kol – Altyn Arashan</h4><ul><li>Distancia total 28,16 km, desnivel positivo 2.147 m, altitud máxima 3.885 m.</li><li>Mejor época: de julio a septiembre, con el clima más estable y sin nieve.</li><li>Requiere buena condición física; llevad agua, snacks y protección solar.</li><li>App Maps.me para mapas sin conexión.</li></ul></div>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://es.wikiloc.com/rutas-senderismo/ruta-ski-karakol-ala-kul-altyn-arashan-179016656" target="_blank" rel="noopener">Ruta Karakol – Ala Kul – Altyn Arashan (Wikiloc)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-8">← Día 8</a><a href="#dia-10">Día 10 →</a></nav>
+      </article>
+      <article class="day" id="dia-10" data-day="10">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>10</b></div>
+          <div>
+            <p class="day-date">Lunes 21 jul</p>
+            <h3 class="day-route">Karakol <i>→</i> Jeti-Oguz <i>→</i> Siete Toros <i>→</i> Kok-Jaiyk</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mont">Montaña</li><li>Yurta</li><li class="t-mont">Caballos</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Yurta a la llegada</b><span class="regimen">Media pensión</span></div>
+        <ul class="keys"><li><b>15–20 min</b>por la A363 hasta el desvío</li><li><b>15–20 min</b>del desvío al valle</li><li><b>5 km</b>del sanatorio al valle de Kok-Jaiyk</li><li><b>5.168 m</b>Pico Oguz Bashi</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="jeti-oguz-siete-toros" alt="The Seven Bulls Rock, Jeti-Oguz" caption="The Seven Bulls Rock, Jeti-Oguz" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="valle-kok-jaiyk-yurta" alt="Yurta en el valle de Kok-Jaiyk" caption="Yurta en el valle de Kok-Jaiyk" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Madrugad y coged el coche hacia <button class="place" type="button" data-stop="jeti_oguz">Jeti-Oguz</button>: por la A363 unos 15–20 min hasta una gasolinera Bishkek Petroleum a la izquierda, desvío hacia Jeti-Oguz y otros 15–20 min hasta el primer punto del valle.</p></div></li>
+          <li><span class="when">The Broken Heart</span><div class="step"><p>Roca partida en dos, símbolo de la región; mejor temprano por la mañana, cuando el sol resalta sus tonos rojizos.</p></div></li>
+          <li><span class="when">Siete Toros</span><div class="step"><p>The <button class="place" type="button" data-stop="seven_bulls">Seven Bulls</button> Rock, las rocas de arenisca roja que dan nombre al valle. Para verlas desde arriba, el sendero que sale junto a las tiendas de la carretera sube a una colina; la mejor luz es por la tarde. Cerca está el sanatorio soviético <button class="place" type="button" data-stop="jeti_oguz">Jeti-Oguz</button>, de aguas termales.</p></div></li>
+          <li><span class="when">Dragon Gorge</span><div class="step"><p>Desde la parte alta, las formaciones siguen al otro lado del valle: Dragon Gorge, acantilados de arenisca roja con las montañas nevadas al fondo.</p></div></li>
+          <li><span class="when">Kok-Jaiyk</span><div class="step"><p>Valle de las Flores (<button class="place" type="button" data-stop="kok_jaiyk">Kok-Jaiyk</button>), unos 5 km al sur del sanatorio: pradera alpina con flores y yurtas donde probar kumys. La pista es movida pero se pasa con un coche normal. Buscad yurta cuanto antes: llegar pronto da más opciones.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Subid en coche o en un paseo a caballo a la pradera superior, Nochnyye Prishel'tsy, con vistas del Pico Boris Yeltsin u Oguz Bashi (5.168 m), sobre todo al atardecer.</p></div></li>
+        </ol>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-9">← Día 9</a><a href="#dia-11">Día 11 →</a></nav>
+      </article>
+      <article class="day" id="dia-11" data-day="11">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>11</b></div>
+          <div>
+            <p class="day-date">Martes 22 jul</p>
+            <h3 class="day-route">Kok-Jaiyk <i>→</i> Valle de Barskoon <i>→</i> Plato Arabel' <i>→</i> Cañón Skazka <i>→</i> Bokonbayevo</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mont">Montaña</li><li class="t-mont">Cañón</li><li class="t-mar">Lago</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Eco Resort Kaiyrma</b><span class="stars" aria-label="1 estrellas">★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>30 km</b>≈25 min hasta el valle de Barskoon</li><li><b>27,9 km</b>más al sur hasta Plato Arabel'</li><li><b>48,2 km</b>de vuelta hasta la A363</li><li><b>34,8 km</b>de Skazka a Bokonbayevo</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="barskoon-monumento-gagarin" alt="Monumento a Gagarin, valle de Barskoon" caption="Monumento a Gagarin, valle de Barskoon" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="canon-skazka" alt="Cañón Skazka" caption="Cañón Skazka" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">30 km</span><div class="step"><p>Desde <button class="place" type="button" data-stop="kok_jaiyk">Kok-Jaiyk</button>, A363 hasta el desvío a la A364 hacia el sur; 30 km (unos 25 min) hasta el corazón del valle de <button class="place" type="button" data-stop="barskoon">Barskoon</button>.</p></div></li>
+          <li><span class="when">Barskoon</span><div class="step"><p>Desfiladero de cascadas, como Tears of the Leopard y Manas Bowl, a las que se llega por senderos cortos, y monumentos dedicados a Yuri Gagarin.</p></div></li>
+          <li><span class="when">27,9 km</span><div class="step"><p>Seguid por la A364 hacia el sur hasta el Plato Arabel', un altiplano abierto con montañas nevadas en el horizonte.</p></div></li>
+          <li><span class="when">48,2 km</span><div class="step"><p>Volved por la A364: tras 48,2 km enlazáis con la A363; girad a la izquierda y unos 20 km hasta el Cañón <button class="place" type="button" data-stop="skazka">Skazka</button> (Cañón de las Hadas), cerca de Tosor, con rocas rojizas y anaranjadas para recorrer a pie.</p></div></li>
+          <li><span class="when">34,8 km</span><div class="step"><p>Por la A363 hacia el oeste 34,8 km hasta un pequeño desvío a la derecha que lleva al resort de <button class="place" type="button" data-stop="bokonbayevo">Bokonbayevo</button>. Por el camino, parada opcional en la playa Kadzhi-Sayskiy, a orillas del Issyk-Kul, para bañarse.</p></div></li>
+        </ol>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-10">← Día 10</a><a href="#dia-12">Día 12 →</a></nav>
+      </article>
+      <article class="day" id="dia-12" data-day="12">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>12</b></div>
+          <div>
+            <p class="day-date">Miércoles 23 jul</p>
+            <h3 class="day-route">Bokonbayevo <i>→</i> Cañones de Aksay <i>→</i> Kochkor <i>→</i> Lago Son-Kul</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mar">Lago</li><li>Yurta</li><li class="t-mont">Caballos</li><li class="t-mont">Cañón</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Yurta a la llegada</b><span class="regimen">Media pensión</span></div>
+        <ul class="keys"><li><b>≈2 h</b>de Ak Say a Kochkor (57 + 46,2 km)</li><li><b>≈100 km</b>≈1 h 30 de Kochkor al lago</li><li><b>+3.000 m</b>altitud del lago Son-Kul</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="lago-son-kul-yurtas" alt="Yurtas junto al lago Son-Kul" caption="Yurtas junto al lago Son-Kul" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="canones-de-aksay" alt="Cañones de Aksay" caption="Cañones de Aksay" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Opcional</span><div class="step"><p>Cañones de Aksay: a unos 13 km de <button class="place" type="button" data-stop="bokonbayevo">Bokonbaevo</button> por la A363 en dirección a <button class="place" type="button" data-stop="son_kul">Son-Kul</button> sale una pista sin asfaltar (15–20 min desde Bokonbaevo). El desvío son unos 30 min de ida y 30 de vuelta más 30–45 min de caminata; no hay señalización ni servicios. Hay que madrugar y evitarlo con lluvia, porque la pista cruza el cauce de un río estacional.</p></div></li>
+          <li><span class="when">≈2 h</span><div class="step"><p>Desde Ak Say, A363 durante 57 km hasta enlazar con la A365 y 46,2 km más hasta <button class="place" type="button" data-stop="kochkor">Kochkor</button>, unas 2 horas.</p></div></li>
+          <li><span class="when">Kochkor</span><div class="step"><p>Talleres de alfombras de fieltro tradicionales (shyrdaks) y almuerzo. Llenad el depósito al máximo: a partir de aquí será complicado encontrar gasolineras.</p></div></li>
+          <li><span class="when">≈100 km</span><div class="step"><p>Por la A365 unos 100 km hasta el desvío señalizado con la pista al lago <button class="place" type="button" data-stop="son_kul">Son-Kul</button>, aproximadamente 1 h 30 min.</p></div></li>
+          <li><span class="when">Son-Kul</span><div class="step"><p>Lago alpino a más de 3.000 m entre praderas. Lo primero, buscar yurta (colchones, mantas gruesas y comida casera, como el beshbarmak). Paseos a caballo, senderismo alrededor del lago o descanso; cerca está el Mausoleo Andash Baatyra. De noche, cielo estrellado sin contaminación lumínica.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://es.wikiloc.com/rutas-senderismo/al-aksa-canyon-180055821" target="_blank" rel="noopener">Cañones de Aksay (Wikiloc)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-11">← Día 11</a><a href="#dia-13">Día 13 →</a></nav>
+      </article>
+      <article class="day" id="dia-13" data-day="13">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>13</b></div>
+          <div>
+            <p class="day-date">Jueves 24 jul</p>
+            <h3 class="day-route">Lago Son-Kul <i>→</i> Orto-Tokoy <i>→</i> Cañón Kok-Moynok <i>→</i> Bishkek</h3>
+            <ul class="tags"><li>Coche</li><li class="t-mont">Cañón</li><li class="t-mar">Lago</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>281 Hotel</b><span class="stars" aria-label="2 estrellas">★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>≈60 + 82 km</b>hasta el desvío de Kok-Moynok</li><li><b>≈2 h 30</b>de Son-Kul al cañón</li><li><b>&lt;1 h 30</b>para recorrer el cañón</li><li><b>≈97 km</b>poco más de 1 h hasta Bishkek</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="canon-kok-moynok" alt="Cañón Kok-Moynok" caption="Cañón Kok-Moynok" wide />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Desayuno con los anfitriones y salida hacia el distrito de Tong: unos 60 km por el camino del día anterior hasta el cruce con la A365; a la izquierda y unos 82 km más.</p></div></li>
+          <li><span class="when">Mirador</span><div class="step"><p>Parada breve en el mirador del <button class="place" type="button" data-stop="orto_tokoy">Orto-Tokoy</button> Reservoir, embalse de agua turquesa entre colinas.</p></div></li>
+          <li><span class="when">≈6 km</span><div class="step"><p>Desvío señalizado a la izquierda hacia <button class="place" type="button" data-stop="kok_moynok">Kok-Moynok</button> y unos 6 km por carreteras sin nombre hasta el Cañón Kok-Moynok, también conocido como Krasnyy Most; en total unas 2 h 30 min desde <button class="place" type="button" data-stop="son_kul">Son-Kul</button>. Se recorre a pie en menos de hora y media: calzado cómodo y agua.</p></div></li>
+          <li><span class="when">≈97 km</span><div class="step"><p>Unos 20 min hasta la A365 (a la izquierda), 43 km hasta una rotonda (primera salida, recto por la A365) y unos 97 km hasta <button class="place" type="button" data-stop="bishkek">Bishkek</button>, en poco más de una hora.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Resto del día libre en <button class="place" type="button" data-stop="bishkek">Bishkek</button>: paseo, compras, algún sitio pendiente o una cerveza fresca en un bar.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://es.wikiloc.com/rutas-senderismo/pokhod-kanon-kok-moinok-136228470" target="_blank" rel="noopener">Cañón Kok-Moynok (Wikiloc)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-12">← Día 12</a><a href="#dia-14">Día 14 →</a></nav>
+      </article>
+      <article class="day" id="dia-14" data-day="14">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>14</b></div>
+          <div>
+            <p class="day-date">Viernes 25 jul</p>
+            <h3 class="day-route">Bishkek <i>→</i> Aeropuerto de Manas <i>→</i> Tashkent</h3>
+            <ul class="tags"><li>Vuelo</li><li>Ciudad</li><li>Metro</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Avant Hotel Tashkent</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>14:40</b>recogida en el hotel</li><li><b>17:50</b>vuelo HY778</li><li><b>18:10</b>llegada a Tashkent</li><li><b>23 kg + 8 kg</b>equipaje por persona</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="tashkent-catedral-asuncion" alt="Catedral de la Asunción, Tashkent" caption="Catedral de la Asunción, Tashkent" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="tashkent-plaza-bunyodkor" alt="Plaza Bunyodkor, Tashkent" caption="Plaza Bunyodkor, Tashkent" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Mañana libre con el coche: la bandera de Kirguistán en el monte Boz-Boltok, a las afueras, con vistas panorámicas de <button class="place" type="button" data-stop="bishkek">Bishkek</button>, o la central Bishkek CHP Station, para fotografía industrial.</p></div></li>
+          <li><span class="when">Mediodía</span><div class="step"><p>Devolución del coche de alquiler según las instrucciones del primer día y comida en algún restaurante.</p></div></li>
+          <li class="fixed"><span class="when">14:40</span><div class="step"><p>Os recogen en el hotel para llevaros al Aeropuerto Internacional de <button class="place" type="button" data-stop="manas">Manas</button>. Conviene estar 2–3 horas antes del vuelo y facturar en el mostrador de UZBEKISTAN AIRWAYS.</p></div></li>
+          <li class="fixed"><span class="when">17:50</span><div class="step"><p>Vuelo HY778 de UZBEKISTAN AIRWAYS a <button class="place" type="button" data-stop="tashkent">Tashkent</button>. Equipaje por persona: una maleta facturada de hasta 23 kg (alto + largo + ancho ≤ 158 cm) y una de mano de hasta 8 kg (55x40x23 cm).</p></div></li>
+          <li class="fixed"><span class="when">18:10</span><div class="step"><p>Llegada a <button class="place" type="button" data-stop="tashkent">Tashkent</button> (hora local): pasaportes, equipaje y el conductor os espera con un cartel con vuestro nombre para llevaros al hotel.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Taxi (o app Yandex) a la Catedral de la Asunción (Uspenski): abre de 6:00 a 22:00, gratis; las mujeres se cubren la cabeza y no se pueden hacer fotos ni vídeos dentro.</p></div></li>
+          <li><span class="when">Metro</span><div class="step"><p>Metro desde la estación Toshkent, dirección Beruniy, hasta Kosmonavtlar (2 paradas, unos 12 min), con murales de la carrera espacial soviética.</p></div></li>
+          <li><span class="when">Paseo</span><div class="step"><p>Hacia el norte por la calle Afrosiyob (Teatro de Marionetas, Museo Islam Karimov, Humo Arena), los rascacielos de la calle Islam Karimov (Nest One) y unos 10 min al oeste hasta la Plaza Bunyodkor, con el mástil de 60 m y el cartel «I Love Uzbekistan», y el Palacio de la Amistad de los Pueblos.</p></div></li>
+          <li><span class="when">Atardecer</span><div class="step"><p>Parque Alisher Navoi (65 ha, lago, monumento a Navoi y «Alley of Writers»), el Parlamento (Oliy Majlis), la madraza Abulkasym, hoy Centro Nacional de Artes Aplicadas, y la animada Seul Ko‘chasi, a unos 10 min a pie del hotel.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Equipaje UZBEKISTAN AIRWAYS (según la aerolínea, puede cambiar)</h4><ul><li>Una maleta facturada de hasta 23 kg; alto + largo + ancho ≤ 158 cm.</li><li>Una maleta de mano de hasta 8 kg, máximo 55x40x23 cm.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-13">← Día 13</a><a href="#dia-15">Día 15 →</a></nav>
+      </article>
+      <article class="day" id="dia-15" data-day="15">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>15</b></div>
+          <div>
+            <p class="day-date">Sábado 26 jul</p>
+            <h3 class="day-route">Tashkent</h3>
+            <ul class="tags"><li>Ciudad</li><li>Mercado</li><li>Metro</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Avant Hotel Tashkent</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>≤30.000 Sum</b>taxi al Hazrati Imam (≈2 €, 15 min)</li><li><b>9:00–18:00</b>Hazrati Imam, gratis</li><li><b>8:00–18:00</b>Bazar Chorsu</li><li><b>50.000 UZS</b>mirador de la Torre de TV (≈4 €)</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="tashkent-complejo-hazrati-imam" alt="Complejo Hazrati Imam" caption="Complejo Hazrati Imam" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="tashkent-bazar-chorsu" alt="Bazar Chorsu" caption="Bazar Chorsu" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Taxi (en la calle o con Yandex) hasta el Complejo Hazrati Imam: unos 15 min y no más de 30.000 Sum (2 €). En transporte público podéis tardar casi una hora.</p></div></li>
+          <li><span class="when">Hazrati Imam</span><div class="step"><p>Principal centro religioso de Taskent (mezquita Tilla Sheikh, madrasa Barak Khan, mausoleo de Abu Bakr Kaffal Shashi) y biblioteca-museo con el Corán de Usman, del siglo VII. De 9:00 a 18:00, gratis con donativo; ropa respetuosa y descalzos. Al lado, el Islamic Civilization Center (9:00–18:00).</p></div></li>
+          <li><span class="when">20 min</span><div class="step"><p>A pie hacia el sur hasta el Bazar Chorsu, bajo su cúpula turquesa (de 8:00 a 18:00, entrada libre): plov, samsas y shashlik; efectivo y regateo. Al lado, la Madrasa Kokaldash, del siglo XVI.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Circo Estatal (a 5 min), Shayhantaur Memorial Complex (20 min al este, gratis), Monument of Courage, por el terremoto de 1966, y Turkistan Concert Hall.</p></div></li>
+          <li><span class="when">Plaza Mustakillik</span><div class="step"><p>Plaza de la Independencia (casi 12 ha, acceso libre): columnata con cigüeñas, Monumento a la Independencia y memorial con la Llama Eterna. Enfrente, el Palacio del Gran Duque Nicolás Konstantínovich (Museo de Artes Aplicadas) y el Museo Estatal de Historia.</p></div></li>
+          <li><span class="when">Plaza Amir Temur</span><div class="step"><p>Diez minutos al este: monumento a Amir Temur, Hotel Uzbekistan, <button class="place" type="button" data-stop="tashkent">Tashkent</button> Chimes, Palace of International Forums y State Museum of the Temurids.</p></div></li>
+          <li><span class="when">Torre de TV</span><div class="step"><p>Metro desde Yunus Rajabiy, dirección Turkestan, hasta Shakhriston (4 paradas, unos 10 min) y 8 min a pie al sur: Memorial a las Víctimas de la Represión (gratis) y la Torre de Televisión (375 m), con mirador a 97 m: de 10:00 a 18:00, unos 50.000 UZS (≈4 €) en efectivo y con pasaporte obligatorio.</p></div></li>
+          <li><span class="when">Mezquita Minor</span><div class="step"><p>20 min a pie o taxi (1–2 €) a la Mezquita Minor (2014), junto al canal Ankhor: gratis; los hombres con pantalón largo y las mujeres con hombros, piernas y cabeza cubiertos; descalzos en la sala de oración; en las horas de oración el acceso puede estar restringido.</p></div></li>
+          <li><span class="when">Final</span><div class="step"><p>13 min a pie a Bodomzor; metro hacia Ming Urik hasta Yunus Rajabiy (3 paradas), transbordo y hacia Chinor hasta Pakhtakor (2 paradas). Estaciones que merecen la pena: Alisher Navoi, Gafur Gulom, Tinchlik, Beruniy, Novza, Chilonzor y Ming Urik. Acabad en <button class="place" type="button" data-stop="tashkent">Tashkent</button> City Park.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Mezquitas</h4><ul><li>Vestid de forma respetuosa y descalzaos antes de entrar en las salas de oración.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-14">← Día 14</a><a href="#dia-16">Día 16 →</a></nav>
+      </article>
+      <article class="day" id="dia-16" data-day="16">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>16</b></div>
+          <div>
+            <p class="day-date">Domingo 27 jul</p>
+            <h3 class="day-route">Tashkent <i>→</i> Samarcanda</h3>
+            <ul class="tags"><li>Tren</li><li>Ciudad</li><li class="t-unesco">Historia</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Ametist Hotel Complex</b><span class="stars" aria-label="4 estrellas">★★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>07:52</b>tren 766ФА, vagón 3</li><li><b>10:22</b>llegada a Samarcanda</li><li><b>40.000 UZS</b>Gur-e-Amir (≈3 €)</li><li><b>50.000 UZS</b>Registán (≈4 €)</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="samarcanda-registan-panoramica" alt="Registán, Samarcanda" caption="Registán, Samarcanda" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="samarcanda-gur-e-amir" alt="Gur-e-Amir" caption="Gur-e-Amir" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">06:40</span><div class="step"><p>Después de desayunar, sobre las 06:40, taxi a la estación Toshkent Markaziy (unos 10 min, 1–2 €; pedidlo con antelación). Estad allí 50–45 min antes: el registro de pasajeros cierra 30 min antes de la salida.</p></div></li>
+          <li class="fixed"><span class="when">07:52</span><div class="step"><p>Tren 766ФА, vagón 3. Llegada a <button class="place" type="button" data-stop="samarcanda">Samarcanda</button> a las 10:22, hora local.</p></div></li>
+          <li class="fixed"><span class="when">10:22</span><div class="step"><p>Taxi al hotel (2–3 €, unos 15 min) o buses M15 o M4 (algo más de 20 min; Yandex Maps). Si la habitación no está lista, dejad el equipaje en recepción.</p></div></li>
+          <li><span class="when">Mañana</span><div class="step"><p>Catedral de San Alejandro (Monk Alexis' Cathedral), al salir del hotel; el Bul'var hasta el Monumento de Amir Temur; enfrente, cruzando el parque Hamid Alimjan, el teatro Hamid Olimjon, y al cruzar la calle el Mausoleo de Rouhabad (siglo XIV).</p></div></li>
+          <li><span class="when">Gur-e-Amir</span><div class="step"><p>Mausoleo de Amir Temur (Tamerlán), de principios del siglo XV, con su cúpula turquesa: de 9:00 a 19:00, unos 40.000 UZS (≈3 €) en efectivo en la taquilla.</p></div></li>
+          <li><span class="when">Registán</span><div class="step"><p>15 min por el Parque Amir Temur (estatua de los dos tigres del Caspio) hasta el Registán: madrazas Ulugh Bek (1417–1420), Sher-Dor y Tilya-Kori. De 8:00 a 19:00, unos 50.000 UZS (≈4 €) en efectivo; algunas noches hay espectáculo de luz y sonido.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Islam Karimov's Park, junto al Registán, y 10 min por la calle Islam Karimov hasta Bibi-Khanym (unos 30.000 UZS, ≈2,5 €; de 8:00 a 19:00). Justo al lado, el Bazar de Siyob: efectivo y regateo.</p></div></li>
+          <li><span class="when">Atardecer</span><div class="step"><p>Volved al Registán al atardecer. Después, hotel o una cerveza o cena en los cafés cercanos.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Tren</h4><ul><li>Estad en la estación 50–45 min antes; el registro de pasajeros cierra 30 min antes de la salida.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-15">← Día 15</a><a href="#dia-17">Día 17 →</a></nav>
+      </article>
+      <article class="day" id="dia-17" data-day="17">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>17</b></div>
+          <div>
+            <p class="day-date">Lunes 28 jul</p>
+            <h3 class="day-route">Samarcanda</h3>
+            <ul class="tags"><li>Ciudad</li><li class="t-unesco">Historia</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Ametist Hotel Complex</b><span class="stars" aria-label="4 estrellas">★★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>2–3 €</b>taxi al Observatorio (≈15 min)</li><li><b>25.000 UZS</b>Observatorio de Ulugh Beg (≈2 €)</li><li><b>30.000 UZS</b>Shah-i-Zinda (≈2,5 €)</li><li><b>8:00–19:00</b>Shah-i-Zinda</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="samarcanda-shah-i-zinda" alt="Shah-i-Zinda" caption="Shah-i-Zinda" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="samarcanda-mezquita-hazrat-hyzr" alt="Mezquita Hazrat-Hyzr" caption="Mezquita Hazrat-Hyzr" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Taxi (2–3 €, unos 15 min) o autobús 99 (algo más de 25 min) al Observatorio de Ulugh Beg: restos del gran sextante y museo. De 9:00 a 18:00, unos 25.000 UZS (≈2 €) en efectivo.</p></div></li>
+          <li><span class="when">15 min</span><div class="step"><p>Mausoleo del Profeta Daniel, junto al río Siab, con una tumba de más de 18 m: gratis; ropa respetuosa y silencio.</p></div></li>
+          <li><span class="when">20 min</span><div class="step"><p>A pie hacia el sur, junto al yacimiento de Afrosiyob (no recomiendan pararse esta vez), hasta el pequeño Mausoleo de Makhsum Baba.</p></div></li>
+          <li><span class="when">Hazrat-Hyzr</span><div class="step"><p>Mezquita Hazrat-Hyzr, en una colina con vistas sobre Bibi-Khanym y el Bazar de Siyob: gratis, ropa respetuosa y silencio.</p></div></li>
+          <li><span class="when">Shah-i-Zinda</span><div class="step"><p>A 5 min a pie, Shah-i-Zinda: avenida de mausoleos de los siglos XI al XIX (Qusam ibn-Abbas, Shadi Mulk Aga, Shirin Beka Oko). Unos 30.000 UZS (≈2,5 €), de 8:00 a 19:00, en efectivo.</p></div></li>
+          <li><span class="when">Comida</span><div class="step"><p>Volved a la zona del Bazar de Siyob para comer plov en algún restaurante tradicional.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Repetid algún monumento a otra hora (Bibi-Khanym, Registán, Gur-e-Amir), id al apartado Mausoleo de Abu Mansur Maturidi o relajaos en una terraza con un té o una cerveza.</p></div></li>
+        </ol>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-16">← Día 16</a><a href="#dia-18">Día 18 →</a></nav>
+      </article>
+      <article class="day" id="dia-18" data-day="18">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>18</b></div>
+          <div>
+            <p class="day-date">29 jul</p>
+            <h3 class="day-route">Sin datos en la muestra</h3>
+          </div>
+        </div>
+        <div class="stay none">Este día no está en el PDF de muestra: falta su página.</div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-17">← Día 17</a><a href="#dia-19">Día 19 →</a></nav>
+      </article>
+      <article class="day" id="dia-19" data-day="19">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>19</b></div>
+          <div>
+            <p class="day-date">Miércoles 30 jul</p>
+            <h3 class="day-route">Samarcanda <i>→</i> Bujará</h3>
+            <ul class="tags"><li>Tren</li><li>Ciudad</li><li class="t-unesco">Historia</li><li>Mercado</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Al - Hayat</b><span class="stars" aria-label="3 estrellas">★★★</span><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>09:49</b>tren 768ФА, vagón 8</li><li><b>11:38</b>llegada a Bujará</li><li><b>2–3 €</b>taxi al hotel (≈25 min)</li><li><b>15.000–30.000 som</b>Arq (2–3 €)</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bujara-poi-kalyan" alt="Plaza Poi-Kalyan, Bujará" caption="Plaza Poi-Kalyan, Bujará" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bujara-chor-minor" alt="Chor Minor" caption="Chor Minor" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">06:40</span><div class="step"><p>Después de desayunar, sobre las 06:40, taxi a la estación de <button class="place" type="button" data-stop="samarcanda">Samarcanda</button> (unos 15 min, 1–2 €; pedidlo con antelación). Estad allí 50–45 min antes: el registro cierra 30 min antes de la salida.</p></div></li>
+          <li class="fixed"><span class="when">09:49</span><div class="step"><p>Tren 768ФА, vagón 8. Llegada a <button class="place" type="button" data-stop="bujara">Bujará</button> a las 11:38, hora local.</p></div></li>
+          <li class="fixed"><span class="when">11:38</span><div class="step"><p>Taxi al hotel (2–3 €, unos 25 min). Si la habitación no está lista, dejad el equipaje y buscad un buen sitio para comer.</p></div></li>
+          <li><span class="when">Tarde</span><div class="step"><p>Kukaldosh Madrasah (siglo XVI); enfrente, la Nodir Devon Begi Madrasasi, con leones alados y ciervos en el portal (abierta todo el día, sin entrada), y al otro lado de la plaza la Khanaka Nadir Divan-Begi (gratis).</p></div></li>
+          <li><span class="when">Bazares cubiertos</span><div class="step"><p>Toki Sarrofon, la madrasa y la mezquita Gaukushon, Magok-i-Kurpa, Telpak Furushon, el Tim de Abdullah Khan, las madrazas Abdul Azizxon y Ulugh Beg (1417) y Toqi Zargaron, el mayor bazar cubierto. Casi todo, libre y gratuito.</p></div></li>
+          <li><span class="when">Poi-Kalyan</span><div class="step"><p>Plaza Poi-Kalyan: minarete Kalyan (1127, 46,5 m; no se puede subir), Mezquita Kalyan (entre 20.000 y 50.000 UZS, ≈1,5–3 €, en efectivo y con ropa adecuada), Madraza Mir-i-Arab y madrasa de Amir Alimkhan.</p></div></li>
+          <li><span class="when">Arq y Bolo Hovuz</span><div class="step"><p>Fortaleza del Arq: de 9:00 a 18:00 (hasta las 19:00 en temporada alta), la taquilla cierra media hora antes; 15.000–30.000 som (2–3 €) más suplemento por fotos o vídeo, en efectivo. Al cruzar la plaza, la mezquita Bolo Hovuz (1712), con estanque y veinte columnas de madera; evitad las horas de oración.</p></div></li>
+          <li><span class="when">Parque</span><div class="step"><p>Madrazas Modarikhon y Abdullah Khan (entrada libre) y, a 10 min, el Mausoleo de Ismail Samani (siglos IX–X; 20.000–25.000 som) y el Chashmai Ayub (unos 20.000 som), en el mismo parque.</p></div></li>
+          <li><span class="when">Final</span><div class="step"><p>Puerta de Talipach (gratis), Mercado Central, 15 min hasta Abu Hafs Kabir (gratis), Parque Mirzo Ulugbek (30 min a pie o taxi de 1 €) y Chor Minor (1807): 35 min a pie, taxi de 1–2 € o buses 10 o 37; subir a la planta superior cuesta 4.000–5.000 soms.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Taxis en Bujará</h4><ul><li>En la calle o con la app Yandex, siempre con precaución para evitar estafas.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-18">← Día 18</a><a href="#dia-20">Día 20 →</a></nav>
+      </article>
+      <article class="day" id="dia-20" data-day="20">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>20</b></div>
+          <div>
+            <p class="day-date">Jueves 31 jul</p>
+            <h3 class="day-route">Bujará <i>→</i> Sitorai Mohi Xosa <i>→</i> Bakhauddin Nakshbandi <i>→</i> Bujará</h3>
+            <ul class="tags"><li>Ciudad</li><li class="t-unesco">Historia</li></ul>
+          </div>
+        </div>
+        <div class="stay"><svg><use href="#i-bed"/></svg><b>Hotel Bukhara</b><span class="regimen">Alojamiento y desayuno</span></div>
+        <ul class="keys"><li><b>1–2 €</b>taxi al palacio (≈15 min)</li><li><b>≈2 €</b>Bakhauddin Nakshbandi</li><li><b>8:00–19:00</b>Bakhauddin Nakshbandi</li></ul>
+        <div class="photos">
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bujara-sitorai-mohi-khosa" alt="Palacio Sitorai Mohi Xosa" caption="Palacio Sitorai Mohi Xosa" />
+          <PlanPhoto plan="kirguistan-uzbekistan" sizes={sizes} name="bujara-bahauddin-naqshbandi" alt="Complejo de Bakhauddin Nakshbandi" caption="Complejo de Bakhauddin Nakshbandi" />
+        </div>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>Taxi (1–2 €, unos 15 min; con precaución con las estafas) o autobús 9 (algo más de 25 min) al palacio <button class="place" type="button" data-stop="sitorai">Sitorai</button> Mohi Xosa, residencia de verano del último emir (1912–1918): Salón Blanco, jardines con pavos reales, casa de té, minarete y museo.</p></div></li>
+          <li><span class="when">20 min</span><div class="step"><p>Taxi (2–3 €) al complejo de <button class="place" type="button" data-stop="bahauddin">Bakhauddin</button> Nakshbandi, a unos 12 km al este de <button class="place" type="button" data-stop="bujara">Bujará</button>: tumba del fundador de la orden sufí naqshbandi, mezquitas, khanaka de Abdulaziz Khan y museo del sufismo. Unos 2 €, de 8:00 a 19:00; ropa respetuosa y silencio.</p></div></li>
+          <li><span class="when">20 min</span><div class="step"><p>Taxi (2–3 €) al Mausoleo de Amir Kulal, en Yangikhayat (distrito de Kagan, a unos 25 km al este de <button class="place" type="button" data-stop="bujara">Bujará</button>), maestro de <button class="place" type="button" data-stop="bahauddin">Naqshband</button> y parada de la ruta «Los siete santos sufíes de Bujará».</p></div></li>
+          <li><span class="when">25 min</span><div class="step"><p>Taxi (2–3 €) a los mausoleos de Bayan-Quli Khan, con azulejos vidriados, y Saif ed-Din Boharzi, de dos cúpulas y sin decoración.</p></div></li>
+          <li><span class="when">Cierre</span><div class="step"><p>Iglesia ortodoxa del Arcángel Miguel (Khram Arkhangela Mikhaila), a pocos minutos de los mausoleos. Comida en el centro y tarde libre para pasear o hacer las últimas compras.</p></div></li>
+          <li><span class="when">Noche</span><div class="step"><p>Al volver al hotel, coordinad el traslado al aeropuerto del día siguiente si no lo habéis hecho ya.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Enlaces</h4><ul><li><a href="https://yandex.com/maps/org/sitorai_mohi_ss_saroyi/108701140354/" target="_blank" rel="noopener">Sitorai Mohi Xosa (Yandex Maps)</a></li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-19">← Día 19</a><a href="#dia-21">Día 21 →</a></nav>
+      </article>
+      <article class="day" id="dia-21" data-day="21">
+        <div class="day-head">
+          <div class="day-num"><small>Día</small><b>21</b></div>
+          <div>
+            <p class="day-date">Viernes 1 ago</p>
+            <h3 class="day-route">Bujará <i>→</i> Estambul <i>→</i> Barcelona</h3>
+            <ul class="tags"><li>Vuelo</li></ul>
+          </div>
+        </div>
+        <div class="stay none"><svg><use href="#i-bed"/></svg>Noche en casa</div>
+        <ul class="keys"><li><b>08:55</b>vuelo TK267 a Estambul</li><li><b>11:35</b>llegada a Estambul</li><li><b>20:15</b>vuelo TK1851 a Barcelona</li><li><b>23:10</b>llegada a Barcelona (T1)</li></ul>
+        <ol class="flow">
+          <li><span class="when">Mañana</span><div class="step"><p>A la hora acordada el día anterior con recepción os recogen en el hotel para ir al Aeropuerto Internacional de <button class="place" type="button" data-stop="bujara">Bujará</button>. Si aún no hay desayuno, pedid uno tipo picnic con antelación (no está garantizado). Estad unas 3 horas antes del vuelo.</p></div></li>
+          <li class="fixed"><span class="when">08:55</span><div class="step"><p>Vuelo TK267 de TURKISH AIRLINES a Estambul. Facturáis en <button class="place" type="button" data-stop="bujara">Bujará</button> y no recogéis el equipaje hasta Barcelona; confirmadlo en el mostrador.</p></div></li>
+          <li class="fixed"><span class="when">11:35</span><div class="step"><p>Llegada a Estambul: seguid las indicaciones de «Conexiones» y buscad en las pantallas la puerta del siguiente vuelo.</p></div></li>
+          <li class="fixed"><span class="when">20:15</span><div class="step"><p>Vuelo TK1851 de TURKISH AIRLINES a Barcelona.</p></div></li>
+          <li class="fixed"><span class="when">23:10</span><div class="step"><p>Llegada a Barcelona (T1) y recogida del equipaje facturado. Fin del viaje.</p></div></li>
+        </ol>
+        <div class="note-box"><h4>Equipaje TURKISH AIRLINES (según la aerolínea, puede cambiar)</h4><ul><li>Una maleta facturada de hasta 30 kg; alto + largo + ancho ≤ 158 cm.</li><li>Una maleta de mano de hasta 8 kg, máximo 23x40x55 cm.</li><li>Un artículo personal que quepa debajo del asiento delantero.</li></ul></div>
+        <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-20">← Día 20</a><a href="#antes">Antes de ir →</a></nav>
+      </article>
+
+<section id="antes" class="band" aria-labelledby="antes-h" slot="info">
+  <div class="wrap sec-head">
+    <div>
+      <p class="eyebrow">Información práctica</p>
+      <h2 id="antes-h">Antes de ir</h2>
+    </div>
+    <p class="note"><span class="cty">KG</span> Kirguistán · <span class="cty">UZ</span> Uzbekistán</p>
+  </div>
+  <div class="wrap">
+    <dl class="facts">
+      <div><dt>Capital</dt><dd><span class="cty">KG</span> Bishkek<br><span class="cty">UZ</span> Tashkent</dd></div>
+      <div><dt>Idioma</dt><dd><span class="cty">KG</span> Kirguís y Ruso<br><span class="cty">UZ</span> Uzbeko</dd></div>
+      <div><dt>Moneda</dt><dd><span class="cty">KG</span> Som kirguís (KGS)<br><span class="cty">UZ</span> Som uzbeko (UZS)</dd></div>
+      <div><dt>Cambio</dt><dd><span class="cty">KG</span> 1 € = 102 som<br><span class="cty">UZ</span> 1 € = 14.790 som</dd></div>
+      <div><dt>Hora</dt><dd><span class="cty">KG</span> GMT +6: +4 h respecto a España peninsular.<br><span class="cty">UZ</span> GMT +5: +3 h respecto a España peninsular.</dd></div>
+      <div><dt>Visado</dt><dd><span class="cty">KG</span> No, hasta 60 días<br><span class="cty">UZ</span> No, hasta 30 días</dd></div>
+      <div><dt>Enchufe</dt><dd>Tipos C y F <small>220 V · 50 Hz, en los dos países</small></dd></div>
+      <div><dt>Vacunas</dt><dd>No son obligatorias <small>Consulta inicial en el 061 o en un Centro de Vacunación Internacional</small></dd></div>
+      <div><dt>Presupuesto</dt><dd>600–800 € por persona <small>Todo el viaje, orientativo</small></dd></div>
+    </dl>
+  </div>
+  <div class="wrap info-grid">
+    <div>
+      <div class="tabs" role="tablist" aria-label="Información práctica">
+        <button class="tab" role="tab" id="tab-doc" aria-controls="p-doc" aria-selected="true">Documentos</button>
+        <button class="tab" role="tab" id="tab-din" aria-controls="p-din" aria-selected="false" tabindex="-1">Dinero</button>
+        <button class="tab" role="tab" id="tab-net" aria-controls="p-net" aria-selected="false" tabindex="-1">Internet</button>
+        <button class="tab" role="tab" id="tab-mov" aria-controls="p-mov" aria-selected="false" tabindex="-1">Moverse</button>
+        <button class="tab" role="tab" id="tab-con" aria-controls="p-con" aria-selected="false" tabindex="-1">Coche</button>
+        <button class="tab" role="tab" id="tab-sal" aria-controls="p-sal" aria-selected="false" tabindex="-1">Salud</button>
+        <button class="tab" role="tab" id="tab-cos" aria-controls="p-cos" aria-selected="false" tabindex="-1">Costumbres</button>
+      </div>
+      <div class="panel" role="tabpanel" id="p-doc" aria-labelledby="tab-doc">
+        <h3>Kirguistán</h3>
+        <ul><li>Ciudadanos de la UE: sin visado para estancias de hasta 60 días.</li><li>Pasaporte en buen estado, sin daños, y con validez de al menos seis meses posteriores a la fecha de entrada.</li><li>Se recomienda consultar los requisitos formales con la Embajada kirguisa en París (acreditada ante España).</li><li>Aunque no se pide visado, es recomendable tener billete de salida y poder demostrar que cubrís los gastos de la estancia.</li></ul>
+        <h3>Uzbekistán</h3>
+        <ul><li>Ciudadanos de la UE: sin visado para estancias de hasta 30 días.</li><li>Pasaporte válido con caducidad no inferior a tres meses desde el final de la estancia, en buen estado.</li><li>Llevad el pasaporte siempre encima: es un requisito legal y la policía hace controles con frecuencia.</li><li>Se recomienda tener billete de salida y medios económicos suficientes para la estancia.</li></ul>
+      </div>
+      <div class="panel" role="tabpanel" id="p-din" aria-labelledby="tab-din" hidden>
+        <h3>Efectivo y tarjetas</h3>
+        <ul><li>Llevad efectivo: en muchos sitios no aceptan tarjetas.</li><li>Para conseguirlo: el cambio hecho desde aquí en una casa de cambio como RIA, en vuestro banco o en destino (en el aeropuerto no se recomienda) o en una casa de cambio.</li><li>Una tarjeta prepago gratuita, como Revolut o N-26, evita comisiones al pagar y al sacar del cajero, y muestra en tiempo real el cambio aplicado.</li><li>Antes de cambiar, comprobad la tasa del día y que la casa de cambio no cobre comisiones excesivas.</li><li>Llevad una tarjeta de crédito para posibles depósitos y para pagar en establecimientos.</li></ul>
+        <h3>Presupuesto</h3>
+        <p>Orientativamente, unos 600-800 € por persona para la totalidad del viaje.</p>
+      </div>
+      <div class="panel" role="tabpanel" id="p-net" aria-labelledby="tab-net" hidden>
+        <h3>eSIM o SIM local</h3>
+        <ul><li>eSIM internacional (Holafly, Airalo…): se activa con un QR, sin cambiar de SIM y se recarga desde el móvil; algo más cara y el móvil debe ser compatible.</li><li>SIM local: más barata y con algunos minutos de llamada; a veces piden registrar el pasaporte y hay que ir a una tienda.</li><li>En zonas rurales la cobertura puede desaparecer, y la SIM de un país no funciona en los demás.</li></ul>
+        <h3>Operadores</h3>
+        <div class="ops">
+          <div><b>Kirguistán</b><span>O!Mobile y Megacom son las mejores compañías.</span></div>
+          <div><b>Uzbekistán</b><span>Beeline y Ucell son las más populares, con buena cobertura en las ciudades.</span></div>
+        </div>
+      </div>
+      <div class="panel" role="tabpanel" id="p-mov" aria-labelledby="tab-mov" hidden>
+        <h3>Taxis, autobuses y apps</h3>
+        <ul><li>Taxis: en la calle o con la app Yandex, con precaución para evitar estafas (Bishkek, Tashkent, Samarcanda, Bujará).</li><li>Autobuses de Bishkek: bus.kg (web y app en inglés); en Uzbekistán, Yandex Maps para saber qué autobús coger.</li><li>Rutas de montaña sin conexión: app Maps.me.</li></ul>
+        <h3>Kirguistán</h3>
+        <ul><li>Marshrutkas: minibuses compartidos, baratos, para moverse por ciudades y entre localidades; pueden ir abarrotados y no siempre tienen horario fijo.</li><li>Transporte rural: los caminos pueden estar en mal estado; para rutas largas se recomienda un todoterreno.</li></ul>
+        <h3>Uzbekistán</h3>
+        <ul><li>Trenes de alta velocidad Afrosiyob entre Tashkent, Samarcanda y Bujará: cómodos y rápidos; reservad con antelación porque se agotan pronto.</li><li>Taxis: económicos en ciudades y entre destinos; negociad el precio antes de subir, no suelen usar taxímetro.</li></ul>
+      </div>
+      <div class="panel" role="tabpanel" id="p-con" aria-labelledby="tab-con" hidden>
+        <h3>Coche de alquiler</h3>
+        <ul><li>Coche de alquiler del Día 5 al Día 14: en principio un Subaru Forester del 2019 con seguro incluido; puede cambiar por otro de la misma categoría.</li><li>Fianza de 400 $.</li><li>Recogedlo lo más temprano posible el Día 5; se devuelve el Día 14 a mediodía según las instrucciones de la recogida.</li><li>En Kochkor (Día 12), llenad el depósito al máximo: a partir de allí es complicado encontrar gasolineras.</li><li>Los caminos rurales pueden estar en mal estado; para rutas largas se recomienda un todoterreno.</li><li>La pista de los Cañones de Aksay cruza el cauce de un río estacional: no la hagáis con lluvia.</li></ul>
+      </div>
+      <div class="panel" role="tabpanel" id="p-sal" aria-labelledby="tab-sal" hidden>
+        <h3>Salud</h3>
+        <ul><li>No hay vacunas obligatorias en Kirguistán ni en Uzbekistán; consulta inicial en el 061 o en un Centro de Vacunación Internacional.</li><li>Agua siempre embotellada; en Uzbekistán, clima seco: hidrataos bien.</li><li>Para el trek de Ala Kol: buena condición física, ropa térmica, agua, snacks y protección solar.</li></ul>
+      </div>
+      <div class="panel" role="tabpanel" id="p-cos" aria-labelledby="tab-cos" hidden>
+        <h3>Kirguistán</h3>
+        <ul><li>Hospitalidad: si os invitan a casa, es de buena educación aceptar y probar la comida, aunque sea poco.</li><li>Ropa modesta en zonas rurales: evitad camisetas sin mangas y pantalones cortos; las mujeres pueden llevar pañuelo en entornos tradicionales.</li><li>Al sentaros, sobre todo en el suelo, no estiréis las piernas hacia otras personas: mejor cruzadas o recogidas.</li><li>En comidas tradicionales se come con la mano, siempre la derecha; si dudáis, preguntad.</li><li>Pese a ser un país musulmán, el alcohol está comúnmente aceptado y se consume.</li><li>Agua: siempre embotellada.</li></ul>
+        <h3>Uzbekistán</h3>
+        <ul><li>Evitad el contacto físico excesivo: entre personas del mismo sexo es poco común en público y entre hombres y mujeres puede estar mal visto en zonas conservadoras.</li><li>Respeto por los mayores: cederles el asiento o saludarles primero.</li><li>Comed despacio y participad en la conversación: apresurarse puede considerarse una falta de respeto.</li><li>Agua: siempre embotellada; el clima es seco, hidrataos bien, sobre todo al aire libre.</li></ul>
+        <h3>Ropa en lugares religiosos</h3>
+        <ul><li>Hombros y rodillas cubiertos; las mujeres, con la cabeza cubierta en iglesias ortodoxas y salas de oración.</li><li>Descalzarse antes de entrar en las mezquitas.</li></ul>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="card">
+        <h3>Vuelos y trenes</h3>
+        <p class="hint">Llegada a Manas el 15 de julio a las 06:35; el vuelo de ida no está en la muestra.</p>
+        <ul class="trips"><li><a href="#dia-14"><span class="mono">25 jul</span> <b>Vuelo HY778</b><small>Bishkek (Manas) 17:50 → Tashkent 18:10</small></a></li><li><a href="#dia-16"><span class="mono">27 jul</span> <b>Tren 766ФА · coche 3</b><small>Tashkent (Toshkent Markaziy) 07:52 → Samarcanda 10:22</small></a></li><li><a href="#dia-19"><span class="mono">30 jul</span> <b>Tren 768ФА · coche 8</b><small>Samarcanda 09:49 → Bujará 11:38</small></a></li><li><a href="#dia-21"><span class="mono">1 ago</span> <b>Vuelo TK1851</b><small>Estambul 20:15 → Barcelona (T1) 23:10</small></a></li><li><a href="#dia-21"><span class="mono">1 ago</span> <b>Vuelo TK267</b><small>Bujará 08:55 → Estambul 11:35</small></a></li></ul>
+      </div>
+      <PlanConverter title="Euros, som y som" hint="Con el cambio de la planificación: 1 € = 102 som kirguises y 1 € = 14.790 som uzbekos." currencies={kirguistanUzbekistan.currencies} presets={kirguistanUzbekistan.presets} start={100} />
+      <div class="card">
+        <h3>Enlaces</h3>
+        <ul class="links"><li><a href="https://www.iatatravelcentre.com/" target="_blank" rel="noopener">IATA Travel Centre <span>↗</span></a></li><li><a href="https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=Kirguist%C3%A1n" target="_blank" rel="noopener">Exteriores: recomendaciones de viaje a Kirguistán <span>↗</span></a></li><li><a href="https://www.exteriores.gob.es/es/ServiciosAlCiudadano/Paginas/Detalle-recomendaciones-de-viaje.aspx?trc=Uzbekist%C3%A1n" target="_blank" rel="noopener">Exteriores: recomendaciones de viaje a Uzbekistán <span>↗</span></a></li><li><a href="http://www.riacurrencyexchange.es/" target="_blank" rel="noopener">RIA Currency Exchange <span>↗</span></a></li><li><a href="https://www.google.com/maps/d/edit?mid=1wRw_rdwBZVkYjhb59O2wHitnXt7lCGc&amp;usp=sharing" target="_blank" rel="noopener">Mapa de Kirguistán (Google My Maps) <span>↗</span></a></li><li><a href="https://www.google.com/maps/d/edit?mid=1qqyWYKvoeOdxp3F7Va9uUVjcEXj-z7E&amp;usp=sharing" target="_blank" rel="noopener">Mapa de Uzbekistán (Google My Maps) <span>↗</span></a></li><li><a href="http://bus.kg/" target="_blank" rel="noopener">bus.kg <span>↗</span></a></li></ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<img slot="food-image" src={img('comida-plov')} width="375" height="212" alt="Plato de plov" loading="lazy" decoding="async">
+</PlanLayout>
+
+<style is:global>
+:root {
+  /* Paleta de Asia Central: el azul de los azulejos de Samarcanda */
+  --bg: #EEF1F3;
+  --surface: #FFFFFF;
+  --ink: #121821;
+  --muted: #556170;
+  --line: #D5DCE2;
+  --accent: #1D5BA6;
+  --accent-ink: #FFFFFF;
+  --sea: #0A7480;
+  --alp: #3E7A48;
+  --map-sea: #D8E6EC;
+  --map-land: #FFFFFF;
+  --map-neigh: #E5E9EC;
+  --map-border: #B5C0C8;
+  --shadow: 0 10px 30px rgba(18, 24, 33, .14);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1318; --surface: #161D24; --ink: #E7ECF1; --muted: #9AA7B4; --line: #27313B;
+    --accent: #7BA9F0; --accent-ink: #0B1626; --sea: #46B8C4; --alp: #74BF89;
+    --map-sea: #0B1820; --map-land: #1C252D; --map-neigh: #131A20; --map-border: #33414C;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1318; --surface: #161D24; --ink: #E7ECF1; --muted: #9AA7B4; --line: #27313B;
+  --accent: #7BA9F0; --accent-ink: #0B1626; --sea: #46B8C4; --alp: #74BF89;
+  --map-sea: #0B1820; --map-land: #1C252D; --map-neigh: #131A20; --map-border: #33414C;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+#inicio .hero h1 { font-size: clamp(3.2rem, 8.6vw, 6.8rem); line-height: 1.08; }
+</style>
+
+<script>
+  import { initPlan } from '../../scripts/plan';
+  import { kirguistanUzbekistan } from '../../data/plans/kirguistan-uzbekistan';
+  initPlan(kirguistanUzbekistan);
+</script>

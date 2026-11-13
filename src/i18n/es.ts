@@ -192,6 +192,7 @@ export const es: Dict = {
           image: 'kg',
           isos: ['kg', 'uz'],
           pdf: '/planificaciones/kirguistan-uzbekistan-muestra.pdf',
+          interactive: '/planificaciones/kirguistan-uzbekistan',
           summary: 'La mítica Ruta de la Seda a través de estepas infinitas, noches en yurta bajo las estrellas y ciudades de azulejos turquesa. Un viaje que cambia la perspectiva.',
           days: [
             { label: 'Días 1-2 — Bishkek', text: 'Capital kirguís. Plaza Ala-Too, Victory Square y primer contacto con la cultura nómada.' },

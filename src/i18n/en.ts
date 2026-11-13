@@ -190,6 +190,7 @@ export const en: Dict = {
           image: 'kg',
           isos: ['kg', 'uz'],
           pdf: '/planificaciones/kirguistan-uzbekistan-muestra.pdf',
+          interactive: '/planificaciones/kirguistan-uzbekistan',
           summary: 'The legendary Silk Road across endless steppes, nights under the stars in a yurt and turquoise-tiled cities. A trip that changes your perspective.',
           days: [
             { label: 'Days 1-2 — Bishkek', text: 'Kyrgyz capital. Ala-Too Square, Victory Square and first contact with nomadic culture.' },

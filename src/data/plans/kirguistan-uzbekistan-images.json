@@ -1,0 +1,152 @@
+{
+ "ala-archa-parque-nacional": {
+  "w": 587,
+  "h": 371,
+  "small": true
+ },
+ "ala-kol-lago-panoramica": {
+  "w": 1200,
+  "h": 573,
+  "small": true
+ },
+ "barskoon-monumento-gagarin": {
+  "w": 510,
+  "h": 408,
+  "small": false
+ },
+ "bishkek-mezquita-central": {
+  "w": 806,
+  "h": 472,
+  "small": true
+ },
+ "bishkek-plaza-ala-too": {
+  "w": 919,
+  "h": 446,
+  "small": true
+ },
+ "bujara-bahauddin-naqshbandi": {
+  "w": 815,
+  "h": 392,
+  "small": true
+ },
+ "bujara-chor-minor": {
+  "w": 750,
+  "h": 537,
+  "small": true
+ },
+ "bujara-poi-kalyan": {
+  "w": 1200,
+  "h": 537,
+  "small": true
+ },
+ "bujara-sitorai-mohi-khosa": {
+  "w": 745,
+  "h": 412,
+  "small": true
+ },
+ "canon-kok-moynok": {
+  "w": 524,
+  "h": 625,
+  "small": false
+ },
+ "canon-skazka": {
+  "w": 715,
+  "h": 368,
+  "small": true
+ },
+ "canones-de-aksay": {
+  "w": 538,
+  "h": 689,
+  "small": false
+ },
+ "cholpon-ata-lago-issyk-kul": {
+  "w": 665,
+  "h": 331,
+  "small": true
+ },
+ "comida-plov": {
+  "w": 375,
+  "h": 212,
+  "small": false
+ },
+ "garganta-de-grigoriev-lagos": {
+  "w": 702,
+  "h": 384,
+  "small": true
+ },
+ "jeti-oguz-siete-toros": {
+  "w": 713,
+  "h": 443,
+  "small": true
+ },
+ "karakol-mezquita-dungan": {
+  "w": 704,
+  "h": 383,
+  "small": true
+ },
+ "lago-son-kul-yurtas": {
+  "w": 759,
+  "h": 417,
+  "small": true
+ },
+ "samarcanda-gur-e-amir": {
+  "w": 713,
+  "h": 511,
+  "small": true
+ },
+ "samarcanda-mezquita-hazrat-hyzr": {
+  "w": 669,
+  "h": 489,
+  "small": true
+ },
+ "samarcanda-registan-panoramica": {
+  "w": 1200,
+  "h": 665,
+  "small": true
+ },
+ "samarcanda-shah-i-zinda": {
+  "w": 1200,
+  "h": 578,
+  "small": true
+ },
+ "tashkent-bazar-chorsu": {
+  "w": 627,
+  "h": 433,
+  "small": true
+ },
+ "tashkent-catedral-asuncion": {
+  "w": 666,
+  "h": 410,
+  "small": true
+ },
+ "tashkent-complejo-hazrati-imam": {
+  "w": 595,
+  "h": 433,
+  "small": true
+ },
+ "tashkent-plaza-bunyodkor": {
+  "w": 719,
+  "h": 448,
+  "small": true
+ },
+ "torre-de-burana": {
+  "w": 657,
+  "h": 440,
+  "small": true
+ },
+ "valle-de-altyn-arashan": {
+  "w": 836,
+  "h": 471,
+  "small": true
+ },
+ "valle-de-karakol": {
+  "w": 657,
+  "h": 449,
+  "small": true
+ },
+ "valle-kok-jaiyk-yurta": {
+  "w": 397,
+  "h": 442,
+  "small": false
+ }
+}

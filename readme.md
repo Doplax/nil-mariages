@@ -13,7 +13,7 @@ itinerarios que ha diseñado y un formulario de contacto directo.
 - **Trayectoria** — CV completo (experiencia, formación, idiomas, competencias, distinciones) y descarga en PDF.
 - **Experiencia viajera** — los 43 países visitados agrupados por continente, con foto y descripción de cada uno.
 - **Rutas sobre el mapa** — itinerarios reales embebidos desde Google My Maps, con carga diferida para no penalizar el rendimiento.
-- **Planificaciones** — ejemplos de itinerarios día a día, con visor de PDF protegido (solo lectura, sin descarga). Albania tiene además una **versión interactiva** en `/planificaciones/albania`: mapa que sigue el día que se lee, horarios, hoteles, información práctica, conversor euro-lek, platos y lista de equipaje con casillas (solo en castellano, como el PDF).
+- **Planificaciones** — ejemplos de itinerarios día a día, con visor de PDF protegido (solo lectura, sin descarga) y **versión interactiva** de cada uno (`/planificaciones/albania` y `/planificaciones/kirguistan-uzbekistan`): mapa que sigue el día que se lee, horarios, hoteles, información práctica, conversor de moneda, platos y lista de equipaje con casillas (solo en castellano, como el PDF).
 - **Proyectos futuros** — próximos destinos en preparación.
 - **Testimonios y contacto** — reseñas de clientes y formulario que envía email por SMTP.
 
@@ -54,9 +54,10 @@ solo hay que tocar estos ficheros:
 | Logotipos de las empresas del CV | `src/assets/logos/`, `public/images/` |
 | Rutas del mapa | `src/data/trips.ts` |
 | CV en PDF y planificaciones | `public/` |
-| Planificación interactiva de Albania (texto, paradas del mapa y datos) | `src/pages/planificaciones/albania.astro` |
-| Fotos de la planificación interactiva | `public/images/planificaciones/albania/` |
-| Contorno del mapa de la planificación | `src/data/plans/albania-map.json` (generado) |
+| Texto de cada día de una planificación interactiva | `src/pages/planificaciones/<plan>.astro` |
+| Paradas y tramos del mapa, platos, maleta y moneda | `src/data/plans/<plan>.ts` |
+| Fotos de una planificación interactiva | `public/images/planificaciones/<plan>/` |
+| Contorno del mapa (generado) | `src/data/plans/<plan>-map.json` |
 
 Los contadores de países (total y por continente) se calculan solos a partir de
 `countries.ts`: al añadir un país, las cifras se actualizan sin tocar nada más.
@@ -66,5 +67,26 @@ Los contadores de países (total y por continente) se calculan solos a partir de
 ```bash
 node scripts/fetch-images.mjs          # busca la foto de cada país en Wikipedia
 node scripts/build-kyrgyzstan-map.mjs  # convierte el KML de Google My Maps a GeoJSON
-node scripts/build-plan-map.mjs        # contorno del mapa de la planificación interactiva (Natural Earth)
+node scripts/build-plan-map.mjs [plan] # contorno del mapa de una planificación interactiva (Natural Earth)
+node scripts/plan-images.mjs <plan>    # versión de 480 px de sus fotos y lista de medidas
 ```
+
+## Planificaciones interactivas
+
+Comparten motor: `src/layouts/PlanLayout.astro` (barra del portfolio, cabecera
+con los días, mapa, platos, maleta, pie y visor de fotos), `src/styles/plan.css`,
+`src/scripts/plan.ts` (comportamiento) y `src/components/plan/` (foto y
+conversor). Cada plan pone su paleta, su portada, el texto de los días y la
+información práctica en su página, y lo demás en `src/data/plans/<plan>.ts`.
+
+Para añadir una:
+
+1. Fotos en WebP en `public/images/planificaciones/<plan>/` (1200 px, calidad
+   74; las de los PDF traen un marco negro que hay que recortar) y
+   `node scripts/plan-images.mjs <plan>`.
+2. Recuadro y países del mapa en `PLANS` de `scripts/build-plan-map.mjs` y
+   `node scripts/build-plan-map.mjs <plan>`.
+3. `src/data/plans/<plan>.ts` (tipos en `types.ts`) y la página
+   `src/pages/planificaciones/<plan>.astro`, copiando una de las que hay.
+4. Campo `interactive` en la tarjeta de los tres diccionarios: con eso salen
+   el botón de la tarjeta y el del visor de PDF.
