@@ -1,0 +1,30 @@
+---
+// Foto de un día de una planificación interactiva: se amplía al tocarla (visor
+// de PlanLayout) y sirve la versión de 480 px cuando el hueco es pequeño
+// (scripts/plan-images.mjs).
+interface Props {
+  plan: string;
+  name: string;
+  alt: string;
+  caption: string;
+  /** Texto del visor; por defecto, el pie de foto */
+  lb?: string;
+  /** Sola en su fila (ocupa todo el ancho de la columna) */
+  wide?: boolean;
+  sizes: Record<string, { w: number; h: number; small: boolean }>;
+}
+const { plan, name, alt, caption, lb = caption, wide = false, sizes } = Astro.props;
+const base = `/images/planificaciones/${plan}/${name}`;
+const s = sizes[name];
+if (!s) throw new Error(`PlanPhoto: falta ${name} en ${plan}-images.json (node scripts/plan-images.mjs ${plan})`);
+const full = `${base}.webp`;
+const srcset = s.small ? `${base}-480.webp 480w, ${full} ${s.w}w` : undefined;
+const slot = wide ? '(min-width: 1000px) 760px, 100vw' : '(min-width: 1000px) 380px, (min-width: 560px) 50vw, 100vw';
+---
+
+<figure>
+  <button type="button" data-lb={lb}>
+    <img src={full} srcset={srcset} sizes={srcset ? slot : undefined} width={s.w} height={s.h} alt={alt} loading="lazy" decoding="async" data-full={full} />
+  </button>
+  <figcaption>{caption}</figcaption>
+</figure>

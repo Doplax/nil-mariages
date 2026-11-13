@@ -1,0 +1,97 @@
+{
+ "berat-panorama": {
+  "w": 1200,
+  "h": 287,
+  "small": true
+ },
+ "berat": {
+  "w": 799,
+  "h": 512,
+  "small": true
+ },
+ "blue-eye": {
+  "w": 593,
+  "h": 412,
+  "small": true
+ },
+ "comida": {
+  "w": 868,
+  "h": 426,
+  "small": true
+ },
+ "dhermi": {
+  "w": 686,
+  "h": 460,
+  "small": true
+ },
+ "gjirokaster": {
+  "w": 750,
+  "h": 414,
+  "small": true
+ },
+ "grama-bay": {
+  "w": 697,
+  "h": 491,
+  "small": true
+ },
+ "kanina": {
+  "w": 749,
+  "h": 482,
+  "small": true
+ },
+ "koman": {
+  "w": 758,
+  "h": 458,
+  "small": true
+ },
+ "kroreze": {
+  "w": 813,
+  "h": 486,
+  "small": true
+ },
+ "kruje": {
+  "w": 644,
+  "h": 449,
+  "small": true
+ },
+ "ksamil": {
+  "w": 769,
+  "h": 419,
+  "small": true
+ },
+ "porto-palermo": {
+  "w": 800,
+  "h": 440,
+  "small": true
+ },
+ "puente-benje": {
+  "w": 673,
+  "h": 449,
+  "small": true
+ },
+ "rozafa": {
+  "w": 736,
+  "h": 494,
+  "small": true
+ },
+ "theth": {
+  "w": 713,
+  "h": 472,
+  "small": true
+ },
+ "tirana-skanderbeg": {
+  "w": 745,
+  "h": 488,
+  "small": true
+ },
+ "valbona-pass": {
+  "w": 771,
+  "h": 479,
+  "small": true
+ },
+ "valbone": {
+  "w": 797,
+  "h": 509,
+  "small": true
+ }
+}

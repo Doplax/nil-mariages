@@ -1,0 +1,216 @@
+---
+// Esqueleto de una planificación interactiva (src/pages/planificaciones/*.astro):
+// barra del portfolio, cabecera con los días, mapa que sigue la lectura,
+// platos, maleta, pie y visor de fotos. Cada página pone su paleta (<style
+// is:global> con los tokens de color), la portada (slot "hero"), los días
+// (slot por defecto), la información práctica (slot "info", que debe ser una
+// <section id="antes">), la foto de la comida (slot "food-image") y su
+// <script> con initPlan(datos). Los colores y la maquetación común están en
+// src/styles/plan.css; el comportamiento, en src/scripts/plan.ts.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/oswald';
+import '../styles/plan.css';
+import Logo from '../components/Logo.astro';
+import type { Mode, PlanData, PlanMap } from '../data/plans/types';
+
+interface Props {
+  plan: PlanData;
+  map: PlanMap;
+  /** Título de la página, sin « · Nil Mariages» */
+  title: string;
+  description: string;
+  /** Marca de la cabecera fija: «Albania <span>2025</span>» */
+  brand: string;
+  brandYear: string;
+  pdfUrl: string;
+  /** Texto accesible del mapa */
+  mapLabel: string;
+  /** Primera línea del pie */
+  footerTitle: string;
+}
+const { plan, map, title, description, brand, brandYear, pdfUrl, mapLabel, footerTitle } = Astro.props;
+
+const proj = JSON.stringify({ W: map.W, H: map.H, lon0: map.lon0, lat1: map.lat1, latRef: map.latRef, k: map.k });
+
+// Leyenda: solo los modos que usa el viaje, en este orden
+const MODE_LABELS: [Mode, string][] = [
+  ['car', 'Coche'], ['transfer', 'Traslado'], ['train', 'Tren'], ['ferry', 'Barco y ferri'],
+  ['walk', 'A pie'], ['horse', 'A caballo'], ['flight', 'Avión'],
+];
+const used = new Set(plan.days.flatMap((d) => d.legs.map((l) => (l[2] === 'boatloop' ? 'ferry' : l[2]))));
+const legend = MODE_LABELS.filter(([m]) => used.has(m));
+
+const catCounts = Object.entries(plan.dishes.cats).map(([key, label]) => ({
+  key, label, n: plan.dishes.items.filter((d) => d.cat === key).length,
+})).filter((c) => c.n > 0);
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title} · Nil Mariages</title>
+<meta name="description" content={description}>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#091622">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<slot name="head" />
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bed" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5M7 11.5a1.5 1.5 0 1 0 0-.01"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></symbol>
+</svg>
+
+<div class="nm-bar">
+  <div class="wrap nm-row">
+    <a class="nm-back" href="/#planificaciones" data-back data-astro-reload aria-label="Volver al portfolio de Nil Mariages"><svg><use href="#i-prev"/></svg><Logo variant="cream" tagline={false} /></a>
+    <span class="nm-crumb">Planificaciones · versión interactiva</span>
+    <a class="nm-pdf" href={pdfUrl} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>Ver el PDF</a>
+  </div>
+</div>
+
+<header class="top" id="top">
+  <div class="wrap top-row">
+    <a class="brand" href="#inicio"><i aria-hidden="true"></i>{brand} <span>{brandYear}</span></a>
+    <nav class="nav" aria-label="Secciones">
+      <a href="#ruta">Ruta</a>
+      <a href="#antes">Antes de ir</a>
+      <a href="#comida">Comida</a>
+      <a href="#maleta">Maleta</a>
+    </nav>
+  </div>
+  <div class="wrap">
+    <nav class="strip" id="strip" aria-label="Días del viaje">
+      {plan.days.map((d) => (
+        <button type="button" class="chip" data-day={d.n}><b>{d.n}</b><small>{d.date}</small><span class="sr">: {d.label}</span></button>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<main>
+<slot name="hero" />
+
+<section id="ruta" aria-labelledby="ruta-h">
+  <div class="wrap sec-head">
+    <div>
+      <p class="eyebrow">Día a día</p>
+      <h2 id="ruta-h">La ruta</h2>
+    </div>
+    <p class="note">El mapa sigue el día que estás leyendo. Toca un lugar subrayado para verlo en el mapa, o usa las flechas ← → del teclado para cambiar de día.</p>
+  </div>
+  <div class="wrap itin">
+    <div class="map-wrap" id="map-wrap">
+      <figure class="map overview" id="map">
+        <div class="map-head">
+          <div class="map-title" aria-live="polite"><small id="map-kicker">{plan.overview.kicker}</small><strong id="map-label">{plan.overview.label}</strong></div>
+          <button class="icon-btn" id="map-prev" type="button" aria-label="Día anterior"><svg><use href="#i-prev"/></svg></button>
+          <button class="icon-btn" id="map-next" type="button" aria-label="Día siguiente"><svg><use href="#i-next"/></svg></button>
+          <button class="pill-btn" id="map-all" type="button" aria-pressed="true">Todo</button>
+          <button class="icon-btn sheet-close" id="map-close" type="button" aria-label="Cerrar el mapa"><svg><use href="#i-close"/></svg></button>
+        </div>
+        <svg id="map-svg" viewBox={`0 0 ${map.W} ${map.H}`} data-proj={proj} preserveAspectRatio="xMidYMid meet" role="img" aria-label={mapLabel}>
+          <rect class="sea" x={-10 * map.W} y={-10 * map.H} width={21 * map.W} height={21 * map.H}/>
+          <path class="neigh" d={map.neighbours}/>
+          <path class="land" d={map.main}/>
+          <path class="lake" d={map.lakes}/>
+          <g id="labels"></g>
+          <g id="legs"></g>
+          <circle id="pulse" r="0" opacity="0"/>
+          <g id="stops"></g>
+          <circle id="traveller" r="0"/>
+        </svg>
+        <ul class="legend" aria-label="Leyenda">
+          {legend.map(([m, label]) => (
+            <li><svg viewBox="0 0 26 8"><path class={`leg mode-${m}`} d="M1 4H25"/></svg>{label}</li>
+          ))}
+        </ul>
+        <p class="map-note">Las líneas unen las paradas, no siguen la carretera. Punto relleno: se duerme allí. Contorno: Natural Earth; coordenadas: OpenStreetMap.</p>
+      </figure>
+    </div>
+
+    <div class="days" id="days">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<slot name="info" />
+
+<section id="comida" aria-labelledby="comida-h">
+  <div class="wrap sec-head">
+    <div>
+      <p class="eyebrow">Qué pedir</p>
+      <h2 id="comida-h">Comida típica</h2>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="food-top">
+      <slot name="food-image" />
+      <div>
+        <div class="filters" id="food-filters" role="group" aria-label="Filtrar platos">
+          <button type="button" data-f="all" aria-pressed="true">Todo<span>{plan.dishes.items.length}</span></button>
+          {catCounts.map((c) => (
+            <button type="button" data-f={c.key} aria-pressed="false">{c.label}<span>{c.n}</span></button>
+          ))}
+          <button type="button" data-f="want" aria-pressed="false">Mi lista<span id="want-n">0</span></button>
+        </div>
+        <p class="tally" id="food-tally">Marca con el corazón lo que queráis probar. Se guarda en este navegador.</p>
+      </div>
+    </div>
+    <ul class="dishes" id="dishes"></ul>
+  </div>
+</section>
+
+<section id="maleta" class="band" aria-labelledby="maleta-h">
+  <div class="wrap sec-head">
+    <div>
+      <p class="eyebrow">Para no olvidar nada</p>
+      <h2 id="maleta-h">Lista de equipaje</h2>
+    </div>
+    <p class="note">La lista de la planificación, más lo que pide el itinerario. Lo que marquéis se guarda en este navegador.</p>
+  </div>
+  <div class="wrap">
+    <div class="pack-top">
+      <div class="meter">
+        <span class="meter-text" id="pack-text">0 de 0 en la maleta</span>
+        <div class="bar" role="progressbar" aria-labelledby="pack-text" aria-valuemin="0" id="pack-bar"><i></i></div>
+      </div>
+      <div class="reset" id="pack-reset">
+        <button class="btn" type="button" id="reset-ask">Desmarcar todo</button>
+        <span id="reset-confirm" hidden>¿Seguro? <button class="btn solid" type="button" id="reset-yes">Sí, desmarcar</button> <button class="btn" type="button" id="reset-no">Cancelar</button></span>
+      </div>
+    </div>
+    <div class="packs" id="packs"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>{footerTitle}</b> · Planificación de Nil Mariages. Muestra de portfolio, no reproducir.</p>
+    <p>Versión interactiva hecha a partir del PDF de la planificación. Mapa: contorno de Natural Earth y coordenadas de OpenStreetMap; las líneas son orientativas.</p>
+    <p><a href="/#planificaciones" data-back data-astro-reload>← Volver al portfolio de Nil Mariages</a> · <a href={pdfUrl} target="_blank" rel="noopener">Ver la planificación en PDF</a></p>
+  </div>
+</footer>
+
+<button class="fab" id="fab" type="button" hidden><svg><use href="#i-map"/></svg>Mapa del día</button>
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
+  <div class="lb-top"><span id="lb-count">1 / 1</span><button type="button" id="lb-close" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button></div>
+  <div class="lb-stage">
+    <button type="button" id="lb-prev" aria-label="Foto anterior"><svg><use href="#i-prev"/></svg></button>
+    <figure class="lb-fig"><img id="lb-img" alt=""></figure>
+    <button type="button" id="lb-next" aria-label="Foto siguiente"><svg><use href="#i-next"/></svg></button>
+  </div>
+  <p class="lb-cap" id="lb-cap"></p>
+</div>
+</body>
+</html>

@@ -2,446 +2,34 @@
 // Planificación interactiva «Albania en 11 días» (muestra de portfolio).
 // El contenido sale del PDF public/planificaciones/albania-muestra.pdf y, como
 // el PDF, está solo en castellano: desde /en y /ca se enlaza aquí igualmente.
-// Fotos: public/images/planificaciones/albania/ (WebP, 1200 px como mucho).
-// Contorno del mapa: src/data/plans/albania-map.json, generado con
-// `node scripts/build-plan-map.mjs`. Las coordenadas de las paradas están en el
-// script de abajo (STOPS), sacadas de OpenStreetMap (Nominatim).
-import '@fontsource-variable/inter';
-import '@fontsource-variable/oswald';
-import Logo from '../../components/Logo.astro';
+// Aquí va el texto de cada día; el mapa, los platos, la maleta y el conversor
+// salen de src/data/plans/albania.ts, y el resto, de src/layouts/PlanLayout.astro.
+// Fotos: public/images/planificaciones/albania/ (scripts/plan-images.mjs).
+// Contorno del mapa: src/data/plans/albania-map.json (scripts/build-plan-map.mjs).
+import PlanLayout from '../../layouts/PlanLayout.astro';
+import PlanPhoto from '../../components/plan/PlanPhoto.astro';
+import PlanConverter from '../../components/plan/PlanConverter.astro';
+import { albania } from '../../data/plans/albania';
 import map from '../../data/plans/albania-map.json';
+import sizes from '../../data/plans/albania-images.json';
 
 const pdfUrl = `/visor?src=${encodeURIComponent('/planificaciones/albania-muestra.pdf')}&title=${encodeURIComponent('Albania en 11 días')}`;
 const img = (name: string) => `/images/planificaciones/albania/${name}.webp`;
 ---
 
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Albania en 11 días · Nil Mariages</title>
-<meta name="description" content="Planificación interactiva de un viaje en coche por Albania del 4 al 14 de septiembre de 2025, por Nil Mariages.">
-<meta name="robots" content="noindex">
-<meta name="theme-color" content="#091622">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<style is:global>
-/* Layout: el mapa se queda fijo a la izquierda y sigue el dia que estas leyendo; los dias corren a la derecha. En movil el mapa se abre como hoja inferior. */
-:root {
-  --bg: #F1F2F0;
-  --surface: #FFFFFF;
-  --ink: #15181A;
-  --muted: #586064;
-  --line: #D8DCDA;
-  --red: #C8131B;
-  --red-ink: #FFFFFF;
-  --sea: #0A7480;
-  --alp: #367046;
-  --map-sea: #DAE7E9;
-  --map-land: #FFFFFF;
-  --map-neigh: #E6E8E5;
-  --map-border: #B7BFBD;
-  --shadow: 0 10px 30px rgba(20, 24, 26, .14);
-  --f-display: "Oswald Variable", "Oswald", "Arial Narrow", "Helvetica Neue", Impact, sans-serif;
-  --f-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --f-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  /* Marca del portfolio (barra superior y logo), igual en los dos temas */
-  --navy: #0e2336;
-  --navy-deep: #091622;
-  --teal: #5fc9bc;
-  --teal-bright: #7ad9cd;
-  --teal-deep: #3da093;
-  --cream: #f5faf9;
-  --hh: 112px;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0F1214; --surface: #171C1F; --ink: #E8ECEA; --muted: #9AA4A8; --line: #2A3236;
-    --red: #F0474D; --red-ink: #1A0506; --sea: #43B9C3; --alp: #72BE88;
-    --map-sea: #0C191E; --map-land: #1E262A; --map-neigh: #14191C; --map-border: #34403F;
-    --shadow: 0 10px 30px rgba(0, 0, 0, .5);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0F1214; --surface: #171C1F; --ink: #E8ECEA; --muted: #9AA4A8; --line: #2A3236;
-  --red: #F0474D; --red-ink: #1A0506; --sea: #43B9C3; --alp: #72BE88;
-  --map-sea: #0C191E; --map-land: #1E262A; --map-neigh: #14191C; --map-border: #34403F;
-  --shadow: 0 10px 30px rgba(0, 0, 0, .5);
-  color-scheme: dark;
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16.5px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
-img { max-width: 100%; }
-[hidden] { display: none !important; }
-a { color: inherit; text-decoration-color: var(--red); text-underline-offset: 3px; }
-a:hover { color: var(--red); }
-button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-h1, h2, h3 { text-wrap: balance; }
-.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-.wrap { max-width: 1260px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.eyebrow { font: 600 .78rem/1.2 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0; }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-/* Barra del portfolio (no fija) */
-.nm-bar { background: var(--navy-deep); color: var(--cream); }
-.nm-row { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; padding-block: 10px; flex-wrap: wrap; }
-.nm-back { display: inline-flex; align-items: center; gap: 10px; color: var(--cream); text-decoration: none; }
-.nm-back:hover { color: var(--cream); opacity: .85; }
-.nm-back > svg { width: 18px; height: 18px; flex: 0 0 auto; }
-.nm-crumb { flex: 1; min-width: 0; font-size: .85rem; color: rgba(245, 250, 249, .7); }
-.nm-pdf { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(245, 250, 249, .3); color: var(--cream); text-decoration: none; font-size: .88rem; font-weight: 600; }
-.nm-pdf:hover { color: var(--navy-deep); background: var(--teal); border-color: var(--teal); }
-.nm-pdf svg { width: 16px; height: 16px; }
-@media (max-width: 560px) { .nm-crumb { display: none; } }
-
-/* Cabecera fija */
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--bg); }
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line); }
-.top-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px 6px; }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 1.05rem/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; }
-.brand i { width: 22px; height: 15px; background: var(--red); border-radius: 2px; display: inline-block; }
-.brand span { color: var(--muted); font-weight: 500; }
-.nav { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-.nav a { text-decoration: none; font-weight: 600; font-size: .92rem; padding: 6px 10px; border-radius: 6px; color: var(--muted); }
-.nav a:hover, .nav a[aria-current="true"] { color: var(--ink); background: var(--surface); }
-.strip { display: flex; gap: 6px; overflow-x: auto; padding-block: 4px 10px; scrollbar-width: none; scroll-padding-inline: 16px; }
-.strip::-webkit-scrollbar { display: none; }
-.chip { flex: 0 0 auto; display: grid; justify-items: center; gap: 1px; min-width: 56px; padding: 5px 8px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
-.chip b { font: 600 1.15rem/1 var(--f-display); }
-.chip small { font: 500 .68rem/1 var(--f-mono); color: var(--muted); letter-spacing: .02em; }
-.chip:hover { border-color: var(--red); }
-.chip[aria-current="true"] { background: var(--red); border-color: var(--red); color: var(--red-ink); }
-.chip[aria-current="true"] small { color: var(--red-ink); opacity: .85; }
-
-/* Portada */
-.hero-photo { display: block; width: 100%; height: clamp(170px, 26vw, 340px); object-fit: cover; object-position: 30% 55%; }
-.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 56px; padding-block: 28px 40px; align-items: end; }
-.hero h1 { margin: 6px 0 0; font: 700 clamp(4.4rem, 14vw, 10.5rem)/.84 var(--f-display); text-transform: uppercase; letter-spacing: .005em; }
-.hero h1 span { display: block; margin-top: .14em; font-size: .3em; letter-spacing: .06em; color: var(--red); font-weight: 600; }
-.dates { margin: 14px 0 0; font: 500 1rem/1.3 var(--f-mono); }
-.lead { margin: 16px 0 0; max-width: 58ch; font-size: 1.12rem; color: var(--ink); }
-.stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 2px solid var(--ink); }
-.stats li { padding: 12px 0 14px; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
-.stats li:not(:nth-child(3n+1)) { padding-left: 14px; border-left: 1px solid var(--line); }
-.stats b { font: 600 2.4rem/1 var(--f-display); }
-.stats span { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--ink); background: transparent; text-decoration: none; font-weight: 600; cursor: pointer; }
-.btn:hover { color: var(--red); border-color: var(--red); }
-.btn.solid { background: var(--red); border-color: var(--red); color: var(--red-ink); }
-.btn.solid:hover { filter: brightness(1.08); color: var(--red-ink); }
-.byline { margin: 18px 0 0; font-size: .85rem; color: var(--muted); }
-.byline b { color: var(--ink); }
-
-.checkin { background: var(--red); color: var(--red-ink); }
-.checkin p { margin: 0; padding-block: 12px; font: 600 clamp(1rem, 2.4vw, 1.25rem)/1.25 var(--f-display); letter-spacing: .06em; text-transform: uppercase; text-align: center; text-wrap: balance; }
-
-/* Itinerario */
-section { scroll-margin-top: calc(var(--hh) + 8px); }
-.sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 24px; padding-block: 44px 8px; }
-.sec-head h2 { margin: 4px 0 0; font: 600 clamp(2rem, 5vw, 3.1rem)/1 var(--f-display); text-transform: uppercase; }
-.sec-head p.note { margin: 0; max-width: 46ch; color: var(--muted); font-size: .95rem; }
-.itin { display: grid; grid-template-columns: minmax(320px, 430px) minmax(0, 1fr); gap: 44px; align-items: start; padding-bottom: 48px; }
-.map-wrap { position: sticky; top: calc(var(--hh) + 14px); }
-.map { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - var(--hh) - 28px); max-height: 880px; min-height: 460px; }
-.map-head { display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 14px; border-bottom: 1px solid var(--line); }
-.map-title { flex: 1; min-width: 0; }
-.map-title small { display: block; font: 600 .72rem/1.2 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
-.map-title strong { display: block; font: 500 1.02rem/1.2 var(--f-display); text-transform: uppercase; letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.icon-btn { flex: 0 0 auto; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; }
-.icon-btn:hover { border-color: var(--red); color: var(--red); }
-.icon-btn:disabled { opacity: .35; cursor: default; border-color: var(--line); color: inherit; }
-.icon-btn svg { width: 16px; height: 16px; }
-.pill-btn { flex: 0 0 auto; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-size: .82rem; font-weight: 600; }
-.pill-btn:hover, .pill-btn[aria-pressed="true"] { border-color: var(--red); color: var(--red); }
-.sheet-close { display: none; }
-#map-svg { flex: 1 1 auto; min-height: 0; width: 100%; display: block; background: var(--map-sea); touch-action: manipulation; }
-#map-svg .sea { fill: var(--map-sea); }
-#map-svg .neigh { fill: var(--map-neigh); stroke: var(--map-border); stroke-width: .8; vector-effect: non-scaling-stroke; }
-#map-svg .alb { fill: var(--map-land); stroke: var(--ink); stroke-opacity: .5; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-#map-svg .c-label { fill: var(--muted); font-family: var(--f-display); letter-spacing: .14em; font-weight: 500; }
-#map-svg .s-label { fill: var(--sea); font-family: var(--f-body); font-style: italic; letter-spacing: .06em; }
-.leg { fill: none; stroke: var(--muted); stroke-opacity: .3; stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; transition: stroke-opacity .3s, stroke-width .3s; }
-.leg.mode-car { --c: var(--red); }
-.leg.mode-transfer { --c: var(--ink); stroke-dasharray: 6 4; }
-.leg.mode-ferry, .leg.mode-boatloop { --c: var(--sea); stroke-dasharray: .5 5; }
-.leg.mode-walk { --c: var(--alp); stroke-dasharray: .5 4.5; }
-.leg.mode-flight { --c: var(--muted); stroke-dasharray: 7 6; }
-.map.overview .leg { stroke: var(--c); stroke-opacity: .9; stroke-width: 2.2; }
-.day-legs.is-active .leg { stroke: var(--c); stroke-opacity: 1; stroke-width: 3.4; }
-.stop { cursor: pointer; outline: none; }
-.stop circle { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; vector-effect: non-scaling-stroke; transition: fill .2s, stroke .2s; }
-.stop.night circle { fill: var(--ink); stroke: var(--surface); }
-.stop.on circle { stroke: var(--red); stroke-width: 2.2; }
-.stop.night.on circle { fill: var(--red); stroke: var(--surface); }
-.stop text { fill: var(--ink); font-family: var(--f-body); font-weight: 700; paint-order: stroke; stroke: var(--map-land); stroke-linejoin: round; opacity: 0; transition: opacity .25s; pointer-events: none; }
-.stop.night text, .stop.on text, .stop:hover text, .stop:focus-visible text { opacity: 1; }
-.map.has-active .stop.night:not(.on):not(:hover) text { opacity: .5; }
-.stop:focus-visible circle { stroke: var(--red); stroke-width: 3; }
-#traveller { fill: var(--red); stroke: var(--surface); stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
-#pulse { fill: none; stroke: var(--red); stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
-.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; list-style: none; margin: 0; padding: 10px 14px 4px; border-top: 1px solid var(--line); font-size: .82rem; color: var(--muted); }
-.legend li { display: flex; align-items: center; gap: 6px; }
-.legend svg { width: 26px; height: 8px; overflow: visible; }
-.legend .leg { stroke: var(--c); stroke-opacity: 1; stroke-width: 2.4; }
-.map-note { margin: 0; padding: 2px 14px 10px; font-size: .74rem; color: var(--muted); }
-.fab { display: none; }
-.scrim { position: fixed; inset: 0; background: rgba(10, 12, 14, .45); z-index: 55; }
-
-/* Dias */
-.days { min-width: 0; }
-.day { scroll-margin-top: calc(var(--hh) + 10px); padding-block: 30px 34px; border-top: 1px solid var(--line); }
-.day:first-child { border-top: 0; padding-top: 4px; }
-.day-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: start; }
-.day-num { display: grid; justify-items: start; font-family: var(--f-display); color: var(--muted); line-height: .85; transition: color .3s; }
-.day-num small { font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; }
-.day-num b { font-size: clamp(3.4rem, 7vw, 4.6rem); font-weight: 600; letter-spacing: -.01em; }
-.day.is-active .day-num { color: var(--red); }
-.day-date { margin: 4px 0 0; font: 500 .9rem/1.2 var(--f-mono); color: var(--muted); }
-.day-route { margin: 6px 0 0; font: 600 clamp(1.45rem, 3vw, 2.05rem)/1.08 var(--f-display); text-transform: uppercase; letter-spacing: .01em; }
-.day-route i { font-style: normal; color: var(--red); font-weight: 500; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 10px 0 0; padding: 0; }
-.tags li { font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
-.tags li.t-mont { color: var(--alp); border-color: currentColor; }
-.tags li.t-mar { color: var(--sea); border-color: currentColor; }
-.tags li.t-unesco { color: var(--red); border-color: currentColor; }
-.stay { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 18px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
-.stay svg { width: 18px; height: 18px; color: var(--muted); flex: 0 0 auto; }
-.stay b { font-weight: 700; }
-.stars { color: var(--red); letter-spacing: .1em; font-size: .9rem; }
-.regimen { color: var(--muted); font-size: .92rem; }
-.stay.none { background: transparent; border-style: dashed; color: var(--muted); }
-.keys { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 14px 0 0; padding: 0; }
-.keys li { display: inline-flex; align-items: baseline; gap: 6px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .9rem; background: var(--bg); }
-.keys b { font: 500 .9rem/1 var(--f-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
-.photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 10px; margin: 18px 0 0; }
-.photos figure { margin: 0; min-width: 0; }
-.photos button { display: block; width: 100%; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: var(--line); cursor: zoom-in; }
-.photos img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; transition: transform .5s ease; }
-.photos button:hover img { transform: scale(1.04); }
-.photos figcaption { margin-top: 6px; font-size: .82rem; color: var(--muted); }
-.flow { list-style: none; margin: 22px 0 0; padding: 0; }
-.flow > li { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 14px; }
-.when { padding-top: 1px; text-align: right; font: 500 .82rem/1.5 var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-.fixed .when { color: var(--red); font-weight: 500; }
-.step { position: relative; padding: 0 0 18px 20px; border-left: 2px solid var(--line); min-width: 0; }
-.flow > li:last-child .step { border-left-color: transparent; padding-bottom: 0; }
-.step::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--muted); }
-.fixed .step::before { background: var(--red); border-color: var(--red); }
-.step p { margin: 0; max-width: 64ch; }
-.step p + p { margin-top: 6px; }
-.step .sub { color: var(--muted); font-size: .95rem; }
-.place { padding: 0; border: 0; background: none; cursor: pointer; font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-style: dotted; text-decoration-color: var(--red); text-underline-offset: 3px; text-decoration-thickness: 2px; }
-.place:hover { color: var(--red); }
-.place::after { content: ""; display: inline-block; width: .55em; height: .55em; margin-left: .25em; border-radius: 50%; border: 2px solid var(--red); vertical-align: .05em; }
-.note-box { margin: 18px 0 0; padding: 12px 16px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: .95rem; }
-.note-box h4 { margin: 0 0 4px; font: 600 .8rem/1.2 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
-.note-box p { margin: 0; }
-.note-box ul { margin: 6px 0 0; padding-left: 1.1em; }
-.note-box li + li { margin-top: 3px; }
-details.more { margin: 16px 0 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-details.more summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; font-weight: 700; }
-details.more summary::-webkit-details-marker { display: none; }
-details.more summary::after { content: "+"; font: 500 1.3rem/1 var(--f-mono); color: var(--red); transition: transform .25s; }
-details.more[open] summary::after { transform: rotate(45deg); }
-details.more .in { padding: 0 16px 14px; font-size: .96rem; }
-details.more .in p { margin: 0 0 8px; max-width: 64ch; }
-details.more .in ul { margin: 0; padding-left: 1.1em; }
-details.more .in li + li { margin-top: 4px; }
-.line-route { overflow-x: auto; margin: 4px -4px 0; padding: 6px 4px 4px; }
-.line-route ol { list-style: none; display: flex; gap: 0; margin: 0; padding: 0; width: max-content; counter-reset: st; }
-.line-route li { counter-increment: st; position: relative; width: 104px; padding-top: 30px; font-size: .84rem; line-height: 1.25; }
-.line-route li::before { content: counter(st); position: absolute; top: 0; left: 0; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); border: 2px solid var(--sea); font: 500 .7rem/1 var(--f-mono); z-index: 1; }
-.line-route li::after { content: ""; position: absolute; top: 10px; left: 22px; right: 0; border-top: 2px dotted var(--sea); }
-.line-route li:last-child::after { display: none; }
-.line-route li.big::before { background: var(--sea); color: var(--surface); }
-.line-route.walk li::before { border-color: var(--red); }
-.line-route.walk li::after { border-top-color: var(--red); border-top-style: solid; }
-.line-route.walk li.big::before { background: var(--red); color: var(--red-ink); }
-.line-route em { display: block; font-style: normal; font: 500 .74rem/1.3 var(--f-mono); color: var(--sea); margin-top: 2px; }
-.day-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 22px; }
-.day-nav a { font-size: .9rem; font-weight: 600; text-decoration: none; color: var(--muted); }
-.day-nav a:hover { color: var(--red); }
-
-/* Antes de ir */
-.band { background: var(--surface); border-block: 1px solid var(--line); }
-.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 0; margin: 18px 0 0; border-top: 2px solid var(--ink); }
-.facts div { padding: 12px 14px 14px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-.facts dt { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.facts dd { margin: 3px 0 0; font-weight: 600; }
-.facts dd small { display: block; font-weight: 400; color: var(--muted); font-size: .86rem; }
-.info-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 32px; padding-block: 28px 52px; align-items: start; }
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
-.tab { padding: 7px 12px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 600; font-size: .92rem; }
-.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.panel { padding-top: 16px; }
-.panel h3 { margin: 18px 0 6px; font: 600 1.15rem/1.2 var(--f-display); text-transform: uppercase; letter-spacing: .03em; }
-.panel h3:first-child { margin-top: 0; }
-.panel p, .panel li { max-width: 66ch; }
-.panel p { margin: 0 0 8px; }
-.panel ul { margin: 0 0 8px; padding-left: 1.1em; }
-.panel li + li { margin-top: 4px; }
-.ops { display: grid; gap: 8px; margin: 8px 0 10px; }
-.ops div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
-.ops b { font-weight: 700; }
-.signs { display: flex; flex-wrap: wrap; gap: 18px; margin: 10px 0 14px; }
-.sign { display: grid; justify-items: center; gap: 6px; font-size: .85rem; color: var(--muted); text-align: center; }
-.sign span { display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background: #FFFFFF; color: #111111; border: 9px solid #D21F25; font: 700 1.25rem/1 var(--f-display); letter-spacing: -.01em; }
-.sign span.small { font-size: 1rem; }
-.words { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 10px; }
-.word { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); }
-.word b { display: block; font: 600 1.25rem/1.1 var(--f-display); letter-spacing: .02em; }
-.word span { color: var(--muted); font-size: .9rem; }
-.side { display: grid; gap: 16px; }
-.card { padding: 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); }
-.card h3 { margin: 0 0 4px; font: 600 1.2rem/1.1 var(--f-display); text-transform: uppercase; letter-spacing: .03em; }
-.card .hint { margin: 0 0 12px; font-size: .86rem; color: var(--muted); }
-.fx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: end; }
-.fx label { display: grid; gap: 4px; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 0; }
-.fx input { width: 100%; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 1.15rem/1.2 var(--f-mono); }
-.fx input:focus { border-color: var(--red); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 25%, transparent); }
-.fx .swap { padding-bottom: 12px; color: var(--muted); font-family: var(--f-mono); }
-.fx-out { margin: 12px 0 0; font: 500 .95rem/1.4 var(--f-mono); }
-.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.presets button { padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: .82rem; }
-.presets button:hover { border-color: var(--red); color: var(--red); }
-.links { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.links a { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; }
-.links a span { color: var(--muted); font-weight: 400; font-size: .85rem; }
-.links a:hover span { color: var(--red); }
-
-/* Comida */
-.food-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; align-items: center; padding-top: 18px; }
-.food-top img { width: 100%; border-radius: 12px; display: block; aspect-ratio: 868 / 426; object-fit: cover; }
-.filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.filters button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; font-size: .9rem; }
-.filters button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.filters button span { font-family: var(--f-mono); font-weight: 400; opacity: .7; margin-left: 4px; }
-.tally { margin: 12px 0 0; font-size: .95rem; color: var(--muted); }
-.tally b { color: var(--red); font-family: var(--f-mono); }
-.dishes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 12px; list-style: none; margin: 22px 0 0; padding: 0 0 52px; }
-.dish { position: relative; padding: 14px 52px 14px 16px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); min-width: 0; transition: border-color .2s; }
-.dish h3 { margin: 0; font: 600 1.18rem/1.15 var(--f-display); letter-spacing: .02em; }
-.dish p { margin: 4px 0 0; font-size: .92rem; color: var(--muted); }
-.dish .cat { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 3px; }
-.heart { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); cursor: pointer; color: var(--muted); }
-.heart svg { width: 16px; height: 16px; }
-.heart[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: var(--red-ink); }
-.dish.want { border-color: var(--red); }
-
-/* Maleta */
-.pack-top { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; justify-content: space-between; padding-top: 16px; }
-.meter { flex: 1 1 320px; display: grid; gap: 8px; }
-.meter-text { font-weight: 600; }
-.meter-text b { font-family: var(--f-mono); color: var(--red); font-weight: 500; }
-.bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; }
-.bar i { display: block; height: 100%; width: 0; background: var(--red); border-radius: inherit; transition: width .35s ease; }
-.reset { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .92rem; }
-.packs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; padding: 22px 0 56px; align-items: start; }
-.pack { border-radius: 12px; border: 1px solid var(--line); background: var(--surface); overflow: hidden; }
-.pack header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
-.pack h3 { margin: 0; font: 600 1.05rem/1.15 var(--f-display); text-transform: uppercase; letter-spacing: .05em; }
-.pack header span { font: 500 .85rem/1 var(--f-mono); color: var(--muted); }
-.pack.done header span { color: var(--alp); }
-.pack.trip { border-color: var(--red); }
-.pack.trip h3 { color: var(--red); }
-.pack ul { list-style: none; margin: 0; padding: 6px 0; }
-.check { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; padding: 7px 14px; cursor: pointer; }
-.check:hover { background: var(--bg); }
-.check input { appearance: none; -webkit-appearance: none; margin: 1px 0 0; width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--muted); background: var(--surface); display: grid; place-items: center; cursor: pointer; }
-.check input::after { content: ""; width: 10px; height: 6px; border-left: 2.5px solid var(--red-ink); border-bottom: 2.5px solid var(--red-ink); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
-.check input:checked { background: var(--red); border-color: var(--red); }
-.check input:checked::after { opacity: 1; }
-.check input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
-.check small { display: block; color: var(--muted); font-size: .82rem; }
-
-footer { border-top: 1px solid var(--line); }
-footer .wrap { display: grid; gap: 6px; padding-block: 24px 36px; font-size: .85rem; color: var(--muted); }
-footer p { margin: 0; max-width: 90ch; }
-footer b { color: var(--ink); }
-
-/* Visor de fotos */
-.lb { position: fixed; inset: 0; z-index: 80; background: rgba(8, 10, 12, .92); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); color: #F2F2F2; }
-.lb-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.lb-top span { font: 500 .85rem/1 var(--f-mono); opacity: .8; }
-.lb-stage { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 0; }
-.lb-stage img { max-width: 100%; max-height: 100%; margin: 0 auto; object-fit: contain; border-radius: 6px; min-height: 0; }
-.lb-fig { margin: 0; display: grid; height: 100%; min-height: 0; place-items: center; }
-.lb button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08); color: #F2F2F2; cursor: pointer; display: grid; place-items: center; }
-.lb button:hover { background: rgba(255,255,255,.18); }
-.lb button svg { width: 18px; height: 18px; }
-.lb-cap { text-align: center; margin: 10px 0 0; font: 500 1.05rem/1.3 var(--f-display); letter-spacing: .04em; text-transform: uppercase; }
-
-/* Movil y tableta */
-@media (max-width: 999px) {
-  .hero { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .itin { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .map-wrap { position: static; }
-  .map { height: min(76vh, 640px); min-height: 420px; }
-  .map.is-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: min(80vh, 680px); min-height: 0; max-height: none; border-radius: 16px 16px 0 0; border-bottom: 0; box-shadow: var(--shadow); padding-bottom: env(safe-area-inset-bottom, 0px); }
-  .map.is-sheet .sheet-close { display: grid; }
-  .fab { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 50; display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 999px; border: 0; background: var(--red); color: var(--red-ink); font-weight: 700; box-shadow: var(--shadow); cursor: pointer; }
-  .fab svg { width: 18px; height: 18px; }
-  .info-grid { grid-template-columns: minmax(0, 1fr); }
-  .food-top { grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 560px) {
-  body { font-size: 16px; }
-  .nav { display: none; }
-  .stats b { font-size: 2rem; }
-  .flow > li { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; }
-  .when { font-size: .74rem; }
-  .day-head { gap: 12px; }
-  .ops div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  .fx { grid-template-columns: minmax(0, 1fr); }
-  .fx .swap { display: none; }
-  .lb-stage { grid-template-columns: minmax(0, 1fr); }
-  .lb-stage > button { display: none; }
-}
-</style>
-</head>
-<body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-bed" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5M7 11.5a1.5 1.5 0 1 0 0-.01"/></symbol>
-  <symbol id="i-prev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
-  <symbol id="i-next" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
-  <symbol id="i-map" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol>
-  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></symbol>
-</svg>
-
-<div class="nm-bar">
-  <div class="wrap nm-row">
-    <a class="nm-back" id="nm-back" href="/#planificaciones" data-astro-reload aria-label="Volver al portfolio de Nil Mariages"><svg><use href="#i-prev"/></svg><Logo variant="cream" tagline={false} /></a>
-    <span class="nm-crumb">Planificaciones · versión interactiva</span>
-    <a class="nm-pdf" href={pdfUrl} target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>Ver el PDF</a>
-  </div>
-</div>
-
-<header class="top" id="top">
-  <div class="wrap top-row">
-    <a class="brand" href="#inicio" aria-label="Albania 2025, volver arriba"><i aria-hidden="true"></i>Albania <span>2025</span></a>
-    <nav class="nav" aria-label="Secciones">
-      <a href="#ruta">Ruta</a>
-      <a href="#antes">Antes de ir</a>
-      <a href="#comida">Comida</a>
-      <a href="#maleta">Maleta</a>
-    </nav>
-  </div>
-  <div class="wrap">
-    <div class="strip" id="strip" role="navigation" aria-label="Días del viaje"></div>
-  </div>
-</header>
-
-<main>
-<section id="inicio" aria-label="Portada">
-  <img class="hero-photo" src={img('berat-panorama')} alt="Casas otomanas blancas en la ladera de Berat">
+<PlanLayout
+  plan={albania}
+  map={map}
+  title="Albania en 11 días"
+  description="Planificación interactiva de un viaje en coche por Albania del 4 al 14 de septiembre de 2025, por Nil Mariages."
+  brand="Albania"
+  brandYear="2025"
+  pdfUrl={pdfUrl}
+  mapLabel="Mapa de Albania con la ruta del viaje"
+  footerTitle="Albania 2025"
+>
+<section id="inicio" aria-label="Portada" slot="hero">
+  <img class="hero-photo" src={img('berat-panorama')} srcset={`${img('berat-panorama-480')} 480w, ${img('berat-panorama')} 1200w`} sizes="100vw" width="1200" height="287" alt="Casas otomanas blancas en la ladera de Berat" fetchpriority="high">
   <div class="wrap hero">
     <div>
       <p class="eyebrow">Shqipëria · Planificación de viaje</p>
@@ -465,48 +53,8 @@ footer b { color: var(--ink); }
   </div>
 </section>
 
-<div class="checkin"><div class="wrap"><p>Acordaos de hacer el check-in 24 horas antes de cada vuelo</p></div></div>
+<div class="checkin" slot="hero"><div class="wrap"><p>Acordaos de hacer el check-in 24 horas antes de cada vuelo</p></div></div>
 
-<section id="ruta" aria-labelledby="ruta-h">
-  <div class="wrap sec-head">
-    <div>
-      <p class="eyebrow">Día a día</p>
-      <h2 id="ruta-h">La ruta</h2>
-    </div>
-    <p class="note">El mapa sigue el día que estás leyendo. Toca un lugar subrayado para verlo en el mapa, o usa las flechas ← → del teclado para cambiar de día.</p>
-  </div>
-  <div class="wrap itin">
-    <div class="map-wrap" id="map-wrap">
-      <figure class="map overview" id="map">
-        <div class="map-head">
-          <div class="map-title" aria-live="polite"><small id="map-kicker">Todo el viaje</small><strong id="map-label">Barcelona → Tiranë → … → Barcelona</strong></div>
-          <button class="icon-btn" id="map-prev" type="button" aria-label="Día anterior"><svg><use href="#i-prev"/></svg></button>
-          <button class="icon-btn" id="map-next" type="button" aria-label="Día siguiente"><svg><use href="#i-next"/></svg></button>
-          <button class="pill-btn" id="map-all" type="button" aria-pressed="true">Todo</button>
-          <button class="icon-btn sheet-close" id="map-close" type="button" aria-label="Cerrar el mapa"><svg><use href="#i-close"/></svg></button>
-        </div>
-        <svg id="map-svg" viewBox={`0 0 ${map.W} ${map.H}`} preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa de Albania con la ruta del viaje">
-          <rect class="sea" x="-2000" y="-2000" width="5000" height="5000"/>
-          <path class="neigh" d={map.neighbours}/>
-          <path class="alb" d={map.main}/>
-          <g id="labels"></g>
-          <g id="legs"></g>
-          <circle id="pulse" r="0" opacity="0"/>
-          <g id="stops"></g>
-          <circle id="traveller" r="0"/>
-        </svg>
-        <ul class="legend" aria-label="Leyenda">
-          <li><svg viewBox="0 0 26 8"><path class="leg mode-car" d="M1 4H25"/></svg>Coche</li>
-          <li><svg viewBox="0 0 26 8"><path class="leg mode-transfer" d="M1 4H25"/></svg>Traslado</li>
-          <li><svg viewBox="0 0 26 8"><path class="leg mode-ferry" d="M1 4H25"/></svg>Barco y ferri</li>
-          <li><svg viewBox="0 0 26 8"><path class="leg mode-walk" d="M1 4H25"/></svg>A pie</li>
-          <li><svg viewBox="0 0 26 8"><path class="leg mode-flight" d="M1 4H25"/></svg>Avión</li>
-        </ul>
-        <p class="map-note">Las líneas unen las paradas, no siguen la carretera. Punto relleno: se duerme allí. Contorno: Natural Earth; coordenadas: OpenStreetMap.</p>
-      </figure>
-    </div>
-
-    <div class="days" id="days">
 
       <!-- DIA 1 -->
       <article class="day" id="dia-1" data-day="1">
@@ -549,8 +97,8 @@ footer b { color: var(--ink); }
           <li><b>85 km</b>≈ 1 h 40 Krujë → Shkodër</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Krujë"><img src={img('kruje')} alt="Krujë con su castillo en lo alto" loading="lazy"></button><figcaption>Krujë</figcaption></figure>
-          <figure><button type="button" data-lb="Castillo de Rozafa, Shkodër"><img src={img('rozafa')} alt="Castillo de Rozafa visto desde el aire" loading="lazy"></button><figcaption>Castillo de Rozafa, Shkodër</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="kruje" alt="Krujë con su castillo en lo alto" caption="Krujë" />
+          <PlanPhoto plan="albania" sizes={sizes} name="rozafa" alt="Castillo de Rozafa visto desde el aire" caption="Castillo de Rozafa, Shkodër" />
         </div>
         <ol class="flow">
           <li class="fixed"><span class="when">01:05</span><div class="step"><p>Llegada al aeropuerto de <button class="place" type="button" data-stop="tia">Tirana</button>. Pasad el control de pasaportes y, a la salida de la terminal, seguid el bono de alquiler hasta la oficina de Green Motion.</p></div></li>
@@ -593,8 +141,8 @@ footer b { color: var(--ink); }
           <li><b>≈ 2 h</b>de ferri</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Lago Koman"><img src={img('koman')} alt="El lago Koman entre paredes de roca" loading="lazy"></button><figcaption>Lago Koman</figcaption></figure>
-          <figure><button type="button" data-lb="Valle de Valbonë"><img src={img('valbone')} alt="El valle de Valbonë rodeado de picos" loading="lazy"></button><figcaption>Valle de Valbonë</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="koman" alt="El lago Koman entre paredes de roca" caption="Lago Koman" />
+          <PlanPhoto plan="albania" sizes={sizes} name="valbone" alt="El valle de Valbonë rodeado de picos" caption="Valle de Valbonë" />
         </div>
         <ol class="flow">
           <li class="fixed"><span class="when">06:30</span><div class="step"><p>En punto en la puerta del Hotel Rozafa. El transfer sale a las 06:45 y no espera a nadie: unas dos horas por carreteras de montaña cada vez más estrechas.</p></div></li>
@@ -624,8 +172,8 @@ footer b { color: var(--ink); }
           <li><b>≈ 2 h</b>traslado a Shkodër</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Ruta de Valbonë a Theth"><img src={img('valbona-pass')} alt="Senderista ante los picos de los Alpes albaneses" loading="lazy"></button><figcaption>Ruta de Valbonë a Theth</figcaption></figure>
-          <figure><button type="button" data-lb="Iglesia de Theth"><img src={img('theth')} alt="La iglesia de piedra de Theth con montañas detrás" loading="lazy"></button><figcaption>Iglesia de Theth</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="valbona-pass" alt="Senderista ante los picos de los Alpes albaneses" caption="Ruta de Valbonë a Theth" />
+          <PlanPhoto plan="albania" sizes={sizes} name="theth" alt="La iglesia de piedra de Theth con montañas detrás" caption="Iglesia de Theth" />
         </div>
         <ol class="flow">
           <li><span class="when">Salida</span><div class="step"><p>La ruta empieza a la altura del Fusha e Gjes Hotel, siguiendo el cauce de un río seco. Si la guesthouse os acerca en coche hasta donde se puede, os ahorráis unos 3 km.</p></div></li>
@@ -663,7 +211,7 @@ footer b { color: var(--ink); }
           <li><b>A pie</b>por el casco histórico</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Berat"><img src={img('berat')} alt="Casas blancas de Berat en terrazas sobre la ladera al atardecer" loading="lazy"></button><figcaption>Berat</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="berat" alt="Casas blancas de Berat en terrazas sobre la ladera al atardecer" caption="Berat" wide />
         </div>
         <ol class="flow">
           <li><span class="when">196 km</span><div class="step"><p>Uno de los tramos más largos: unas tres horas por colinas, zonas rurales y pueblos pequeños. Al llegar a <button class="place" type="button" data-stop="berat">Berat</button>, aparcad y seguid a pie.</p></div></li>
@@ -692,8 +240,8 @@ footer b { color: var(--ink); }
           <li><b>1 h 20</b>Langarica → Gjirokastër</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Puente de Bënjë, Cañón de Langarica"><img src={img('puente-benje')} alt="Puente otomano de piedra sobre el río Langarica" loading="lazy"></button><figcaption>Puente de Bënjë</figcaption></figure>
-          <figure><button type="button" data-lb="Gjirokastër"><img src={img('gjirokaster')} alt="Torre del reloj del castillo de Gjirokastër" loading="lazy"></button><figcaption>Gjirokastër</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="puente-benje" alt="Puente otomano de piedra sobre el río Langarica" caption="Puente de Bënjë" lb="Puente de Bënjë, Cañón de Langarica" />
+          <PlanPhoto plan="albania" sizes={sizes} name="gjirokaster" alt="Torre del reloj del castillo de Gjirokastër" caption="Gjirokastër" />
         </div>
         <ol class="flow">
           <li><span class="when">278 km</span><div class="step"><p>El tramo de coche más largo del viaje, por montañas, valles y pueblos poco transitados. El Cañón de Osumi no es recomendable sin 4x4; en su lugar, un desvío de una hora al Cañón de Langarica.</p></div></li>
@@ -722,8 +270,8 @@ footer b { color: var(--ink); }
           <li><b>Blue Eye</b>parada a medio camino</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Blue Eye (Syri i Kaltër)"><img src={img('blue-eye')} alt="El manantial azul intenso del Blue Eye" loading="lazy"></button><figcaption>Blue Eye (Syri i Kaltër)</figcaption></figure>
-          <figure><button type="button" data-lb="Ksamil"><img src={img('ksamil')} alt="Agua turquesa frente a una isla en Ksamil" loading="lazy"></button><figcaption>Ksamil</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="blue-eye" alt="El manantial azul intenso del Blue Eye" caption="Blue Eye (Syri i Kaltër)" />
+          <PlanPhoto plan="albania" sizes={sizes} name="ksamil" alt="Agua turquesa frente a una isla en Ksamil" caption="Ksamil" />
         </div>
         <ol class="flow">
           <li><span class="when">Mañana</span><div class="step"><p>A medio camino, el <button class="place" type="button" data-stop="blueeye">Blue Eye</button>: un manantial con forma de iris que brota de una cueva de más de 50 metros, según las estimaciones. Ya no se puede nadar; se ve desde pasarelas y miradores.</p></div></li>
@@ -751,8 +299,8 @@ footer b { color: var(--ink); }
           <li><b>25 min</b>Ksamil → Sarandë</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Playa de Krorëzë"><img src={img('kroreze')} alt="Cala de agua turquesa con rocas y barcas" loading="lazy"></button><figcaption>Playa de Krorëzë</figcaption></figure>
-          <figure><button type="button" data-lb="Castillo de Porto Palermo"><img src={img('porto-palermo')} alt="Fortaleza de Porto Palermo sobre la bahía" loading="lazy"></button><figcaption>Castillo de Porto Palermo</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="kroreze" alt="Cala de agua turquesa con rocas y barcas" caption="Playa de Krorëzë" />
+          <PlanPhoto plan="albania" sizes={sizes} name="porto-palermo" alt="Fortaleza de Porto Palermo sobre la bahía" caption="Castillo de Porto Palermo" />
         </div>
         <ol class="flow">
           <li><span class="when">25 min</span><div class="step"><p>De Ksamil a <button class="place" type="button" data-stop="sarande">Sarandë</button>.</p></div></li>
@@ -797,7 +345,7 @@ footer b { color: var(--ink); }
           <li><b>≈ 15:00</b>vuelta a Himarë</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Grama Bay"><img src={img('grama-bay')} alt="Cala de arena clara entre acantilados" loading="lazy"></button><figcaption>Grama Bay</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="grama-bay" alt="Cala de arena clara entre acantilados" caption="Grama Bay" wide />
         </div>
         <ol class="flow">
           <li class="fixed"><span class="when">09:45</span><div class="step"><p>Quince minutos antes en el punto de encuentro de <button class="place" type="button" data-stop="himare">Himarë</button>.</p></div></li>
@@ -849,8 +397,8 @@ footer b { color: var(--ink); }
           <li><b>45 km</b>≈ 50 min a Vlorë</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Dhërmi"><img src={img('dhermi')} alt="Iglesia blanca y casas de Dhërmi en la ladera" loading="lazy"></button><figcaption>Dhërmi</figcaption></figure>
-          <figure><button type="button" data-lb="Castillo de Kanina al atardecer"><img src={img('kanina')} alt="Murallas del castillo de Kanina al atardecer" loading="lazy"></button><figcaption>Castillo de Kanina</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="dhermi" alt="Iglesia blanca y casas de Dhërmi en la ladera" caption="Dhërmi" />
+          <PlanPhoto plan="albania" sizes={sizes} name="kanina" alt="Murallas del castillo de Kanina al atardecer" caption="Castillo de Kanina" lb="Castillo de Kanina al atardecer" />
         </div>
         <ol class="flow">
           <li><span class="when">35 min</span><div class="step"><p>A la costa de <button class="place" type="button" data-stop="dhermi">Dhërmi</button>. Dos playas: Gjiri i Teodorit (Saint Theodore’s Bay), un arco de arena clara entre pinos y olivos, y Argjent’s Bay, más pequeña, con pozas entre las rocas.</p></div></li>
@@ -881,7 +429,7 @@ footer b { color: var(--ink); }
           <li><b>21:55</b>El Prat T2</li>
         </ul>
         <div class="photos">
-          <figure><button type="button" data-lb="Plaza Skënderbeg, Tirana"><img src={img('tirana-skanderbeg')} alt="Estatua ecuestre de Skënderbeg en la plaza central de Tirana" loading="lazy"></button><figcaption>Plaza Skënderbeg, Tirana</figcaption></figure>
+          <PlanPhoto plan="albania" sizes={sizes} name="tirana-skanderbeg" alt="Estatua ecuestre de Skënderbeg en la plaza central de Tirana" caption="Plaza Skënderbeg, Tirana" wide />
         </div>
         <ol class="flow">
           <li><span class="when">Temprano</span><div class="step"><p>160 km sin paradas hasta <button class="place" type="button" data-stop="tirana">Tirana</button>. Cuanto antes salgáis, más tiempo para la capital.</p></div></li>
@@ -917,11 +465,8 @@ footer b { color: var(--ink); }
         </details>
         <nav class="day-nav" aria-label="Cambiar de día"><a href="#dia-10">← Día 10</a><a href="#antes">Antes de ir →</a></nav>
       </article>
-    </div>
-  </div>
-</section>
 
-<section id="antes" class="band" aria-labelledby="antes-h">
+<section id="antes" class="band" aria-labelledby="antes-h" slot="info">
   <div class="wrap sec-head">
     <div>
       <p class="eyebrow">Información práctica</p>
@@ -1039,22 +584,7 @@ footer b { color: var(--ink); }
       </div>
     </div>
     <aside class="side">
-      <div class="card">
-        <h3>Euros y lek</h3>
-        <p class="hint">Con el cambio de la planificación: 1 € = 97 L.</p>
-        <div class="fx">
-          <label for="fx-eur">Euros<input id="fx-eur" type="number" inputmode="decimal" min="0" step="any" value="400"></label>
-          <span class="swap" aria-hidden="true">⇄</span>
-          <label for="fx-all">Lek<input id="fx-all" type="number" inputmode="decimal" min="0" step="any" value="38800"></label>
-        </div>
-        <p class="fx-out" id="fx-out" aria-live="polite">400 € ≈ 38.800 L</p>
-        <div class="presets">
-          <button type="button" data-all="40">Billete de bus · 40 L</button>
-          <button type="button" data-eur="25">Recogida fuera de horario · 25 €</button>
-          <button type="button" data-eur="400">Presupuesto · 400 €</button>
-          <button type="button" data-eur="500">Depósito del coche · 500 €</button>
-        </div>
-      </div>
+      <PlanConverter title="Euros y lek" hint="Con el cambio de la planificación: 1 € = 97 L." currencies={albania.currencies} presets={albania.presets} start={400} />
       <div class="card">
         <h3>Enlaces</h3>
         <ul class="links">
@@ -1069,641 +599,48 @@ footer b { color: var(--ink); }
   </div>
 </section>
 
-<section id="comida" aria-labelledby="comida-h">
-  <div class="wrap sec-head">
-    <div>
-      <p class="eyebrow">Qué pedir</p>
-      <h2 id="comida-h">Comida típica</h2>
-    </div>
-  </div>
-  <div class="wrap">
-    <div class="food-top">
-      <img src={img('comida')} alt="Varios platos típicos albaneses" loading="lazy">
-      <div>
-        <div class="filters" id="food-filters" role="group" aria-label="Filtrar platos">
-          <button type="button" data-f="all" aria-pressed="true">Todo<span>17</span></button>
-          <button type="button" data-f="salado" aria-pressed="false">Salados<span>12</span></button>
-          <button type="button" data-f="dulce" aria-pressed="false">Dulces<span>4</span></button>
-          <button type="button" data-f="bebida" aria-pressed="false">Bebidas<span>1</span></button>
-          <button type="button" data-f="want" aria-pressed="false">Mi lista<span id="want-n">0</span></button>
-        </div>
-        <p class="tally" id="food-tally">Marca con el corazón lo que queráis probar. Se guarda en este navegador.</p>
-      </div>
-    </div>
-    <ul class="dishes" id="dishes"></ul>
-  </div>
-</section>
+<img slot="food-image" src={img('comida')} srcset={`${img('comida-480')} 480w, ${img('comida')} 868w`} sizes="(min-width: 1000px) 560px, 100vw" width="868" height="426" alt="Varios platos típicos albaneses" loading="lazy">
+</PlanLayout>
 
-<section id="maleta" class="band" aria-labelledby="maleta-h">
-  <div class="wrap sec-head">
-    <div>
-      <p class="eyebrow">Para no olvidar nada</p>
-      <h2 id="maleta-h">Lista de equipaje</h2>
-    </div>
-    <p class="note">La lista de la planificación, más lo que pide el itinerario. Lo que marquéis se guarda en este navegador.</p>
-  </div>
-  <div class="wrap">
-    <div class="pack-top">
-      <div class="meter">
-        <span class="meter-text" id="pack-text">0 de 0 en la maleta</span>
-        <div class="bar" role="progressbar" aria-labelledby="pack-text" aria-valuemin="0" id="pack-bar"><i></i></div>
-      </div>
-      <div class="reset" id="pack-reset">
-        <button class="btn" type="button" id="reset-ask">Desmarcar todo</button>
-        <span id="reset-confirm" hidden>¿Seguro? <button class="btn solid" type="button" id="reset-yes">Sí, desmarcar</button> <button class="btn" type="button" id="reset-no">Cancelar</button></span>
-      </div>
-    </div>
-    <div class="packs" id="packs"></div>
-  </div>
-</section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <p><b>Albania 2025</b> · Planificación de Nil Mariages. Muestra de portfolio, no reproducir.</p>
-    <p>Versión interactiva hecha a partir del PDF de la planificación. Mapa: contorno de Natural Earth y coordenadas de OpenStreetMap; las líneas son orientativas.</p>
-    <p><a id="foot-back" href="/#planificaciones" data-astro-reload>← Volver al portfolio de Nil Mariages</a> · <a href={pdfUrl} target="_blank" rel="noopener">Ver la planificación en PDF</a></p>
-  </div>
-</footer>
-
-<button class="fab" id="fab" type="button" hidden><svg><use href="#i-map"/></svg>Mapa del día</button>
-<div class="scrim" id="scrim" hidden></div>
-
-<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
-  <div class="lb-top"><span id="lb-count">1 / 1</span><button type="button" id="lb-close" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button></div>
-  <div class="lb-stage">
-    <button type="button" id="lb-prev" aria-label="Foto anterior"><svg><use href="#i-prev"/></svg></button>
-    <figure class="lb-fig"><img id="lb-img" alt=""></figure>
-    <button type="button" id="lb-next" aria-label="Foto siguiente"><svg><use href="#i-next"/></svg></button>
-  </div>
-  <p class="lb-cap" id="lb-cap"></p>
-</div>
+<style is:global>
+:root {
+  /* Paleta de Albania: el rojo de la bandera */
+  --bg: #F1F2F0;
+  --surface: #FFFFFF;
+  --ink: #15181A;
+  --muted: #586064;
+  --line: #D8DCDA;
+  --accent: #C8131B;
+  --accent-ink: #FFFFFF;
+  --sea: #0A7480;
+  --alp: #367046;
+  --map-sea: #DAE7E9;
+  --map-land: #FFFFFF;
+  --map-neigh: #E6E8E5;
+  --map-border: #B7BFBD;
+  --shadow: 0 10px 30px rgba(20, 24, 26, .14);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1214; --surface: #171C1F; --ink: #E8ECEA; --muted: #9AA4A8; --line: #2A3236;
+    --accent: #F0474D; --accent-ink: #1A0506; --sea: #43B9C3; --alp: #72BE88;
+    --map-sea: #0C191E; --map-land: #1E262A; --map-neigh: #14191C; --map-border: #34403F;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1214; --surface: #171C1F; --ink: #E8ECEA; --muted: #9AA4A8; --line: #2A3236;
+  --accent: #F0474D; --accent-ink: #1A0506; --sea: #43B9C3; --alp: #72BE88;
+  --map-sea: #0C191E; --map-land: #1E262A; --map-neigh: #14191C; --map-border: #34403F;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}
+</style>
 
 <script>
-(function () {
-  "use strict";
-  var $ = function (s, r) { return (r || document).querySelector(s); };
-  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  var store = {
-    get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
-  };
-  var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var mobileMQ = matchMedia("(max-width: 999px)");
-
-  /* Altura de la cabecera */
-  var topEl = $("#top");
-  function setHH() { document.documentElement.style.setProperty("--hh", topEl.offsetHeight + "px"); }
-  setHH();
-  if (window.ResizeObserver) new ResizeObserver(setHH).observe(topEl);
-
-  /* Datos del viaje */
-  var DAYS = [
-    { n: 1, date: "4 sep", label: "Barcelona → Tiranë", legs: [["bcn", "tia", "flight"]] },
-    { n: 2, date: "5 sep", label: "Tiranë → Krujë → Shkodër", legs: [["tia", "kruje", "car"], ["kruje", "shkoder", "car"]] },
-    { n: 3, date: "6 sep", label: "Shkodër → Lago Koman → Valbonë", legs: [["shkoder", "koman", "transfer"], ["koman", "fierze", "ferry"], ["fierze", "valbone", "transfer"]] },
-    { n: 4, date: "7 sep", label: "Valbonë → Theth → Shkodër", legs: [["valbone", "theth", "walk"], ["theth", "shkoder", "transfer"]] },
-    { n: 5, date: "8 sep", label: "Shkodër → Berat", legs: [["shkoder", "berat", "car"]] },
-    { n: 6, date: "9 sep", label: "Berat → Langarica → Gjirokastër", legs: [["berat", "benje", "car"], ["benje", "gjirokaster", "car"]] },
-    { n: 7, date: "10 sep", label: "Gjirokastër → Ksamil", legs: [["gjirokaster", "blueeye", "car"], ["blueeye", "butrint", "car"], ["butrint", "ksamil", "car"]] },
-    { n: 8, date: "11 sep", label: "Ksamil → Sarandë → Porto Palermo → Himarë", legs: [["ksamil", "sarande", "car"], ["sarande", "kakome", "boatloop"], ["sarande", "portopalermo", "car"], ["portopalermo", "himare", "car"]] },
-    { n: 9, date: "12 sep", label: "Himarë · Grama Bay en barco", legs: [["himare", "grama", "boatloop"]] },
-    { n: 10, date: "13 sep", label: "Himarë → Dhërmi → Vlorë", legs: [["himare", "dhermi", "car"], ["dhermi", "llogara", "car"], ["llogara", "kanina", "car"], ["kanina", "vlore", "car"]] },
-    { n: 11, date: "14 sep", label: "Vlorë → Tiranë → Barcelona", legs: [["vlore", "tirana", "car"], ["tirana", "tia", "car"], ["tia", "bcn", "flight"]] }
-  ];
-  /* nombre, lat, lon, lado de la etiqueta, se duerme alli (coordenadas: OpenStreetMap Nominatim) */
-  var STOPS = {
-    tia: ["Aeropuerto de Tirana", 41.4115, 19.7133, "l"],
-    kruje: ["Krujë", 41.5069, 19.7939, "r", 1],
-    shkoder: ["Shkodër", 42.0465, 19.4939, "l", 1],
-    koman: ["Koman", 42.0954, 19.8115, "r"],
-    fierze: ["Fierzë", 42.2641, 20.0042, "r"],
-    valbone: ["Valbonë", 42.4196, 19.8844, "r", 1],
-    theth: ["Theth", 42.3947, 19.7751, "l"],
-    berat: ["Berat", 40.7081, 19.9455, "r", 1],
-    benje: ["Bënjë · Langarica", 40.2519, 20.4162, "r"],
-    gjirokaster: ["Gjirokastër", 40.0732, 20.14, "r", 1],
-    blueeye: ["Blue Eye", 39.9238, 20.1925, "r"],
-    butrint: ["Butrinto", 39.7459, 20.021, "r"],
-    ksamil: ["Ksamil", 39.7701, 20.0038, "l", 1],
-    sarande: ["Sarandë", 39.8752, 20.0065, "r"],
-    kakome: ["Kakomë", 39.9313, 19.9498, "l"],
-    portopalermo: ["Porto Palermo", 40.0622, 19.7907, "r"],
-    himare: ["Himarë", 40.1022, 19.7473, "l", 1],
-    grama: ["Grama Bay", 40.2153, 19.4735, "l"],
-    dhermi: ["Dhërmi", 40.1512, 19.6414, "r"],
-    llogara: ["Llogara", 40.1982, 19.5924, "l"],
-    kanina: ["Kanina", 40.4447, 19.5222, "r"],
-    vlore: ["Vlorë", 40.4708, 19.4913, "l", 1],
-    tirana: ["Tiranë", 41.3281, 19.8184, "r"]
-  };
-  var LABELS = [
-    ["MONTENEGRO", 42.62, 19.05, "start", "c"],
-    ["KOSOVO", 42.5, 20.62, "start", "c"],
-    ["MACEDONIA", 41.55, 21.2, "end", "c"],
-    ["DEL NORTE", 41.47, 21.2, "end", "c"],
-    ["GRECIA", 39.9, 21.15, "end", "c"],
-    ["Mar Adriático", 41.45, 18.68, "start", "s"],
-    ["Mar Jónico", 39.62, 18.95, "start", "s"]
-  ];
-
-  /* Proyeccion: la misma que scripts/build-plan-map.mjs (equirectangular a 41,1° N) */
-  var svg = $("#map-svg");
-  var vbInit = svg.getAttribute("viewBox").split(" ").map(Number);
-  var P = { LON0: 18.55, LAT1: 42.75, COS: Math.cos(41.1 * Math.PI / 180), K: 200, W: vbInit[2], H: vbInit[3] };
-  function proj(lat, lon) { return [(lon - P.LON0) * P.COS * P.K, (P.LAT1 - lat) * P.K]; }
-  Object.keys(STOPS).forEach(function (k) {
-    var s = STOPS[k];
-    STOPS[k] = { key: k, name: s[0], xy: proj(s[1], s[2]), side: s[3], night: !!s[4], days: [] };
-  });
-  STOPS.bcn = { key: "bcn", name: "Barcelona", xy: [-70, STOPS.tia.xy[1] - 30], off: true, days: [] };
-
-  var NS = "http://www.w3.org/2000/svg";
-  var mapEl = $("#map"), gLegs = $("#legs"), gStops = $("#stops"), gLabels = $("#labels");
-  var traveller = $("#traveller"), pulse = $("#pulse");
-  function el(tag, attrs, parent) {
-    var e = document.createElementNS(NS, tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (parent) parent.appendChild(e);
-    return e;
-  }
-  function legPath(a, b, mode) {
-    var p1 = STOPS[a].xy, p2 = STOPS[b].xy;
-    var x1 = p1[0], y1 = p1[1], x2 = p2[0], y2 = p2[1];
-    if (mode === "boatloop") {
-      var dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, o = Math.max(L * 0.3, 5);
-      var mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-      return "M" + x1 + "," + y1 + " Q" + (mx + nx * o) + "," + (my + ny * o) + " " + x2 + "," + y2 + " Q" + (mx - nx * o) + "," + (my - ny * o) + " " + x1 + "," + y1;
-    }
-    if (mode === "flight") {
-      return "M" + x1 + "," + y1 + " Q" + ((x1 + x2) / 2) + "," + (Math.min(y1, y2) - 28) + " " + x2 + "," + y2;
-    }
-    return "M" + x1 + "," + y1 + " L" + x2 + "," + y2;
-  }
-
-  var labelEls = LABELS.map(function (l) {
-    var xy = proj(l[1], l[2]);
-    var t = el("text", { x: xy[0], y: xy[1], "text-anchor": l[3], "class": l[4] === "c" ? "c-label" : "s-label" }, gLabels);
-    t.textContent = l[0];
-    return t;
-  });
-
-  DAYS.forEach(function (d) {
-    d.g = el("g", { "class": "day-legs", "data-day": d.n }, gLegs);
-    d.paths = d.legs.map(function (l) { return el("path", { d: legPath(l[0], l[1], l[2]), "class": "leg mode-" + l[2] }, d.g); });
-    d.stops = [];
-    d.legs.forEach(function (l) {
-      [l[0], l[1]].forEach(function (k) {
-        if (!STOPS[k].off && d.stops.indexOf(k) < 0) { d.stops.push(k); STOPS[k].days.push(d.n); }
-      });
-    });
-  });
-
-  var stopEls = {};
-  Object.keys(STOPS).forEach(function (k) {
-    var s = STOPS[k];
-    if (s.off) return;
-    var g = el("g", { "class": "stop" + (s.night ? " night" : ""), tabindex: "0", role: "button", "aria-label": s.name + " (día " + s.days.join(", ") + ")", "data-stop": k }, gStops);
-    var c = el("circle", { cx: s.xy[0], cy: s.xy[1], r: 4 }, g);
-    var t = el("text", { x: s.xy[0], y: s.xy[1], "text-anchor": s.side === "l" ? "end" : "start" }, g);
-    t.textContent = s.name;
-    var title = el("title", {}, g);
-    title.textContent = s.name + " · día " + s.days.join(", ");
-    stopEls[k] = { g: g, c: c, t: t, s: s };
-    g.addEventListener("click", function () { onStop(k); });
-    g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onStop(k); } });
-  });
-
-  /* Escala: radios y textos constantes en pantalla aunque el mapa haga zoom */
-  var vb = { x: 0, y: 0, w: P.W, h: P.H };
-  function upp() {
-    var r = svg.getBoundingClientRect();
-    if (!r.width || !r.height) return 1;
-    return Math.max(vb.w / r.width, vb.h / r.height);
-  }
-  var lastU = 1;
-  function rescale() {
-    var u = upp(); lastU = u;
-    Object.keys(stopEls).forEach(function (k) {
-      var o = stopEls[k], night = o.s.night;
-      o.c.setAttribute("r", (night ? 5.5 : 4) * u);
-      o.t.setAttribute("font-size", 12.5 * u);
-      o.t.setAttribute("stroke-width", 3.5 * u);
-      o.t.setAttribute("x", o.s.xy[0] + (o.s.side === "l" ? -9 : 9) * u);
-      o.t.setAttribute("y", o.s.xy[1] + 4.3 * u);
-    });
-    labelEls.forEach(function (t) { t.setAttribute("font-size", (t.getAttribute("class") === "c-label" ? 10.5 : 12) * u); });
-    traveller.setAttribute("r", 6 * u);
-  }
-  function setVB(v) {
-    vb = v;
-    svg.setAttribute("viewBox", v.x + " " + v.y + " " + v.w + " " + v.h);
-    rescale();
-  }
-  function fit(minx, miny, maxx, maxy, pad) {
-    var r = svg.getBoundingClientRect();
-    var ar = (r.width && r.height) ? r.width / r.height : P.W / P.H;
-    var w = Math.max(maxx - minx, 60) + 2 * pad, h = Math.max(maxy - miny, 60) + 2 * pad;
-    if (w / h > ar) h = w / ar; else w = h * ar;
-    var cx = (minx + maxx) / 2, cy = (miny + maxy) / 2;
-    return { x: cx - w / 2, y: cy - h / 2, w: w, h: h };
-  }
-  function fullBox() { return fit(4, 4, P.W - 4, P.H - 4, 0); }
-  function dayBox(d) {
-    var xs = [], ys = [];
-    d.legs.forEach(function (l) {
-      [l[0], l[1]].forEach(function (k) { var p = STOPS[k].xy; xs.push(Math.max(p[0], -15)); ys.push(p[1]); });
-    });
-    var minx = Math.min.apply(null, xs), maxx = Math.max.apply(null, xs), miny = Math.min.apply(null, ys), maxy = Math.max.apply(null, ys);
-    return fit(minx, miny, maxx, maxy, 34);
-  }
-  var raf = 0, target = null;
-  function animateTo(t) {
-    target = t;
-    cancelAnimationFrame(raf);
-    if (reduceMotion) { setVB(t); return; }
-    var s = { x: vb.x, y: vb.y, w: vb.w, h: vb.h }, t0 = performance.now(), D = 700;
-    function step(now) {
-      var p = Math.min(1, (now - t0) / D);
-      p = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-      setVB({ x: s.x + (t.x - s.x) * p, y: s.y + (t.y - s.y) * p, w: s.w + (t.w - s.w) * p, h: s.h + (t.h - s.h) * p });
-      if (p < 1) raf = requestAnimationFrame(step);
-    }
-    raf = requestAnimationFrame(step);
-  }
-
-  /* Punto que recorre el dia */
-  var travRaf = 0;
-  function runTraveller(d) {
-    cancelAnimationFrame(travRaf);
-    var paths = d.paths.filter(function (p, i) { return d.legs[i][2] !== "flight"; });
-    if (!paths.length) paths = d.paths;
-    var lens = paths.map(function (p) { return p.getTotalLength(); });
-    var total = lens.reduce(function (a, b) { return a + b; }, 0);
-    function place(dist) {
-      for (var i = 0; i < paths.length; i++) {
-        if (dist <= lens[i] || i === paths.length - 1) {
-          var pt = paths[i].getPointAtLength(Math.min(dist, lens[i]));
-          traveller.setAttribute("cx", pt.x); traveller.setAttribute("cy", pt.y);
-          return;
-        }
-        dist -= lens[i];
-      }
-    }
-    traveller.style.opacity = 1;
-    if (reduceMotion || !total) { place(total); return; }
-    var t0 = performance.now(), D = Math.min(2400, 900 + total * 6);
-    function step(now) {
-      var p = Math.min(1, (now - t0) / D);
-      place(total * (1 - Math.pow(1 - p, 2)));
-      if (p < 1) travRaf = requestAnimationFrame(step);
-    }
-    travRaf = requestAnimationFrame(step);
-  }
-  function doPulse(k) {
-    var s = STOPS[k];
-    pulse.setAttribute("cx", s.xy[0]); pulse.setAttribute("cy", s.xy[1]);
-    if (reduceMotion) return;
-    var t0 = performance.now();
-    function step(now) {
-      var p = Math.min(1, (now - t0) / 1100);
-      pulse.setAttribute("r", (6 + 26 * p) * lastU);
-      pulse.setAttribute("opacity", String(1 - p));
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  /* Estado activo */
-  var active = 0;
-  var chips = [];
-  var strip = $("#strip");
-  DAYS.forEach(function (d) {
-    var b = document.createElement("button");
-    b.type = "button"; b.className = "chip"; b.setAttribute("aria-label", "Día " + d.n + ", " + d.date + ": " + d.label);
-    b.innerHTML = "<b>" + d.n + "</b><small>" + d.date + "</small>";
-    b.addEventListener("click", function () { goDay(d.n); });
-    strip.appendChild(b); chips.push(b);
-  });
-  var dayEls = $$(".day");
-  var kicker = $("#map-kicker"), mapLabel = $("#map-label");
-  var btnPrev = $("#map-prev"), btnNext = $("#map-next"), btnAll = $("#map-all");
-
-  function setActive(n) {
-    if (n === active) return;
-    active = n;
-    var d = DAYS[n - 1];
-    mapEl.classList.remove("overview"); mapEl.classList.add("has-active");
-    btnAll.setAttribute("aria-pressed", "false");
-    DAYS.forEach(function (x) { x.g.classList.toggle("is-active", x.n === n); });
-    gLegs.appendChild(d.g);
-    Object.keys(stopEls).forEach(function (k) { stopEls[k].g.classList.toggle("on", d.stops.indexOf(k) >= 0); });
-    chips.forEach(function (c, i) { if (i === n - 1) c.setAttribute("aria-current", "true"); else c.removeAttribute("aria-current"); });
-    var chip = chips[n - 1];
-    var sr = strip.getBoundingClientRect(), cr = chip.getBoundingClientRect();
-    if (cr.left < sr.left || cr.right > sr.right) strip.scrollBy({ left: cr.left - sr.left - sr.width / 2 + cr.width / 2, behavior: reduceMotion ? "auto" : "smooth" });
-    dayEls.forEach(function (a) { a.classList.toggle("is-active", +a.dataset.day === n); });
-    kicker.textContent = "Día " + n + " · " + d.date;
-    mapLabel.textContent = d.label;
-    btnPrev.disabled = n === 1; btnNext.disabled = n === DAYS.length;
-    animateTo(dayBox(d));
-    runTraveller(d);
-  }
-  function showAll() {
-    active = 0;
-    mapEl.classList.add("overview"); mapEl.classList.remove("has-active");
-    btnAll.setAttribute("aria-pressed", "true");
-    DAYS.forEach(function (x) { x.g.classList.remove("is-active"); });
-    Object.keys(stopEls).forEach(function (k) { stopEls[k].g.classList.remove("on"); });
-    kicker.textContent = "Todo el viaje · 11 días";
-    mapLabel.textContent = "Barcelona → Tiranë → … → Barcelona";
-    btnPrev.disabled = false; btnNext.disabled = false;
-    traveller.style.opacity = 0;
-    animateTo(fullBox());
-  }
-  var lockUntil = 0;
-  function goDay(n) {
-    n = Math.max(1, Math.min(DAYS.length, n));
-    lockUntil = performance.now() + (reduceMotion ? 150 : 1100);
-    var a = $("#dia-" + n);
-    if (a) a.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-    setActive(n);
-    if (history.replaceState) history.replaceState(null, "", "#dia-" + n);
-  }
-  btnPrev.addEventListener("click", function () { goDay(active ? active - 1 : 1); });
-  btnNext.addEventListener("click", function () { goDay(active ? active + 1 : 1); });
-  btnAll.addEventListener("click", showAll);
-
-  function focusStop(k) {
-    var s = STOPS[k];
-    var b = fit(s.xy[0] - 45, s.xy[1] - 45, s.xy[0] + 45, s.xy[1] + 45, 12);
-    animateTo(b);
-    Object.keys(stopEls).forEach(function (j) { if (j === k) stopEls[j].g.classList.add("on"); });
-    setTimeout(function () { doPulse(k); }, reduceMotion ? 0 : 450);
-  }
-  function onStop(k) {
-    var days = STOPS[k].days;
-    if (days.indexOf(active) >= 0) { focusStop(k); return; }
-    goDay(days[0]);
-    setTimeout(function () { doPulse(k); }, reduceMotion ? 0 : 750);
-  }
-  $$(".place").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var k = b.dataset.stop;
-      var day = +b.closest(".day").dataset.day;
-      if (active !== day) setActive(day);
-      if (mobileMQ.matches) openSheet();
-      setTimeout(function () { focusStop(k); }, mobileMQ.matches && !reduceMotion ? 320 : 0);
-    });
-  });
-
-  /* Dia visible al hacer scroll */
-  if (window.IntersectionObserver) {
-    var io = new IntersectionObserver(function (entries) {
-      if (performance.now() < lockUntil) return;
-      entries.forEach(function (e) { if (e.isIntersecting) setActive(+e.target.dataset.day); });
-    }, { rootMargin: "-38% 0px -58% 0px" });
-    dayEls.forEach(function (a) { io.observe(a); });
-  }
-
-  /* Hoja del mapa en movil */
-  var wrap = $("#map-wrap"), fab = $("#fab"), scrim = $("#scrim");
-  var mapVisible = true, inRoute = false;
-  function updateFab() { fab.hidden = !(mobileMQ.matches && inRoute && !mapVisible && !mapEl.classList.contains("is-sheet")); }
-  if (window.IntersectionObserver) {
-    new IntersectionObserver(function (es) { mapVisible = es[0].isIntersecting; updateFab(); }, { threshold: 0.15 }).observe(wrap);
-    new IntersectionObserver(function (es) { inRoute = es[0].isIntersecting; updateFab(); }).observe($("#days"));
-  }
-  function refit() { setVB(active ? dayBox(DAYS[active - 1]) : fullBox()); }
-  function openSheet() {
-    if (!mobileMQ.matches || mapEl.classList.contains("is-sheet")) return;
-    wrap.style.minHeight = mapEl.offsetHeight + "px";
-    mapEl.classList.add("is-sheet"); scrim.hidden = false; updateFab();
-    refit();
-    $("#map-close").focus({ preventScroll: true });
-  }
-  function closeSheet() {
-    if (!mapEl.classList.contains("is-sheet")) return;
-    mapEl.classList.remove("is-sheet"); scrim.hidden = true; wrap.style.minHeight = "";
-    updateFab(); refit();
-  }
-  fab.addEventListener("click", openSheet);
-  scrim.addEventListener("click", closeSheet);
-  $("#map-close").addEventListener("click", closeSheet);
-  mobileMQ.addEventListener ? mobileMQ.addEventListener("change", function () { closeSheet(); updateFab(); refit(); }) : null;
-  var rt = 0;
-  window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(refit, 120); });
-
-  /* Pestañas */
-  var tabs = $$(".tab");
-  function selectTab(t, focus) {
-    tabs.forEach(function (x) {
-      var on = x === t;
-      x.setAttribute("aria-selected", on ? "true" : "false");
-      x.tabIndex = on ? 0 : -1;
-      $("#" + x.getAttribute("aria-controls")).hidden = !on;
-    });
-    if (focus) t.focus();
-  }
-  tabs.forEach(function (t, i) {
-    t.addEventListener("click", function () { selectTab(t); });
-    t.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        e.preventDefault(); e.stopPropagation();
-        selectTab(tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length], true);
-      }
-    });
-  });
-
-  /* Conversor */
-  var RATE = 97, eur = $("#fx-eur"), all = $("#fx-all"), out = $("#fx-out");
-  var nf0 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0, useGrouping: true });
-  var nf2 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 2, useGrouping: true });
-  function writeOut() {
-    var e = parseFloat(eur.value), a = parseFloat(all.value);
-    out.textContent = (isFinite(e) && isFinite(a)) ? nf2.format(e) + " € ≈ " + nf0.format(a) + " L" : "Escribe una cantidad";
-  }
-  eur.addEventListener("input", function () { var v = parseFloat(eur.value); all.value = isFinite(v) ? Math.round(v * RATE) : ""; writeOut(); });
-  all.addEventListener("input", function () { var v = parseFloat(all.value); eur.value = isFinite(v) ? Math.round(v / RATE * 100) / 100 : ""; writeOut(); });
-  $$(".presets button").forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (b.dataset.eur) { eur.value = b.dataset.eur; eur.dispatchEvent(new Event("input")); }
-      else { all.value = b.dataset.all; all.dispatchEvent(new Event("input")); }
-    });
-  });
-
-  /* Comida */
-  var DISHES = [
-    ["salado", "Byrek", "Pastel salado de masa filo relleno de espinacas, queso gjizë o carne. Muy típico."],
-    ["salado", "Fërgesë verore", "Crema de pimientos, tomates y requesón, típica de Tirana, para untar con pan."],
-    ["salado", "Tavë Kosi", "Cordero al horno con huevos y yogur, originario de Elbasan, suave y jugoso."],
-    ["salado", "Speça me gjizë", "Pimientos de colores rellenos de arroz, requesón y especias, al horno."],
-    ["salado", "Kaçkavall frito", "Queso amarillo salado frito, crujiente por fuera y cremoso por dentro."],
-    ["salado", "Qofte", "Albóndigas a la parrilla de cordero o res con hierbas."],
-    ["salado", "Zgara", "Carne mixta a la parrilla, muy común en las casas de parrilla."],
-    ["salado", "Perime ne Zgare", "Verduras a la parrilla, como plato principal o acompañamiento."],
-    ["salado", "Pescado y marisco", "Fresco y económico, servido de forma sencilla para resaltar el sabor."],
-    ["salado", "Shapkat", "Pastel de maíz con queso feta, eneldo y espinacas, típico de Gjirokastër."],
-    ["salado", "Gjizë", "Queso cuajado seco, tipo ricota agria, solo o como relleno."],
-    ["salado", "Flija", "Plato en capas con relleno de aceite, mantequilla y yogur o kaymak."],
-    ["dulce", "Baklava", "Pastel otomano de masa filo con nueces o pistachos y sirope, en todas las pastelerías."],
-    ["dulce", "Trilece", "Bizcocho bañado en tres leches (condensada, evaporada y crema) con caramelo."],
-    ["dulce", "Qumështor", "Natilla al horno de huevos, leche y mantequilla."],
-    ["dulce", "Ballokume", "Galletas de harina de maíz, típicas de la fiesta de Dita e Verës."],
-    ["bebida", "Rakija", "Aguardiente fuerte de frutas (uva, ciruela, pera…), muy de celebraciones."]
-  ];
-  var CAT = { salado: "Salado", dulce: "Dulce", bebida: "Bebida" };
-  var want = store.get("albania-comida-v1", []);
-  if (!Array.isArray(want)) want = [];
-  var dishesEl = $("#dishes"), filter = "all";
-  DISHES.forEach(function (d, i) {
-    var li = document.createElement("li");
-    li.className = "dish"; li.dataset.cat = d[0]; li.dataset.i = i;
-    li.innerHTML = '<span class="cat">' + CAT[d[0]] + "</span><h3>" + d[1] + "</h3><p>" + d[2] + "</p>" +
-      '<button class="heart" type="button" aria-pressed="false" aria-label="Quiero probar ' + d[1] + '"><svg><use href="#i-heart"/></svg></button>';
-    li.querySelector(".heart").addEventListener("click", function () {
-      var k = want.indexOf(d[1]);
-      if (k >= 0) want.splice(k, 1); else want.push(d[1]);
-      store.set("albania-comida-v1", want);
-      paintFood();
-    });
-    dishesEl.appendChild(li);
-  });
-  function paintFood() {
-    $$(".dish", dishesEl).forEach(function (li) {
-      var name = DISHES[+li.dataset.i][1], on = want.indexOf(name) >= 0;
-      li.classList.toggle("want", on);
-      li.querySelector(".heart").setAttribute("aria-pressed", on ? "true" : "false");
-      li.hidden = filter === "want" ? !on : (filter !== "all" && li.dataset.cat !== filter);
-    });
-    $("#want-n").textContent = want.length;
-    $("#food-tally").innerHTML = want.length
-      ? "En vuestra lista: <b>" + want.length + "</b> de 17. Se guarda en este navegador."
-      : "Marca con el corazón lo que queráis probar. Se guarda en este navegador.";
-  }
-  $$("#food-filters button").forEach(function (b) {
-    b.addEventListener("click", function () {
-      filter = b.dataset.f;
-      $$("#food-filters button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      paintFood();
-    });
-  });
-  paintFood();
-
-  /* Maleta */
-  var PACK = [
-    { id: "viaje", trip: true, t: "Lo que pide el itinerario", items: [
-      ["Check-in 24 h antes de cada vuelo", "Ida el 4 y vuelta el 14"],
-      ["Maleta de mano de 40 × 30 × 20 cm", "Sin equipaje facturado"],
-      ["Carné internacional junto al español", "El español solo no vale"],
-      ["Tarjeta de crédito del conductor", "Depósito de 500 € del coche"],
-      ["Maps.me con la ruta descargada", "Para el trekking sin cobertura"],
-      ["Encargar el lunchbox en Valbonë", "Día 3, al hacer el check-in"],
-      ["Gorra, crema y agua para el paso", "Día 4"],
-      ["Bañador, toalla y ropa ligera", "Barcos de los días 8 y 9"]
-    ] },
-    { id: "doc", t: "Documentación personal", items: ["DNI", "Carné de conducir", "Carné internacional", "Pasaporte", "Certificado COVID", "Documentación de viaje", "Dinero en efectivo", "Tarjeta de crédito", "Tarjeta sanitaria", "Seguro médico de viaje"] },
-    { id: "nec", t: "Neceser personal", items: ["Champú, acondicionador y gel", "Cepillo o peine", "Pasta y cepillo de dientes", "Perfume", "Lentillas y solución líquida", "Higiene femenina", "Secador y planchas", "Crema hidratante", "Desodorante", "Maquillaje", "Pañuelos", "Cuchilla, máquina de afeitar, depiladora", "Cortaúñas, tijeritas, pinzas"] },
-    { id: "bot", t: "Botiquín", items: [["Medicamentos básicos", "Analgésicos, antiinflamatorios, antibióticos, protector de estómago, pastillas para el mareo, laxantes y antidiarreicos"], "Crema solar y after sun", "Tiritas y gasas", "Repelente y afterbite", "Gel desinfectante"] },
-    { id: "ropa", t: "Ropa de viaje", items: ["Camisetas y camisas", "Pantalones y faldas", "Sudaderas y jerséis", "Vestidos y monos", "Chaquetas y abrigos", "Ropa interior", "Pijama y zapatillas", "Bañador y bikini", "Gorras y sombreros", "Bambas, zapatos, calzado elegante", "Gafas de sol", "Escarpines y chanclas", "Paraguas de bolsillo, chubasquero"] },
-    { id: "tec", t: "Tecnología y entretenimiento", items: ["Itinerario y guía de viaje", "Adaptador de corriente universal, regleta", "Batería portátil", "Auriculares inalámbricos", "Almohada, antifaz y tapones", "Cámara fotográfica, acuática, dron…", "Móvil y tablet u ordenador", "Libro o e-book", "Cargador de móvil", "Bolsa impermeable"] }
-  ];
-  var packed = store.get("albania-maleta-v1", {});
-  if (!packed || typeof packed !== "object") packed = {};
-  var packsEl = $("#packs"), totalItems = 0;
-  PACK.forEach(function (cat) {
-    var box = document.createElement("div");
-    box.className = "pack" + (cat.trip ? " trip" : ""); box.dataset.cat = cat.id;
-    var html = "<header><h3>" + cat.t + '</h3><span class="cnt"></span></header><ul>';
-    cat.items.forEach(function (it, i) {
-      var label = Array.isArray(it) ? it[0] : it, sub = Array.isArray(it) ? "<small>" + it[1] + "</small>" : "";
-      var id = "pk-" + cat.id + "-" + i;
-      html += '<li><label class="check" for="' + id + '"><input type="checkbox" id="' + id + '"><span>' + label + sub + "</span></label></li>";
-      totalItems++;
-    });
-    box.innerHTML = html + "</ul>";
-    packsEl.appendChild(box);
-  });
-  var boxes = $$("#packs input[type=checkbox]");
-  boxes.forEach(function (b) {
-    b.checked = !!packed[b.id];
-    b.addEventListener("change", function () {
-      if (b.checked) packed[b.id] = 1; else delete packed[b.id];
-      store.set("albania-maleta-v1", packed);
-      paintPack();
-    });
-  });
-  var bar = $("#pack-bar");
-  function paintPack() {
-    var done = boxes.filter(function (b) { return b.checked; }).length;
-    $("#pack-text").innerHTML = "<b>" + done + "</b> de " + totalItems + " en la maleta";
-    bar.firstElementChild.style.width = (100 * done / totalItems) + "%";
-    bar.setAttribute("aria-valuemax", totalItems); bar.setAttribute("aria-valuenow", done);
-    $$(".pack", packsEl).forEach(function (p) {
-      var cb = $$("input", p), d = cb.filter(function (x) { return x.checked; }).length;
-      p.querySelector(".cnt").textContent = d + "/" + cb.length;
-      p.classList.toggle("done", d === cb.length);
-    });
-  }
-  paintPack();
-  var ask = $("#reset-ask"), confirmBox = $("#reset-confirm");
-  ask.addEventListener("click", function () { ask.hidden = true; confirmBox.hidden = false; $("#reset-no").focus(); });
-  $("#reset-no").addEventListener("click", function () { confirmBox.hidden = true; ask.hidden = false; ask.focus(); });
-  $("#reset-yes").addEventListener("click", function () {
-    boxes.forEach(function (b) { b.checked = false; });
-    packed = {}; store.set("albania-maleta-v1", packed); paintPack();
-    confirmBox.hidden = true; ask.hidden = false; ask.focus();
-  });
-
-  /* Visor de fotos */
-  var shots = $$("[data-lb]"), lb = $("#lb"), lbImg = $("#lb-img"), lbCap = $("#lb-cap"), lbCount = $("#lb-count"), cur = 0, lastFocus = null;
-  function showShot(i) {
-    cur = (i + shots.length) % shots.length;
-    var b = shots[cur], img = b.querySelector("img");
-    lbImg.src = img.src; lbImg.alt = img.alt;
-    lbCap.textContent = b.dataset.lb;
-    lbCount.textContent = (cur + 1) + " / " + shots.length;
-  }
-  function openLb(i) { lastFocus = document.activeElement; showShot(i); lb.hidden = false; document.body.style.overflow = "hidden"; $("#lb-close").focus(); }
-  function closeLb() { lb.hidden = true; document.body.style.overflow = ""; if (lastFocus) lastFocus.focus({ preventScroll: true }); }
-  shots.forEach(function (b, i) { b.addEventListener("click", function () { openLb(i); }); });
-  $("#lb-close").addEventListener("click", closeLb);
-  $("#lb-prev").addEventListener("click", function () { showShot(cur - 1); });
-  $("#lb-next").addEventListener("click", function () { showShot(cur + 1); });
-  lb.addEventListener("click", function (e) { if (e.target === lb || e.target.classList.contains("lb-fig")) closeLb(); });
-  var tx = null;
-  lb.addEventListener("touchstart", function (e) { tx = e.touches[0].clientX; }, { passive: true });
-  lb.addEventListener("touchend", function (e) { if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) showShot(cur + (dx < 0 ? 1 : -1)); tx = null; });
-
-  /* Teclado */
-  document.addEventListener("keydown", function (e) {
-    if (!lb.hidden) {
-      if (e.key === "Escape") closeLb();
-      else if (e.key === "ArrowRight") showShot(cur + 1);
-      else if (e.key === "ArrowLeft") showShot(cur - 1);
-      return;
-    }
-    if (e.key === "Escape" && mapEl.classList.contains("is-sheet")) { closeSheet(); return; }
-    var tag = (e.target.tagName || "").toLowerCase();
-    if (tag === "input" || tag === "textarea" || e.target.getAttribute("role") === "tab" || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === "ArrowRight") { e.preventDefault(); goDay(active ? active + 1 : 1); }
-    else if (e.key === "ArrowLeft") { e.preventDefault(); goDay(active ? active - 1 : 1); }
-  });
-
-  /* Volver al portfolio en el idioma de donde se viene */
-  try {
-    var ref = document.referrer ? new URL(document.referrer) : null;
-    if (ref && ref.origin === location.origin) {
-      var seg = ref.pathname.split("/")[1];
-      if (seg === "en" || seg === "ca") { $("#nm-back").href = "/" + seg + "/#planificaciones"; $("#foot-back").href = "/" + seg + "/#planificaciones"; }
-    }
-  } catch (e) {}
-
-  /* Arranque */
-  setVB(fullBox());
-  var m = /^#dia-(\d+)$/.exec(location.hash);
-  if (m) setActive(+m[1]);
-})();
+  import { initPlan } from '../../scripts/plan';
+  import { albania } from '../../data/plans/albania';
+  initPlan(albania);
 </script>
-</body>
-</html>

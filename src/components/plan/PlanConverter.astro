@@ -1,0 +1,35 @@
+---
+// Conversor de euros a la moneda (o monedas) de una planificación, con el
+// cambio que da el PDF. El comportamiento está en src/scripts/plan.ts.
+import type { PlanCurrency } from '../../data/plans/types';
+
+interface Props {
+  title: string;
+  hint: string;
+  currencies: PlanCurrency[];
+  presets: { label: string; eur?: number; code?: string; amount?: number }[];
+  /** Euros con los que arranca */
+  start?: number;
+}
+const { title, hint, currencies, presets, start = 100 } = Astro.props;
+---
+
+<div class="card">
+  <h3>{title}</h3>
+  <p class="hint">{hint}</p>
+  <div class="fx">
+    <label for="fx-eur">Euros<input id="fx-eur" type="number" inputmode="decimal" min="0" step="any" value={start}></label>
+    {currencies.map((c) => (
+      <>
+        <span class="swap" aria-hidden="true">⇄</span>
+        <label for={`fx-${c.code.toLowerCase()}`}>{c.label}<input id={`fx-${c.code.toLowerCase()}`} type="number" inputmode="decimal" min="0" step="any" value={Math.round(start * c.rate)} data-rate={c.rate} data-code={c.code} data-symbol={c.symbol}></label>
+      </>
+    ))}
+  </div>
+  <p class="fx-out" id="fx-out" aria-live="polite"></p>
+  <div class="presets">
+    {presets.map((p) => (
+      <button type="button" data-eur={p.eur} data-code={p.code} data-amount={p.amount}>{p.label}</button>
+    ))}
+  </div>
+</div>
